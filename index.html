@@ -1814,7 +1814,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     parts.forEach((p,i)=>{p.x+=p.vx+Math.sin(p.ph+p.y/60)*.3;p.y+=p.vy;p.r+=p.vr;if(p.y>innerHeight+30||p.y<-40||p.x<-50||p.x>innerWidth+50)parts[i]=spawn(ptype);drawP(p,ptype)});requestAnimationFrame(tick)};
   const sizeCv=()=>{cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)};
   let theme=null;
-  const dress=()=>{const t=theme;const tint=layer.querySelector('.h-tint'),top=layer.querySelector('.h-top'),hang=layer.querySelector('.h-hang'),cor=layer.querySelector('.h-corners');
+  const dress=()=>{const t=theme;window.__theme=t;const tint=layer.querySelector('.h-tint'),top=layer.querySelector('.h-top'),hang=layer.querySelector('.h-hang'),cor=layer.querySelector('.h-corners');
     if(!t){webs(false);layer.classList.remove('on');bdPaths.forEach(p=>p.setAttribute('stroke',p.dataset.s));document.body.style.background='';ptype='none';cx.clearRect(0,0,innerWidth,innerHeight);top.innerHTML=hang.innerHTML=cor.innerHTML='';return}
     layer.classList.add('on');bdPaths.forEach((p,i)=>p.setAttribute('stroke',t.bg[i%t.bg.length]));document.body.style.background=t.bg[0];tint.style.background=t.tint;
     const W=innerWidth;top.innerHTML=t.top&&t.top!=='none'?svgw(W,110,TOP(t.top,W)):'';
@@ -2200,15 +2200,22 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
   const sky=$('livingSky'),svg=sky.querySelector('.ls-svg'),tint=sky.querySelector('.ls-tint'),cv=sky.querySelector('.ls-meteors'),cx=cv.getContext('2d');
   const B=$('backdrop'),bdRect=B.querySelector('rect'),hair=B.querySelector('g'),bdPaths=[...B.querySelectorAll('g path')];
   // the hair strokes drift slowly, and turn a little each day
-  const turn=el('g',{},B);B.insertBefore(turn,hair);turn.appendChild(hair);hair.classList.add('bd-drift');
+  hair.style.display='none';
+  const bdDefs=el('defs',{},B);B.insertBefore(bdDefs,B.firstChild);
+  const lg=el('linearGradient',{id:'bdGrad',x1:0,y1:0,x2:1,y2:1},bdDefs),s0=el('stop',{offset:0},lg),s1=el('stop',{offset:.55},lg),s2=el('stop',{offset:1},lg);
+  const rg=el('radialGradient',{id:'bdGlow',cx:.5,cy:.42,r:.6},bdDefs),g0=el('stop',{offset:0,'stop-opacity':.38},rg),g1=el('stop',{offset:1,'stop-opacity':0},rg);
+  bdRect.setAttribute('fill','url(#bdGrad)');const glow=el('rect',{width:1600,height:1000,fill:'url(#bdGlow)'});bdRect.after(glow);
+  [s0,s1,s2].forEach(x=>x.style.transition='stop-color 3s');
   let state={},lastDay='';
   const build=()=>{const d=now(),W=innerWidth,H=innerHeight,key=d.toDateString();seed=Math.floor(d/864e5)%2147483646+1;
     const m=moonOf(d),z=zodiacOf(d),sh=showerOf(d),pal=yearPalette(d);
-    turn.setAttribute('transform',`rotate(${R(-14,14).toFixed(1)} 800 500) scale(1.28) translate(${R(-60,60).toFixed(0)} ${R(-40,40).toFixed(0)})`);
-    B.style.filter=`blur(1px) saturate(.95) hue-rotate(${R(-7,7).toFixed(1)}deg)`;
-    bdPaths.forEach((p,i)=>{if(!p.dataset.s||!/^#[0-9a-f]{6}$/i.test(p.dataset.s))return;const thin=+p.getAttribute('stroke-width')<3;p.dataset.s=thin?p.dataset.s:pal.c[i%8]});
-    const holidayOn=document.getElementById('holidayLayer')?.classList.contains('on');
-    if(!holidayOn){bdPaths.forEach(p=>p.setAttribute('stroke',p.dataset.s));bdRect.setAttribute('fill',pal.bg)}
+    // the page's colour: the holiday's when there is one, otherwise the season's, turned a little differently each day
+    const th=window.__theme,a=R(0,1);
+    const c0=th?th.bg[0]:pal.bg,c2=th?(th.bg[1]||mix(th.bg[0],'#000000',.3)):mix(pal.bg,pal.c[6],.42),c1=mix(c0,c2,.45);
+    lg.setAttribute('x1',a.toFixed(2));lg.setAttribute('x2',(1-a).toFixed(2));
+    s0.setAttribute('stop-color',c0);s1.setAttribute('stop-color',c1);s2.setAttribute('stop-color',c2);
+    const glowC=mix(c0,'#ffffff',.55);g0.setAttribute('stop-color',glowC);g1.setAttribute('stop-color',glowC);
+    B.style.filter='none';document.body.style.background=c1;
     // stars, constellation and moon
     svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.innerHTML='';
     const stars=el('g',{class:'ls-stars'},svg);const n=Math.round(W*H/5200);
@@ -2233,7 +2240,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     notes.push(m.full?`tonight, ${FULLNAMES[mo]}`:`tonight, ${m.name}`);
     notes.push(`${z} season`);if(sh)notes.push(`${sh} are falling`);
     $('skyNote').textContent=notes.join(' · ');
-    state={m,z,sh,pal,mx,my,r,W,H,key};window.__sky={moon:m.name,lit:+m.lit.toFixed(3),age:+m.age.toFixed(2),waxing:m.waxing,full:m.full,zodiac:z,shower:sh,palette:pal,wax:waxNow()};
+    state={m,z,sh,pal,mx,my,r,W,H,key};window.__sky={bg:[c0,c1,c2],moon:m.name,lit:+m.lit.toFixed(3),age:+m.age.toFixed(2),waxing:m.waxing,full:m.full,zodiac:z,shower:sh,palette:pal,wax:waxNow()};
     cv.width=W*devicePixelRatio;cv.height=H*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
     light();favicon()};
   // the hour's light, eased every few minutes

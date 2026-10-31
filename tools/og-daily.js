@@ -26,10 +26,12 @@ const moonPath=(cx,cy,r,age)=>{const waxing=age<SYN/2,k=Math.cos(2*Math.PI*age/S
   const html=`<html><body style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
 <defs><filter id="blur"><feGaussianBlur stdDeviation="1.2"/></filter><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter><filter id="ds" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="24" stdDeviation="22" flood-color="#2a0a05" flood-opacity=".5"/></filter>
 <radialGradient id="vig" cx=".5" cy=".5" r=".75"><stop offset=".45" stop-color="#2a1405" stop-opacity="0"/><stop offset="1" stop-color="#2a1405" stop-opacity=".55"/></radialGradient>
+<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${sky.bg[0]}"/><stop offset=".55" stop-color="${sky.bg[1]}"/><stop offset="1" stop-color="${sky.bg[2]}"/></linearGradient>
+<radialGradient id="glowbg" cx=".5" cy=".42" r=".6"><stop offset="0" stop-color="${sky.bg[0]}" stop-opacity=".0"/><stop offset="0" stop-color="#ffffff" stop-opacity=".22"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
 <linearGradient id="env" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a1f2f"/><stop offset=".7" stop-color="#3a0d18"/></linearGradient>
 <linearGradient id="flap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a2536"/><stop offset="1" stop-color="#4a1420"/></linearGradient>
 <symbol id="rose" viewBox="0 0 120 120">${rose}</symbol></defs>
-<rect width="1200" height="630" fill="${sky.palette.bg}"/><g filter="url(#blur)" transform="rotate(${rot} 600 315) scale(1.2) translate(-100 -60)">${hair}</g><rect width="1200" height="630" fill="url(#vig)"/>${moon}
+<rect width="1200" height="630" fill="url(#bg)"/><rect width="1200" height="630" fill="url(#glowbg)"/><rect width="1200" height="630" fill="url(#vig)"/>${moon}
 <g transform="translate(330 120)" filter="url(#ds)">
  <rect width="540" height="346" rx="6" fill="url(#env)"/><path d="M0 0 L270 214 L540 0" fill="none" stroke="#2a0710" stroke-opacity=".4" stroke-width="1.5"/>
  <path d="M0 346 L250 180 M540 346 L290 180" stroke="#2a0710" stroke-opacity=".3" stroke-width="1.5"/><path d="M0 0 H540 L270 228Z" fill="url(#flap)"/>
