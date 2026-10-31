@@ -45,6 +45,14 @@ const moonPath=(cx,cy,r,age)=>{const waxing=age<SYN/2,k=Math.cos(2*Math.PI*age/S
  <text y="36" font-size="13.5" font-style="italic" letter-spacing="1.2" fill="#8a7454">${tonight} · ${sky.zodiac} season</text>
 </g></svg></body></html>`;
   const q=await b.newPage({viewport:{width:1200,height:630}});await q.setContent(html);
-  await q.screenshot({path:path.join(ROOT,'og-card.jpg'),type:'jpeg',quality:88});await b.close();
+  await q.screenshot({path:path.join(ROOT,'og-card.jpg'),type:'jpeg',quality:88});
+  // the seal in the tab and on the home screen wears the same wax
+  const fav=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="4 2 186 186">${waxSeal(seal(false,'f'),sky.wax)}</svg>`;fs.writeFileSync(path.join(ROOT,'favicon.svg'),fav);
+  const src='data:image/svg+xml;base64,'+Buffer.from(fav).toString('base64');
+  for(const [n,sz,bg] of [['favicon-32.png',32,'transparent'],['favicon-192.png',192,'transparent'],['apple-touch-icon.png',180,'#f1ecdd'],['icon-512.png',512,'transparent']]){
+    const f=await b.newPage({viewport:{width:sz,height:sz}});const k=bg==='transparent'?1:.86;
+    await f.setContent(`<html><body style="margin:0;background:${bg}"><img src="${src}" style="width:${sz*k}px;height:${sz*k}px;display:block;margin:${sz*(1-k)/2}px"></body></html>`);
+    await f.screenshot({path:path.join(ROOT,n),omitBackground:bg==='transparent'});await f.close()}
+  await b.close();
   console.log(date,sky.moon,sky.zodiac,sky.wax.join(' '));
 })();
