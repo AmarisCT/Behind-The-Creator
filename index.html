@@ -217,6 +217,47 @@ footer{position:relative;z-index:1;text-align:center;padding:0 0 40px;font-famil
 #soundBtn[aria-pressed="true"]::after{content:"";position:absolute;inset:-4px;border-radius:50%;border:1px solid rgba(181,140,76,.5);animation:ring 2.4s ease-out infinite}
 @keyframes ring{from{transform:scale(.9);opacity:.9}to{transform:scale(1.35);opacity:0}}
 
+
+/* ---------------- INK, POSTMARK, LEAVES, HOLIDAYS, QUILL ---------------- */
+.ink-w{opacity:0;filter:blur(2.5px);color:var(--sepia);transition:opacity .9s ease,filter .9s ease,color 1.4s ease;transition-delay:var(--d,0s)}
+.inked .ink-w{opacity:1;filter:none;color:inherit}
+.inkline{clip-path:inset(-30% 102% -30% -6%);transition:clip-path 1.9s cubic-bezier(.5,0,.3,1)}
+.inkline.inked{clip-path:inset(-30% -6% -30% -6%)}
+.closing svg.sig{width:clamp(280px,52vw,500px);height:auto;overflow:visible;display:block}
+.closing svg.sig text{font-family:'Pinyon Script',cursive;font-size:78px;fill:transparent;stroke:var(--ink);stroke-width:.9;stroke-dasharray:2600;stroke-dashoffset:2600}
+.closing svg.sig.drawn text{animation:sigdraw 3.4s cubic-bezier(.45,.05,.4,1) forwards}
+@keyframes sigdraw{70%{stroke-dashoffset:0;fill:transparent}100%{stroke-dashoffset:0;fill:var(--ink);stroke-width:.3}}
+.closing .seal-sm{opacity:0;transform:scale(1.9) rotate(-30deg)}
+.closing .seal-sm.stamped{animation:stampdown .5s cubic-bezier(.3,1.6,.5,1) forwards}
+@keyframes stampdown{0%{opacity:0;transform:scale(1.9) rotate(-30deg)}60%{opacity:1;transform:scale(.92) rotate(-10deg)}100%{opacity:1;transform:scale(1) rotate(-12deg)}}
+.postage{position:absolute;left:14px;bottom:12px;width:clamp(150px,34%,200px);height:auto;opacity:.95}
+.holiday-note{font-style:italic;font-size:clamp(14px,1.6vw,17px);letter-spacing:.04em;margin-top:8px;opacity:0;transition:opacity 2s}
+.holiday-note.show{opacity:.92}
+.hero .titles{pointer-events:none}
+.hero svg.scene *,.finale svg.shore *{pointer-events:none}
+.hero svg.scene .fl,.finale svg.shore .fl{pointer-events:visiblePainted}
+.fl{stroke:transparent;stroke-width:18px;cursor:pointer}
+.fl.caught{animation-play-state:paused!important;transition:opacity .8s;opacity:0!important}
+.leaf-hint{position:absolute;left:24px;bottom:72px;z-index:4;font-style:italic;font-size:14px;color:#f3e8cc;text-shadow:0 1px 6px rgba(0,0,0,.6);opacity:0;transition:opacity 2s;pointer-events:none}
+.leaf-hint.show{opacity:.85}
+.toast{position:fixed;z-index:50;width:min(300px,80vw);background:var(--parch);padding:18px 20px 16px;box-shadow:0 18px 40px rgba(40,20,5,.35);font-size:16.5px;line-height:1.4;text-align:center;
+  transform:translate(-50%,-110%) scale(.6) rotate(-4deg);opacity:0;transition:transform .55s cubic-bezier(.2,.9,.25,1.2),opacity .4s;pointer-events:auto}
+.toast.show{transform:translate(-50%,-110%) scale(1) rotate(-1deg);opacity:1}
+.toast::before{content:"";position:absolute;inset:6px;border:.5px solid rgba(181,140,76,.6);pointer-events:none}
+.toast b{display:block;font-family:'Pinyon Script',cursive;font-weight:400;font-size:28px;color:var(--rose);line-height:1;margin-bottom:6px}
+.toast i{display:block;font-family:'Cinzel',serif;font-style:normal;font-size:10.5px;letter-spacing:.24em;text-transform:uppercase;color:var(--sepia);margin-bottom:6px}
+.toast a{color:var(--wine);font-family:'Cinzel',serif;font-size:10.5px;letter-spacing:.2em;text-transform:uppercase;display:inline-block;margin-top:8px}
+.flicker{animation:flicker 1.6s ease-in-out infinite alternate}
+@keyframes flicker{0%{opacity:.75}30%{opacity:1}55%{opacity:.82}80%{opacity:.96}100%{opacity:.7}}
+.flame{transform-box:fill-box;transform-origin:50% 100%;animation:flame .9s ease-in-out infinite alternate}
+@keyframes flame{from{transform:scale(1,1) skewX(-3deg)}to{transform:scale(.9,1.12) skewX(4deg)}}
+.bulb{animation:twinkle var(--tw,2s) ease-in-out infinite}
+.fw{transform-box:fill-box;transform-origin:center;animation:burst 1.6s ease-out forwards}
+@keyframes burst{from{transform:scale(.05);opacity:1}70%{opacity:1}to{transform:scale(1);opacity:0}}
+html.quill,html.quill body{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='32' height='32' viewBox='0 0 32 32'%3E%3Cpath d='M29 2 C18 6 11 14 7 25 C13 19 19 15 24 13 C20 14 15 16 11 19 C15 12 21 7 29 2Z' fill='%23f6efdc' stroke='%237a5a36' stroke-width='1'/%3E%3Cpath d='M7 25 L3 30' stroke='%232e2920' stroke-width='1.8' stroke-linecap='round'/%3E%3C/svg%3E") 3 29,auto}
+html.quill a,html.quill button,html.quill [role=button],html.quill .fl{cursor:pointer}
+#shimmerTrail{position:fixed;inset:0;z-index:60;pointer-events:none}
+
 /* ---------------- THE LETTER ---------------- */
 body.sealed{overflow:hidden}
 body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:translateY(30px) scale(.97)}
@@ -405,7 +446,28 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
       <div class="ln">JASLEEN</div><div class="ln2">AHLUWALIA</div>
       <svg viewBox="0 0 420 34" style="width:62%;height:20px;margin-top:4px" aria-hidden="true"><use href="#flourish"/></svg>
     </div>
-    <div class="env-front"><div class="edge"></div><div class="to">for you</div>
+    <div class="env-front"><div class="edge"></div><div class="to" id="envTo">for you</div>
+      <svg class="postage" viewBox="0 0 190 96" aria-hidden="true">
+        <defs><path id="pmTop" d="M108 48 a34 34 0 0 1 68 0"/><path id="pmBot" d="M104 48 a38 38 0 0 0 76 0"/></defs>
+        <g transform="rotate(-4 34 48)">
+          <path d="M6 8 h56 v80 h-56Z" fill="#f4ecd8"/>
+          <path d="M6 8 h56 v80 h-56Z" fill="none" stroke="#f4ecd8" stroke-width="6" stroke-dasharray="3.2 3.2" stroke-linecap="round"/>
+          <rect x="11" y="13" width="46" height="70" fill="#e9dcc0" stroke="#b58c4c" stroke-width=".6"/>
+          <use href="#rose" x="14" y="24" width="40" height="40"/>
+          <text x="34" y="78" text-anchor="middle" font-family="Cinzel" font-size="6.5" fill="#7a2a30" letter-spacing=".6">AMARIS</text>
+          <text x="34" y="21" text-anchor="middle" font-family="Cinzel" font-size="6" fill="#7a2a30">1¢</text>
+        </g>
+        <g fill="none" stroke="#ecd7aa" stroke-opacity=".7" stroke-width="1.1">
+          <circle cx="142" cy="48" r="38"/><circle cx="142" cy="48" r="27"/>
+          <path d="M44 30 q10 -5 20 0 t20 0 t20 0 M44 44 q10 -5 20 0 t20 0 t20 0 M44 58 q10 -5 20 0 t20 0 t20 0 M44 72 q10 -5 20 0 t20 0 t20 0"/>
+        </g>
+        <g fill="#ecd7aa" fill-opacity=".85" font-family="Cinzel">
+          <text font-size="8.4" letter-spacing="1.4"><textPath href="#pmTop" startOffset="50%" text-anchor="middle" id="pmCity">BY HAND</textPath></text>
+          <text font-size="7" letter-spacing="1.2"><textPath href="#pmBot" startOffset="50%" text-anchor="middle">· BEHIND THE CREATOR ·</textPath></text>
+          <text x="142" y="46" text-anchor="middle" font-size="9" id="pmDate">31 OCT</text>
+          <text x="142" y="57" text-anchor="middle" font-size="8" id="pmYear">2026</text>
+        </g>
+      </svg>
       <svg class="pressed-rose" viewBox="0 0 120 120" aria-hidden="true"><use href="#rose"/></svg>
     </div>
     <div class="flap">
@@ -528,6 +590,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
         a garden of works &amp; wonders
         <svg viewBox="0 0 80 20" style="transform:scaleX(-1)" aria-hidden="true"><path d="M2 10 H56 C64 10 66 4 72 4 C78 4 78 12 72 12 C68 12 68 8 72 8" stroke="#f1e6c8" fill="none" stroke-width="1"/><circle cx="2" cy="10" r="1.5" fill="#f1e6c8"/></svg>
       </div>
+      <div class="holiday-note" id="holidayNote"></div>
     </div>
     <nav class="top">
       <a href="#story">My Story</a><i></i><a href="#works">The Works</a><i></i><a href="#now">Now</a><i></i><a href="#closing">The Letter</a>
@@ -676,8 +739,8 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     <p>Thank you for reading this far. Wander back whenever you like, and if something here sparks an idea, a question or a collaboration, the envelope below is always open.</p>
     <p class="valediction">With warmth &amp; wonder,</p>
     <div class="sigwrap">
-      <div class="sig">Jasleen Ahluwalia</div>
-      <svg class="seal-sm" viewBox="0 0 100 100" aria-hidden="true">
+      <svg class="sig" viewBox="0 0 560 104" role="img" aria-label="Jasleen Ahluwalia"><text x="4" y="78" textLength="548" lengthAdjust="spacingAndGlyphs">Jasleen Ahluwalia</text></svg>
+      <svg class="seal-sm" id="sealSm" viewBox="0 0 100 100" aria-hidden="true">
         <path d="M50 6 C66 4 80 12 88 26 C96 40 94 58 84 72 C74 86 58 94 42 92 C26 90 12 80 7 64 C2 48 8 30 20 18 C28 10 38 7 50 6Z" fill="#a3242a"/>
         <circle cx="50" cy="49" r="30" fill="#b8312f"/><circle cx="50" cy="49" r="26" fill="none" stroke="#e98d86" stroke-width=".8" stroke-dasharray="1.5 2.5" opacity=".6"/>
         <text x="50" y="64" text-anchor="middle" font-family="Pinyon Script" font-size="42" fill="#f4cdb6">J</text>
@@ -1076,7 +1139,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
       const se=st.season;
       if(p.pr==='snow'){$('heroFall').innerHTML='';$('finFall').innerHTML=''}else{
         fall($('heroFall'),[[0,110,320,260],[820,90,180,280]],640,se,wind);fall($('finFall'),[[790,30,210,320]],600,se,wind)}
-      fx(st.key,night);window.__wx=st;window.SND&&SND.update(st);
+      fx(st.key,night);window.__wx=st;document.dispatchEvent(new CustomEvent('wx',{detail:st}));window.SND&&SND.update(st);
       if(st.text)note.textContent=st.text;
     };
     // first guess from the visitor's own clock
@@ -1086,7 +1149,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     const words={0:'clear skies',1:'mostly clear',2:'a few clouds',3:'overcast',45:'fog',48:'frosty fog',51:'light drizzle',53:'drizzle',55:'heavy drizzle',56:'freezing drizzle',57:'freezing drizzle',61:'light rain',63:'rain',65:'heavy rain',66:'freezing rain',67:'freezing rain',71:'light snow',73:'snow',75:'heavy snow',77:'snow grains',80:'passing showers',81:'showers',82:'heavy showers',85:'snow showers',86:'heavy snow showers',95:'a thunderstorm',96:'a thunderstorm with hail',99:'a thunderstorm with hail'};
     const tmo=(u,ms=6000)=>{const ac=new AbortController();setTimeout(()=>ac.abort(),ms);return fetch(u,{signal:ac.signal}).then(r=>{if(!r.ok)throw 0;return r.json()})};
     tmo('https://get.geojs.io/v1/ip/geo.json').then(g=>{
-      const lat=+g.latitude,lon=+g.longitude,city=g.city||g.region||'',us=(g.country_code||'')==='US';
+      const lat=+g.latitude,lon=+g.longitude,city=g.city||g.region||'',us=(g.country_code||'')==='US';window.__geo=g;document.dispatchEvent(new CustomEvent('geo',{detail:g}));
       return tmo(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code,is_day,cloud_cover,temperature_2m,wind_speed_10m&daily=sunrise,sunset&timezone=auto&forecast_days=1&wind_speed_unit=kmh${us?'&temperature_unit=fahrenheit':''}`).then(w=>{
         const cur=w.current,code=cur.weather_code,night=!cur.is_day;let key=pickKey(code,cur.cloud_cover);
         const now=new Date(cur.time).getTime(),sr=new Date(w.daily.sunrise[0]).getTime(),ss=new Date(w.daily.sunset[0]).getTime();
@@ -1150,6 +1213,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     g.gain.setValueAtTime(0,t);g.gain.linearRampToValueAtTime(peak,t+att);g.gain.exponentialRampToValueAtTime(.0001,t+att+dec);o.connect(g);out(g,p);o.start(t);o.stop(t+att+dec+.05)}
   const api={
     start(){if(pref==='off'){setBtn(false);return}if(!ctx)init();ctx.resume();started=true;setOn(true)},
+    chime(){if(!on)return;[1568,2349,3136].forEach((f,i)=>setTimeout(()=>tone(f,'sine',.05,.005,.9,0),i*90))},
     crack(k=1){if(!on)return;burst(.06,'bandpass',2600,1.2,.55*k,.07,0);setTimeout(()=>burst(.04,'bandpass',4200,2,.3*k,.05,.1),45);setTimeout(()=>burst(.03,'bandpass',1800,2,.22*k,.04,-.1),95);tone(140,'sine',.35*k,.004,.12,0,60)},
     stamp(){if(!on)return;tone(110,'sine',.4,.004,.18,0,55);burst(.05,'lowpass',900,.7,.25,.08,0)},
     rustle(d=1){if(!on)return;const s=ctx.createBufferSource();s.buffer=W;const g=gain(0),t=ctx.currentTime;
@@ -1191,6 +1255,150 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   function setOn(v){on=v;setBtn(v);if(!ctx)return;master.gain.setTargetAtTime(v?.9:0,ctx.currentTime,.6);if(v)mix()}
   btn.addEventListener('click',()=>{const v=!on;try{localStorage.setItem('btc-sound',v?'on':'off')}catch(e){}pref=v?'on':'off';if(v&&!ctx)init();if(ctx)ctx.resume();started=true;setOn(v)});
   document.addEventListener('visibilitychange',()=>{if(!ctx)return;document.visibilityState==='hidden'?ctx.suspend():on&&ctx.resume()});
+})();
+</script>
+<script>
+/* ===== Ink, postmark & greeting, catch-a-leaf, parallax, holidays, quill ===== */
+(function(){
+  const $=id=>document.getElementById(id),NS='http://www.w3.org/2000/svg';
+  const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+  const R=(a,b)=>a+Math.random()*(b-a),pick=a=>a[Math.floor(Math.random()*a.length)];
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const store={get(k){try{return localStorage.getItem(k)}catch(e){return null}},set(k,v){try{localStorage.setItem(k,v)}catch(e){}}};
+  const now=new Date(),H=now.getHours();
+
+  // ---------- 2. greeting, returning visitors, postmark ----------
+  const greet=H>=5&&H<12?'Buongiorno':H>=12&&H<17?'Buon pomeriggio':H>=17&&H<22?'Buonasera':'Buonanotte';
+  const visits=+(store.get('btc-visits')||0);store.set('btc-visits',visits+1);
+  const back=visits>0;
+  const hint=$('hint');hint.innerHTML=`<b>${greet}, ${back?'another letter for you':'a letter has arrived'}</b>Break the seal`;
+  if(back)$('envTo').textContent='for you, again';
+  const sal=document.querySelector('.salutation');sal.textContent=`${greet}, dear friend,`;
+  const MON=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
+  $('pmDate').textContent=`${now.getDate()} ${MON[now.getMonth()]}`;$('pmYear').textContent=now.getFullYear();
+  const setCity=c=>{if(c)$('pmCity').textContent=c.toUpperCase().slice(0,18)};
+  if(window.__geo)setCity(window.__geo.city);document.addEventListener('geo',e=>setCity(e.detail.city||e.detail.region));
+
+  // ---------- 1. ink-writing reveals ----------
+  const words=(root)=>{const w=document.createTreeWalker(root,NodeFilter.SHOW_TEXT),nodes=[];while(w.nextNode())nodes.push(w.currentNode);let i=0;
+    nodes.forEach(n=>{if(!n.textContent.trim()||n.parentNode.closest('svg'))return;const f=document.createDocumentFragment();n.textContent.split(/(\s+)/).forEach(t=>{if(!t)return;if(/^\s+$/.test(t)){f.appendChild(document.createTextNode(t));return}
+      const sp=document.createElement('span');sp.className='ink-w';sp.textContent=t;sp.style.setProperty('--d',Math.min(i*.035,3.2).toFixed(3)+'s');i++;f.appendChild(sp)});n.parentNode.replaceChild(f,n)})};
+  const paras=[...document.querySelectorAll('.story .cols p, .closing p:not(.valediction)')];
+  const lines=[...document.querySelectorAll('.salutation, .story h2.script, .closing .valediction, .works h2.script')];
+  lines.forEach(l=>l.classList.add('inkline'));
+  paras.forEach(words);
+  const sig=document.querySelector('.closing svg.sig'),seal=$('sealSm');
+  if(reduce){paras.forEach(p=>p.classList.add('inked'));lines.forEach(l=>l.classList.add('inked'));sig.classList.add('drawn');seal.classList.add('stamped')}
+  else{
+    const io=new IntersectionObserver(es=>es.forEach(e=>{if(!e.isIntersecting)return;const t=e.target;io.unobserve(t);
+      if(t===sig){window.SND&&SND.rustle&&SND.rustle(.5);t.classList.add('drawn');setTimeout(()=>{seal.classList.add('stamped');window.SND&&SND.stamp&&SND.stamp()},3300)}
+      else if(t._lines){t._lines.forEach((l,i)=>setTimeout(()=>{l.classList.add('inked');window.SND&&SND.rustle&&SND.rustle(.35)},i*700))}
+      else t.classList.add('inked')}),{threshold:.2});
+    const watchLines=()=>lines.forEach(l=>{const p=l.parentElement;(p._lines=p._lines||[]).includes(l)||p._lines.push(l);io.observe(p)});
+    paras.forEach(x=>io.observe(x));watchLines();io.observe(sig);
+    // re-ink when the letter is closed and reopened
+    $('closeLetter').addEventListener('click',()=>setTimeout(()=>{[...paras,...lines].forEach(x=>x.classList.remove('inked'));paras.forEach(x=>io.observe(x));watchLines();sig.classList.remove('drawn');seal.classList.remove('stamped');io.observe(sig)},1200));
+  }
+
+  // ---------- 4. catch a falling leaf ----------
+  const MAJOR=[['The Fool','a leap of faith, a fresh beginning'],['The Magician','you already hold every tool you need'],['The High Priestess','trust the quiet voice'],['The Empress','let something grow slowly'],['The Emperor','build the structure, then rest in it'],['The Hierophant','learn from those who came before'],['The Lovers','choose with your whole heart'],['The Chariot','steady will, forward motion'],['Strength','gentleness is its own kind of power'],['The Hermit','a little solitude will light the way'],['Wheel of Fortune','the season is turning in your favour'],['Justice','honest scales, clear decisions'],['The Hanged Man','a new angle changes everything'],['Death','an ending that makes room'],['Temperance','balance, patience, the long blend'],['The Devil','notice what holds you, then loosen it'],['The Tower','what falls was ready to fall'],['The Star','hope, renewal, quiet faith'],['The Moon','not everything needs to be clear yet'],['The Sun','warmth, joy, a day that says yes'],['Judgement','answer the call you keep hearing'],['The World','a circle completed, a door opening']];
+  const dayIdx=Math.floor(new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime()/864e5);
+  const card=MAJOR[(dayIdx*7+3)%MAJOR.length];
+  const SUR=[
+    ()=>({h:'tarot card of the day',t:`TarotParot drew <em>${card[0]}</em> for today: ${card[1]}.`,a:['ask the parrot yourself','https://amarisct.github.io/TarotParot/']}),
+    ()=>({h:'from the catalogue',t:'Dessert Spotter: name the dessert you’re craving and I’ll point you to the nearest place that has it.',a:['find a dessert','https://amarisct.github.io/dessertspotter/']}),
+    ()=>({h:'from the catalogue',t:'Artificially Intelligent is where I study human consciousness and machine intelligence, side by side.',a:['step inside','https://amarisct.github.io/Artificially-Intelligent/']}),
+    ()=>({h:'from the catalogue',t:'The Weekly Planner: a gentler way to hold the week.',a:['plan a week','https://amarisct.github.io/Weekly-Planner/']}),
+    ()=>({h:'from the studio',t:'Every work in this garden is made at amaris ct, my studio.',a:['visit the studio','https://amarisct.github.io/Amaris/']}),
+    ()=>({h:'a pressed line',t:'“Hope” is the thing with feathers, that perches in the soul.<br><small>(Emily Dickinson)</small>'}),
+    ()=>({h:'a pressed line',t:'A thing of beauty is a joy for ever.<br><small>(John Keats)</small>'}),
+    ()=>{const wx=window.__wx||{},g=window.__geo||{};return {h:'you caught one',t:`A leaf from ${g.city?g.city+'’s':'your'} ${wx.season||'autumn'} sky. Keep it pressed between these pages.`}}
+  ];
+  let order=[0,...SUR.slice(1).map((_,i)=>i+1).sort(()=>Math.random()-.5)],oi=0,toastEl=null,toastT=null;
+  const toast=(x,y,o)=>{if(toastEl)toastEl.remove();clearTimeout(toastT);const d=document.createElement('div');d.className='toast';d.setAttribute('role','status');
+    d.innerHTML=`<b>a leaf for you</b><i>${o.h}</i><div>${o.t}</div>${o.a?`<a href="${o.a[1]}" target="_blank" rel="noopener">${o.a[0]} →</a>`:''}`;
+    d.style.left=Math.max(170,Math.min(innerWidth-170,x))+'px';d.style.top=Math.max(230,y)+'px';document.body.appendChild(d);toastEl=d;
+    requestAnimationFrame(()=>d.classList.add('show'));d.addEventListener('click',e=>{if(e.target.tagName!=='A'){d.classList.remove('show');setTimeout(()=>d.remove(),400)}});
+    toastT=setTimeout(()=>{d.classList.remove('show');setTimeout(()=>d.remove(),400)},9000)};
+  document.addEventListener('click',e=>{const leaf=e.target.closest&&e.target.closest('.fl');if(!leaf)return;
+    leaf.classList.add('caught');setTimeout(()=>leaf.classList.remove('caught'),9000);
+    window.SND&&SND.chime&&SND.chime();toast(e.clientX,e.clientY,SUR[order[oi++%order.length]]())});
+  const lh=document.createElement('div');lh.className='leaf-hint';lh.textContent='psst… catch a falling leaf';document.querySelector('.hero').appendChild(lh);
+  setTimeout(()=>{if(document.querySelector('#heroFall .fl'))lh.classList.add('show');setTimeout(()=>lh.classList.remove('show'),9000)},7000);
+
+  // ---------- 5. parallax ----------
+  const wrap=(node,cls)=>{if(!node)return null;const g=document.createElementNS(NS,'g');node.parentNode.insertBefore(g,node);g.appendChild(node);return g};
+  const heroSvg=document.querySelector('.hero svg.scene'),finSvg=document.querySelector('.finale svg.shore');
+  const L={far:[],mtn:[],mid:[],trL:[],trR:[]},F={far:[],mid:[],tree:[]};
+  ['heroClouds','rays','sunGlow','stars','moon'].forEach(id=>L.far.push(wrap($(id))));
+  heroSvg.querySelectorAll('#birds').forEach(n=>L.far.push(wrap(n)));
+  const mt=document.querySelector('#scenery > g[filter="url(#paintSoft)"]');L.mtn.push(wrap(mt));
+  ['cypressRow','canopyR'].forEach(id=>L.trR.push(wrap($(id))));['canopyL','willow','roseBush'].forEach(id=>L.trL.push(wrap($(id))));
+  ['finClouds','stars2','moon2','birds2'].forEach(id=>F.far.push(wrap($(id))));F.mid.push(wrap($('lighthouse')));F.tree.push(wrap($('grove')));
+  const titles=document.querySelector('.hero .titles');
+  const setT=(arr,x,y)=>arr.forEach(g=>g&&g.setAttribute('transform',`translate(${x.toFixed(1)} ${y.toFixed(1)})`));
+  let ticking=false;
+  const par=()=>{ticking=false;const vh=innerHeight;
+    const hr=heroSvg.getBoundingClientRect();if(hr.bottom>0&&hr.top<vh){const p=Math.max(0,Math.min(1,-hr.top/hr.height));
+      setT(L.far,0,p*150);setT(L.mtn,0,p*105);setT(L.trL,-p*40,p*30);setT(L.trR,p*40,p*30);
+      titles.style.transform=`translateY(${p*-60}px)`;titles.style.opacity=1-p*1.2}
+    const fr=finSvg.getBoundingClientRect();if(fr.bottom>0&&fr.top<vh){const p=(vh-fr.top)/(vh+fr.height)-.5;
+      setT(F.far,0,p*-110);setT(F.mid,0,p*-40);setT(F.tree,p*-30,p*-20)}};
+  if(!reduce){addEventListener('scroll',()=>{if(!ticking){ticking=true;requestAnimationFrame(par)}},{passive:true});par()}
+
+  // ---------- 6. holiday moments ----------
+  const md=(m,d)=>new Date(now.getFullYear(),m-1,d);const day=new Date(now.getFullYear(),now.getMonth(),now.getDate());
+  const within=(a,b)=>day>=a&&day<=b;
+  const DIWALI={2026:'11-08',2027:'10-29',2028:'10-17',2029:'11-05',2030:'10-26',2031:'11-14',2032:'11-02'};
+  let hol=null;
+  if(within(md(10,24),md(10,31))||within(md(11,1),md(11,1)))hol='halloween';
+  const dw=DIWALI[now.getFullYear()];if(dw){const [m,d]=dw.split('-').map(Number);if(within(new Date(now.getFullYear(),m-1,d-3),new Date(now.getFullYear(),m-1,d+2)))hol='diwali'}
+  if(now.getMonth()===11)hol=now.getDate()===31?'newyear':'december';
+  if(now.getMonth()===0&&now.getDate()===1)hol='newyear';
+  const q=new URLSearchParams(location.search).get('holiday');if(q)hol=q;   // preview any holiday with ?holiday=halloween|diwali|december|newyear
+  const NOTE={halloween:'a happy Halloween from the garden',diwali:'Shubh Deepavali · may your days be full of light',december:'warm wishes for the season',newyear:'a happy new year from the garden'};
+  if(hol){const n=$('holidayNote');n.textContent=NOTE[hol];setTimeout(()=>n.classList.add('show'),1200)}
+  const hg=el('g',{id:'holiday'});const hf=$('heroFall');hf.parentNode.insertBefore(hg,hf);
+  const glows=[];
+  const pumpkin=(x,y,k)=>{const g=el('g',{transform:`translate(${x} ${y}) scale(${k})`},hg);
+    const gl=el('circle',{cx:0,cy:-14,r:30,fill:'#ffb347',opacity:.5,filter:'url(#blur8)',class:'flicker'},g);glows.push(gl);
+    el('ellipse',{cx:-9,cy:-12,rx:10,ry:12,fill:'#d4691d'},g);el('ellipse',{cx:9,cy:-12,rx:10,ry:12,fill:'#d4691d'},g);el('ellipse',{cx:0,cy:-12,rx:10,ry:13,fill:'#e57a24'},g);
+    el('path',{d:'M-1 -24 q2 -7 6 -9',stroke:'#4d6b3c','stroke-width':2.4,fill:'none','stroke-linecap':'round'},g);
+    el('path',{d:'M-9 -16 l4 -5 l3 5Z M3 -16 l4 -5 l3 5Z M-10 -8 q10 8 20 0 l-4 1 l-2 -3 l-2 3 l-4 0 l-2 -3 l-2 3Z',fill:'#ffd76a',class:'flicker'},g)};
+  const diya=(x,y)=>{const g=el('g',{transform:`translate(${x} ${y})`},hg);const gl=el('circle',{cx:0,cy:-8,r:14,fill:'#ffb347',opacity:.55,filter:'url(#blur8)',class:'flicker'},g);glows.push(gl);
+    el('path',{d:'M-9 -3 q9 9 18 0 l-2 -3 h-14Z',fill:'#a0522d'},g);el('path',{d:'M-7 -6 h14',stroke:'#e4a65b','stroke-width':1.2},g);
+    el('path',{d:'M0 -6 c-3 -4 -1 -9 0 -12 c1 3 3 8 0 12Z',fill:'#ffcf4a',class:'flame'},g)};
+  const candle=(x,y)=>{const g=el('g',{transform:`translate(${x} ${y})`},hg);const gl=el('circle',{cx:0,cy:-22,r:22,fill:'#ffcf7a',opacity:.5,filter:'url(#blur8)',class:'flicker'},g);glows.push(gl);
+    el('rect',{x:-9,y:-34,width:18,height:34,rx:2,fill:'rgba(240,235,220,.25)',stroke:'#5b4a36','stroke-width':1.4},g);el('path',{d:'M-11 -34 h22 l-11 -8Z',fill:'#5b4a36'},g);
+    el('rect',{x:-3.5,y:-16,width:7,height:14,fill:'#f4ead2'},g);el('path',{d:'M0 -17 c-2.5 -3 -1 -7 0 -9 c1 2 2.5 6 0 9Z',fill:'#ffcf4a',class:'flame'},g)};
+  const lights=(x0,y0,x1,y1,sag,cols)=>{const pts=[];for(let i=0;i<=24;i++){const t=i/24,x=x0+(x1-x0)*t,y=y0+(y1-y0)*t+Math.sin(Math.PI*t)*sag;pts.push([x,y])}
+    el('path',{d:'M'+pts.map(p=>p.join(' ')).join(' L'),stroke:'#3a3a2c','stroke-width':.8,fill:'none',opacity:.7},hg);
+    pts.forEach(([x,y],i)=>{if(i%2)return;const c=cols[i%cols.length];const b=el('circle',{cx:x,cy:y+3,r:2.6,fill:c,class:'bulb',filter:'url(#blur2)'},hg);b.style.setProperty('--tw',R(1.4,3)+'s');b.style.animationDelay=-R(0,3)+'s';el('circle',{cx:x,cy:y+3,r:1.2,fill:'#fffbe8'},hg)})};
+  const garland=()=>{for(let x=0;x<1000;x+=9){el('circle',{cx:x,cy:519+Math.sin(x/40)*3,r:4.4,fill:pick(['#f29f05','#f2b705','#e8730c'])},hg)}};
+  if(hol==='halloween'){pumpkin(330,522,1);pumpkin(372,522,.75);pumpkin(640,522,.9);pumpkin(118,522,.8)}
+  if(hol==='diwali'){garland();for(let x=60;x<1000;x+=95)diya(x,519);lights(0,300,330,240,40,['#ffd166','#ef476f','#06d6a0','#ffd166']);lights(760,250,1000,300,36,['#ffd166','#ff9f1c','#ef476f'])}
+  if(hol==='december'||hol==='newyear'){[150,420,640,860].forEach(x=>candle(x,520));lights(30,250,330,260,50,['#fff3c4','#ffe08a']);lights(760,240,990,280,46,['#fff3c4','#ffe08a']);
+    const fr=el('rect',{width:1000,height:640,fill:'url(#frostG)',opacity:.55},hg);const dg=heroSvg.querySelector('defs');const rg=el('radialGradient',{id:'frostG',cx:.5,cy:.45,r:.75},dg);el('stop',{offset:.6,'stop-color':'#ffffff','stop-opacity':0},rg);el('stop',{offset:1,'stop-color':'#eef6ff','stop-opacity':.9},rg)}
+  // bats on Halloween nights, fireworks on New Year's night
+  const bats=el('g',{class:'fade',style:'opacity:0'});heroSvg.insertBefore(bats,$('holiday'));
+  if(hol==='halloween')for(let i=0;i<7;i++){const y=R(60,240),k=R(.8,1.3),b=el('g',{class:'bird'},bats);b.style.setProperty('--d','1100px');b.style.setProperty('--ft',R(14,26)+'s');b.style.animationDelay=-R(0,26)+'s';
+    ['M-40 0 c4 -6 9 -7 12 -2 c2 -4 5 -4 7 0','M-21 0 c2 -4 5 -4 7 0 c3 -5 8 -4 12 2'].forEach(d=>{const w=el('path',{d,transform:`translate(0 ${y}) scale(${k})`,fill:'#1d1a22',class:'wing'},b);w.style.setProperty('--fl','.22s')})}
+  const fwG=el('g',{class:'fade',style:'opacity:0'});heroSvg.insertBefore(fwG,$('holiday'));
+  const firework=()=>{const x=R(150,850),y=R(70,220),c=pick(['#ffd166','#ff6b9a','#9be7ff','#fff3c4','#b6ff8a']),g=el('g',{},fwG);
+    for(let i=0;i<22;i++){const a=i/22*Math.PI*2,r=R(36,58);el('path',{d:`M${x} ${y} L${x+Math.cos(a)*r} ${y+Math.sin(a)*r}`,stroke:c,'stroke-width':1.6,'stroke-linecap':'round',class:'fw'},g)}
+    el('circle',{cx:x,cy:y,r:40,fill:c,opacity:.25,filter:'url(#blur8)',class:'fw'},g);setTimeout(()=>g.remove(),1800);window.SND&&SND.stamp&&Math.random()<.5&&SND.crack&&SND.crack(.35)};
+  let fwOn=false;(function fwLoop(){setTimeout(()=>{if(fwOn&&document.visibilityState==='visible')firework();fwLoop()},R(700,1800))})();
+  const holWx=st=>{const night=st.night||st.key==='night';glows.forEach(g=>g.setAttribute('opacity',night?.85:.35));bats.style.opacity=hol==='halloween'&&night?1:0;fwOn=hol==='newyear'&&night;fwG.style.opacity=fwOn?1:0};
+  if(window.__wx)holWx(window.__wx);document.addEventListener('wx',e=>holWx(e.detail));
+
+  // ---------- 7. quill cursor + gold shimmer ----------
+  if(matchMedia('(pointer:fine)').matches){document.documentElement.classList.add('quill');
+    if(!reduce){const cv=document.createElement('canvas');cv.id='shimmerTrail';document.body.appendChild(cv);const c=cv.getContext('2d');let P=[],run=false;
+      const size=()=>{cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;c.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)};size();addEventListener('resize',size);
+      const draw=()=>{c.clearRect(0,0,innerWidth,innerHeight);P=P.filter(p=>(p.l-=.022)>0);P.forEach(p=>{p.x+=p.vx;p.y+=p.vy;p.vy+=.02;c.globalAlpha=p.l*.9;c.fillStyle=p.c;c.beginPath();c.arc(p.x,p.y,p.r*p.l+.3,0,7);c.fill()});
+        if(P.length)requestAnimationFrame(draw);else run=false};
+      addEventListener('pointermove',e=>{if(e.pointerType!=='mouse')return;for(let i=0;i<2;i++)P.push({x:e.clientX+3+R(-2,2),y:e.clientY+29+R(-2,2),vx:R(-.3,.3),vy:R(-.2,.4),r:R(.8,2),l:1,c:pick(['#e9c97a','#f6e2a6','#c9a24e','#fff4cf'])});
+        if(P.length>160)P.splice(0,P.length-160);if(!run){run=true;requestAnimationFrame(draw)}},{passive:true})}}
 })();
 </script>
 </body>
