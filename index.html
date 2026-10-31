@@ -219,6 +219,13 @@ footer{position:relative;z-index:1;text-align:center;padding:0 0 40px;font-famil
 .h-orn i{display:block;width:1px;background:rgba(60,45,30,.55)}
 @keyframes ornsway{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
 .h-corner{position:absolute;bottom:6px}.h-corner.l{left:72px}.h-corner.r{right:6px;transform:scaleX(-1)}
+.webx{position:absolute;pointer-events:none;z-index:4;aspect-ratio:1}.webx svg{width:100%;height:100%;overflow:visible;display:block}
+.gossamer{inset:0;width:auto;height:auto}.gthread{stroke-opacity:0;animation:gossamer 18s ease-in-out infinite}
+@keyframes gossamer{0%,100%{stroke-opacity:0;transform:translateY(0)}30%{stroke-opacity:.35}50%{stroke-opacity:.5;transform:translateY(-18px)}70%{stroke-opacity:.3}}
+.crawler{position:absolute;top:16px;left:40px;z-index:5;pointer-events:none;animation:crawl 26s linear infinite}
+.crawler svg{display:block;animation:crawlbob .3s steps(2) infinite}
+@keyframes crawl{0%{transform:translateX(0) rotate(90deg)}38%{transform:translateX(340px) rotate(90deg)}45%{transform:translateX(340px) rotate(90deg)}48%{transform:translateX(340px) rotate(-90deg)}88%{transform:translateX(0) rotate(-90deg)}95%{transform:translateX(0) rotate(-90deg)}98%,100%{transform:translateX(0) rotate(90deg)}}
+@keyframes crawlbob{50%{transform:translateY(.6px) scaleX(.96)}}
 .h-web{position:absolute;width:260px;height:260px}.h-web svg{overflow:visible}
 .h-web.tl{left:0;top:0}.h-web.tr{right:0;top:0}.h-web.bl{left:0;bottom:0}.h-web.br{right:0;bottom:0}
 .dangle{animation:dangle 6s ease-in-out infinite}
@@ -1650,11 +1657,12 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     cor.innerHTML='';if(t.corner&&t.corner!=='none'&&CORNER[t.corner]){[0,1].forEach(side=>{const d=document.createElement('div');d.className='h-corner '+(side?'r':'l');d.innerHTML=svgw(150,70,CORNER[t.corner](0)+CORNER[t.corner](45)+CORNER[t.corner](90));cor.appendChild(d)})}
     webs(!!t.webs);ptype=t.fall||'none';sizeCv();parts=Array.from({length:ptype==='powder'?16:ptype==='snow'?90:55},()=>spawn(ptype,true));if(!rafOn&&ptype!=='none'&&!reduce){rafOn=true;requestAnimationFrame(tick)}};
 
-  const WEB=()=>{
-    // an orb web strung across a corner: frame anchored to both walls, uneven spokes, one continuous sagging capture spiral
-    const ax=R(190,250),by=R(190,250),D=[R(150,200),R(150,200)];
-    const poly=[[0,0],[ax,0],[D[0]+R(10,30),D[1]*R(.35,.55)],D,[D[0]*R(.35,.55),D[1]+R(10,30)],[0,by]];
-    const hub=[R(72,98),R(72,98)];
+  const WEB=(opt={})=>{
+    // an orb web: frame anchored to walls (corner) or strung between branches (free), uneven spokes, one continuous sagging capture spiral
+    const free=opt.mode==='free',silk=opt.silk||'#f1eef8',so=opt.so||.5;
+    let ax=R(190,250),by=R(190,250),D=[R(150,200),R(150,200)],poly,hub;
+    if(free){const k=Math.floor(R(6,9));poly=Array.from({length:k},(_,i)=>{const a=i/k*6.283+R(-.2,.2),r=R(85,120);return [130+Math.cos(a)*r,130+Math.sin(a)*r]});hub=[R(118,142),R(118,142)]}
+    else{poly=[[0,0],[ax,0],[D[0]+R(10,30),D[1]*R(.35,.55)],D,[D[0]*R(.35,.55),D[1]+R(10,30)],[0,by]];hub=[R(72,98),R(72,98)]}
     const hit=(a)=>{const dx=Math.cos(a),dy=Math.sin(a);let best=1e9;for(let i=0;i<poly.length;i++){const [x1,y1]=poly[i],[x2,y2]=poly[(i+1)%poly.length],ex=x2-x1,ey=y2-y1,den=dx*ey-dy*ex;if(Math.abs(den)<1e-9)continue;
       const t=((x1-hub[0])*ey-(y1-hub[1])*ex)/den,u=((x1-hub[0])*dy-(y1-hub[1])*dx)/den;if(t>0&&u>=0&&u<=1&&t<best)best=t}return best};
     const n=Math.floor(R(19,25));let ang=[],a0=R(0,6.28);for(let i=0;i<n;i++){ang.push(a0+i*2*Math.PI/n+R(-.11,.11))}
@@ -1662,7 +1670,8 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     const P=(sp,f)=>[hub[0]+Math.cos(sp.a)*sp.L*f,hub[1]+Math.sin(sp.a)*sp.L*f];
     let o='';
     // anchor lines running on to the walls and beyond
-    o+=`<path d="M${ax} 0 L${ax+R(10,40)} 0 M0 ${by} L0 ${by+R(10,40)} M${D[0]} ${D[1]} L${D[0]+R(40,90)} ${D[1]+R(40,90)}" stroke-width=".7" stroke-opacity=".5"/>`;
+    if(free)poly.forEach(([x,y])=>{if(Math.random()<.7){const ang2=Math.atan2(y-130,x-130),l=R(30,70);o+=`<path d="M${x.toFixed(1)} ${y.toFixed(1)} L${(x+Math.cos(ang2)*l).toFixed(1)} ${(y+Math.sin(ang2)*l).toFixed(1)}" stroke-width=".6" stroke-opacity=".5"/>`}});
+    else o+=`<path d="M${ax} 0 L${ax+R(10,40)} 0 M0 ${by} L0 ${by+R(10,40)} M${D[0]} ${D[1]} L${D[0]+R(40,90)} ${D[1]+R(40,90)}" stroke-width=".7" stroke-opacity=".5"/>`;
     o+=`<path d="M${poly.map(p=>p.map(v=>v.toFixed(1)).join(' ')).join(' L')}Z" stroke-width=".8"/>`;
     spokes.forEach(sp=>o+=`<path d="M${hub[0].toFixed(1)} ${hub[1].toFixed(1)} L${sp.x.toFixed(1)} ${sp.y.toFixed(1)}" stroke-width="${R(.5,.8).toFixed(2)}"/>`);
     // capture spiral (outside → in), sagging toward the hub between spokes, with a few broken strands and a torn gap
@@ -1682,9 +1691,25 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     const dew=drops.map(([x,y])=>`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${R(.8,1.8).toFixed(2)}" fill="url(#dew)"/>`).join('');
     return `<defs><radialGradient id="dew" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#eef2ff" stop-opacity=".8"/><stop offset="1" stop-color="#c9d2e8" stop-opacity=".2"/></radialGradient>
       <filter id="silk" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation=".35" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
-      <g class="webbreeze"><g fill="none" stroke="#f1eef8" stroke-opacity=".5" stroke-linecap="round" filter="url(#silk)">${o}</g>${dew}</g>`};
+      <g class="webbreeze"><g fill="none" stroke="${silk}" stroke-opacity="${so}" stroke-linecap="round" filter="url(#silk)">${o}</g>${dew}</g>`};
   const SPIDER=`<g class="dangle"><path d="M0 -400 V0" stroke="#efe8f5" stroke-opacity=".6" stroke-width=".8"/><g transform="translate(0 8)"><ellipse rx="7" ry="9" fill="#1d1a22"/><circle cy="-10" r="5" fill="#1d1a22"/>${[-1,1].map(s2=>[0,1,2,3].map(i=>`<path d="M0 ${-4+i*3} q${s2*12} ${-6+i*3} ${s2*18} ${2+i*5}" stroke="#1d1a22" stroke-width="1.4" fill="none"/>`).join('')).join('')}<circle cx="-2" cy="-11" r="1" fill="#e07b2a"/><circle cx="2" cy="-11" r="1" fill="#e07b2a"/></g></g>`;
-  const webs=(on)=>{const box=layer.querySelector('.h-webs');box.innerHTML='';if(!on)return;
+  const SPOTS=[
+    {sel:'.hero',css:'left:1%;top:3%;width:180px',mode:'corner'},
+    {sel:'.hero',css:'right:6%;top:24%;width:130px',mode:'free',z:2},
+    {sel:'.story',css:'right:18px;top:22px;width:150px',mode:'corner',flip:'scaleX(-1)',silk:'#6f6455',so:.42},
+    {sel:'.vignette',css:'left:-6px;bottom:-6px;width:96px',mode:'corner',flip:'scaleY(-1)',silk:'#f1eef8',so:.6},
+    {sel:'.works',css:'right:30px;top:120px;width:170px',mode:'free',silk:'#6f6455',so:.4},
+    {sel:'#now .cartouche',css:'left:-14px;top:-14px;width:110px',mode:'corner',silk:'#f8f6f0',so:.6},
+    {sel:'.closing',css:'right:0;bottom:0;width:210px',mode:'corner',flip:'scale(-1,-1)',silk:'#6f6455',so:.38},
+    {sel:'.sqenv',css:'right:-34px;top:-34px;width:110px',mode:'corner',flip:'scaleX(-1)',silk:'#f8f6f0',so:.6}
+  ];
+  const webs=(on)=>{document.querySelectorAll('.webx,.crawler').forEach(e=>e.remove());const box=layer.querySelector('.h-webs');box.innerHTML='';if(!on)return;
+    SPOTS.forEach(sp=>{const host=document.querySelector(sp.sel);if(!host)return;const d=document.createElement('div');d.className='webx';d.style.cssText=sp.css+(sp.z?`;z-index:${sp.z}`:'');
+      d.innerHTML=`<svg viewBox="0 0 260 260" style="${sp.flip?`transform:${sp.flip}`:''}" aria-hidden="true">${WEB({mode:sp.mode,silk:sp.silk,so:sp.so})}</svg>`;host.appendChild(d)});
+    const g=document.createElement('div');g.className='h-web gossamer';let gs='';for(let i=0;i<5;i++){const y=R(.1,.9)*innerHeight,x0=-50,x1=innerWidth+50;gs+=`<path d="M${x0} ${y.toFixed(0)} C${(innerWidth*.3).toFixed(0)} ${(y+R(-80,80)).toFixed(0)} ${(innerWidth*.6).toFixed(0)} ${(y+R(-80,80)).toFixed(0)} ${x1} ${(y+R(-60,60)).toFixed(0)}" class="gthread" style="animation-delay:${-R(0,18).toFixed(1)}s"/>`}
+    g.innerHTML=`<svg width="${innerWidth}" height="${innerHeight}" aria-hidden="true"><g fill="none" stroke="#f4f0fa" stroke-width=".6">${gs}</g></svg>`;box.appendChild(g);
+    const cr=document.createElement('div');cr.className='crawler';cr.innerHTML=`<svg viewBox="-20 -16 40 32" width="26" height="21" aria-hidden="true"><ellipse rx="6" ry="7.5" fill="#1d1a22"/><circle cy="-9" r="4" fill="#1d1a22"/>${[-1,1].map(s2=>[0,1,2,3].map(i=>`<path class="leg${i%2}" d="M0 ${-4+i*3} q${s2*9} ${-5+i*3} ${s2*14} ${1+i*4}" stroke="#1d1a22" stroke-width="1.3" fill="none"/>`).join('')).join('')}</svg>`;
+    document.querySelector('.story').appendChild(cr);
     [['tl',''],['tr','scale(-1 1)'],['bl','scale(1 -1)'],['br','scale(-1 -1)']].forEach(([c,tr],i)=>{const d=document.createElement('div');d.className='h-web '+c;
       d.innerHTML=`<svg viewBox="0 0 260 260" width="260" height="260" aria-hidden="true"><g transform="${tr?`translate(${tr.includes('-1 1')||tr.includes('-1 -1')?260:0} ${tr.includes('1 -1')||tr.includes('-1 -1')?260:0}) ${tr}`:''}">${WEB()}</g>${i===0?`<g transform="translate(150 0)"><g transform="translate(0 ${R(150,200).toFixed(0)})">${SPIDER}</g></g>`:''}${i===1?`<g transform="translate(70 0)"><g transform="translate(0 ${R(90,130).toFixed(0)})">${SPIDER}</g></g>`:''}</svg>`;box.appendChild(d)})};
   // ---------- 6c. flowers follow the season and the holiday ----------
