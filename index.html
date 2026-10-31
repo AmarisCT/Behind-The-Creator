@@ -3,8 +3,8 @@
 <head>
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
-<title>Behind The Creator · Jasleen</title>
-<meta name="description" content="A letter from Jasleen, founder of amaris ct.">
+<title>Behind The Creator · Jasleen Ahluwalia</title>
+<meta name="description" content="A letter from Jasleen Ahluwalia, founder of amaris ct.">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Italiana&family=Pinyon+Script&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
@@ -31,6 +31,7 @@ section{position:relative}
 .wreath{width:clamp(78px,10vw,104px);height:auto;filter:drop-shadow(0 2px 6px rgba(20,25,10,.5))}
 .benvenuti{font-family:'Pinyon Script',cursive;font-size:clamp(20px,3vw,30px);margin-top:clamp(20px,5vw,54px)}
 .name{font-family:'Italiana',serif;font-weight:400;font-size:clamp(50px,10.5vw,112px);letter-spacing:.07em;line-height:.95}
+.name .surname{display:block;font-size:.34em;letter-spacing:.62em;margin:6px 0 0 .62em;line-height:1.2}
 .subtitle{display:flex;align-items:center;gap:14px;font-family:'Pinyon Script',cursive;font-size:clamp(24px,4.2vw,44px);margin-top:2px}
 .subtitle svg{width:clamp(40px,7vw,76px);height:auto;opacity:.85}
 nav.top{position:absolute;bottom:34px;left:0;right:0;display:flex;justify-content:center;align-items:center;gap:clamp(10px,2.4vw,26px);font-family:'Cinzel',serif;font-size:11.5px;letter-spacing:.3em;text-transform:uppercase}
@@ -111,7 +112,7 @@ h2.script{font-family:'Pinyon Script',cursive;font-weight:400;color:var(--sage);
 .closing p{font-size:19px;line-height:34px;max-width:580px;margin-bottom:34px;position:relative}
 .closing .valediction{font-family:'Pinyon Script',cursive;font-size:32px;color:var(--sage);margin:6px 0 0;line-height:34px}
 .closing .sigwrap{display:flex;align-items:center;gap:26px;margin:6px 0 0 34px}
-.closing .sig{font-family:'Pinyon Script',cursive;font-size:clamp(64px,9vw,92px);line-height:1;color:var(--ink)}
+.closing .sig{font-family:'Pinyon Script',cursive;font-size:clamp(48px,7vw,78px);line-height:1;color:var(--ink)}
 .closing .seal-sm{width:70px;height:70px;transform:rotate(-12deg);filter:drop-shadow(0 3px 4px rgba(60,10,10,.35))}
 .closing .ps{font-style:italic;color:var(--muted);font-size:17px;margin-top:30px;line-height:34px}
 .pressed{position:absolute;right:clamp(20px,7vw,90px);top:60px;width:clamp(110px,16vw,170px);opacity:.82;filter:sepia(.35) saturate(.8);transform:rotate(18deg)}
@@ -130,7 +131,7 @@ h2.script{font-family:'Pinyon Script',cursive;font-weight:400;color:var(--sage);
 .sq-front{z-index:3;background:linear-gradient(160deg,#6a1f2f,#3a0d18 75%);clip-path:polygon(0 0,50% 52%,100% 0,100% 100%,0 100%)}
 .sq-front::after{content:"";position:absolute;inset:0;background:linear-gradient(to top right,transparent 49.5%,rgba(0,0,0,.25) 50%,transparent 50.6%) left/50% 100% no-repeat,linear-gradient(to top left,transparent 49.5%,rgba(0,0,0,.25) 50%,transparent 50.6%) right/50% 100% no-repeat}
 .sq-front .edge{position:absolute;inset:7px;border:.5px solid rgba(220,192,136,.45)}
-.sq-front .addr{position:absolute;bottom:10%;left:0;right:0;text-align:center;font-family:'Pinyon Script',cursive;color:#dcc088;font-size:clamp(20px,2.6vw,26px)}
+.sq-front .addr{position:absolute;bottom:10%;left:0;right:0;text-align:center;font-family:'Pinyon Script',cursive;color:#dcc088;font-size:clamp(17px,2.1vw,22px)}
 .sq-flap{z-index:4;transform-origin:top center;background:linear-gradient(#7a2536,#4a1420);clip-path:polygon(0 0,100% 0,50% 56%);transition:transform .7s cubic-bezier(.4,.1,.2,1),z-index 0s .35s,filter .7s}
 .sq-seal{position:absolute;left:50%;top:56%;width:58px;height:58px;transform:translate(-50%,-50%);z-index:5;filter:drop-shadow(0 3px 4px rgba(0,0,0,.4));transition:opacity .4s,transform .5s}
 .sq-hint{position:absolute;left:0;right:0;bottom:-30px;text-align:center;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.32em;color:#f3ecdc;text-transform:uppercase;text-shadow:0 1px 6px rgba(0,0,0,.6);animation:breathe 2.6s ease-in-out infinite}
@@ -151,7 +152,7 @@ h2.script{font-family:'Pinyon Script',cursive;font-weight:400;color:var(--sage);
 .nc p{font-size:18px;line-height:1.5;color:#3a3328;font-style:italic}
 .nc-btn{display:inline-flex;gap:8px;align-items:center;margin-top:22px;padding:11px 22px;background:var(--wine);color:#f3dcae;text-decoration:none;font-family:'Cinzel',serif;font-size:11.5px;letter-spacing:.2em;text-transform:uppercase;border-radius:2px;box-shadow:inset 0 0 0 1px rgba(220,192,136,.5),inset 0 0 0 4px var(--wine),inset 0 0 0 5px rgba(220,192,136,.35);transition:transform .3s}
 .nc-btn:hover{transform:translateY(-2px)}.nc-btn span{transition:transform .3s}.nc-btn:hover span{transform:translateX(4px)}
-.nc-sig{font-family:'Pinyon Script',cursive;font-size:44px;margin-top:18px;line-height:1}
+.nc-sig{font-family:'Pinyon Script',cursive;font-size:38px;margin-top:18px;line-height:1}
 .nc-fl{width:70%;height:22px;margin-top:4px}
 .nc-x{position:absolute;right:16px;top:12px;background:none;border:none;font-size:26px;color:var(--sepia);cursor:pointer;z-index:2;line-height:1}
 
@@ -196,6 +197,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
 .letter .lw{width:62px;height:auto;margin:0 auto}
 .letter .lb{font-family:'Pinyon Script',cursive;color:var(--sage);font-size:clamp(17px,3vw,23px);margin-top:4px}
 .letter .ln{font-family:'Italiana',serif;font-size:clamp(30px,6vw,46px);letter-spacing:.09em;color:var(--ink);line-height:1.05}
+.letter .ln2{font-family:'Italiana',serif;font-size:clamp(11px,2vw,15px);letter-spacing:.6em;color:var(--sepia);margin:2px 0 0 .6em}
 #intro.closing .letter{transition:transform 1s cubic-bezier(.4,0,.2,1) 0s}
 #intro.closing .flap{transition:transform .9s cubic-bezier(.4,.1,.2,1) .9s,z-index 0s 1.2s,filter .9s .9s}
 #intro.closing .seal{transition:transform .6s cubic-bezier(.3,1.5,.5,1) 1.8s,opacity .4s 1.8s}
@@ -348,7 +350,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     <div class="letter" id="letter" tabindex="-1" aria-label="Pull the letter out to open it">
       <svg class="lw" viewBox="0 0 120 120" aria-hidden="true"><use href="#laurel"/><text x="60" y="76" text-anchor="middle" font-family="Pinyon Script" font-size="52" fill="#b58c4c">J</text></svg>
       <div class="lb">Benvenuti nel giardino di</div>
-      <div class="ln">JASLEEN</div>
+      <div class="ln">JASLEEN</div><div class="ln2">AHLUWALIA</div>
       <svg viewBox="0 0 420 34" style="width:62%;height:20px;margin-top:4px" aria-hidden="true"><use href="#flourish"/></svg>
     </div>
     <div class="env-front"><div class="edge"></div><div class="to">for you</div>
@@ -470,7 +472,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     <div class="titles">
       <svg class="wreath" viewBox="0 0 120 120" aria-hidden="true"><use href="#laurel"/><text x="60" y="78" text-anchor="middle" font-family="Pinyon Script" font-size="56" fill="#f1e6c8">J</text></svg>
       <div class="benvenuti">Benvenuti nel giardino di</div>
-      <h1 class="name">JASLEEN</h1>
+      <h1 class="name">JASLEEN<span class="surname">AHLUWALIA</span></h1>
       <div class="subtitle">
         <svg viewBox="0 0 80 20" aria-hidden="true"><path d="M2 10 H56 C64 10 66 4 72 4 C78 4 78 12 72 12 C68 12 68 8 72 8" stroke="#f1e6c8" fill="none" stroke-width="1"/><circle cx="2" cy="10" r="1.5" fill="#f1e6c8"/></svg>
         a garden of works &amp; wonders
@@ -622,7 +624,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     <p>Thank you for reading this far. Wander back whenever you like, and if something here sparks an idea, a question or a collaboration, the envelope below is always open.</p>
     <p class="valediction">With warmth &amp; wonder,</p>
     <div class="sigwrap">
-      <div class="sig">Jasleen</div>
+      <div class="sig">Jasleen Ahluwalia</div>
       <svg class="seal-sm" viewBox="0 0 100 100" aria-hidden="true">
         <path d="M50 6 C66 4 80 12 88 26 C96 40 94 58 84 72 C74 86 58 94 42 92 C26 90 12 80 7 64 C2 48 8 30 20 18 C28 10 38 7 50 6Z" fill="#a3242a"/>
         <circle cx="50" cy="49" r="30" fill="#b8312f"/><circle cx="50" cy="49" r="26" fill="none" stroke="#e98d86" stroke-width=".8" stroke-dasharray="1.5 2.5" opacity=".6"/>
@@ -658,7 +660,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     <div class="sqenv" id="sqenv" role="button" tabindex="0" aria-label="Open the envelope to write to Jasleen">
       <div class="sq-back"></div>
       <div class="sq-peek"><div class="k">KINDLY WRITE</div><div class="r">a note awaits</div></div>
-      <div class="sq-front"><div class="edge"></div><div class="addr">to Jasleen</div></div>
+      <div class="sq-front"><div class="edge"></div><div class="addr">to Jasleen Ahluwalia</div></div>
       <div class="sq-flap"></div>
       <svg class="sq-seal" viewBox="0 0 100 100" aria-hidden="true">
         <path d="M50 6 C66 4 80 12 88 26 C96 40 94 58 84 72 C74 86 58 94 42 92 C26 90 12 80 7 64 C2 48 8 30 20 18 C28 10 38 7 50 6Z" fill="#a3242a"/>
@@ -685,7 +687,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     <span><b>close the letter</b>fold &amp; seal</span>
   </button>
 </div>
-<footer>amaris ct · Jasleen · MMXXVI</footer>
+<footer>amaris ct · Jasleen Ahluwalia · MMXXVI</footer>
 
 <!-- ================= THE NOTECARD ================= -->
 <div id="notecard" role="dialog" aria-modal="true" aria-label="A notecard from Jasleen">
@@ -698,7 +700,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     <div class="nc-h">Dear friend,</div>
     <p>If something here sparked an idea, a question or a collaboration, I would love to hear from you. My correspondence lives on LinkedIn, so leave a note there and I’ll write back.</p>
     <a class="nc-btn" href="https://www.linkedin.com/in/jojomojojo222/" target="_blank" rel="noopener">Write to me on LinkedIn <span>→</span></a>
-    <div class="nc-sig">Jasleen</div>
+    <div class="nc-sig">Jasleen Ahluwalia</div>
     <svg viewBox="0 0 420 34" class="nc-fl" aria-hidden="true"><use href="#flourish"/></svg>
   </div>
 </div>
