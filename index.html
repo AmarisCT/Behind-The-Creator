@@ -4,7 +4,14 @@
 <meta charset="utf-8">
 <meta name="viewport" content="width=device-width, initial-scale=1">
 <title>Behind The Creator · Jasleen Ahluwalia</title>
-<meta name="description" content="A letter from Jasleen Ahluwalia, founder of amaris ct.">
+<meta name="description" content="A letter from Jasleen Kaur Ahluwalia, founder of amaris ct. Break the seal.">
+<meta name="theme-color" content="#4a1420">
+<meta name="apple-mobile-web-app-capable" content="yes"><meta name="apple-mobile-web-app-title" content="JKA"><meta name="apple-mobile-web-app-status-bar-style" content="black-translucent">
+<link rel="icon" href="favicon.svg" type="image/svg+xml"><link rel="icon" href="favicon-32.png" sizes="32x32" type="image/png"><link rel="apple-touch-icon" href="apple-touch-icon.png"><link rel="manifest" href="site.webmanifest">
+<meta property="og:type" content="website"><meta property="og:site_name" content="Behind The Creator">
+<meta property="og:title" content="Behind The Creator · a letter from Jasleen Kaur Ahluwalia"><meta property="og:description" content="A letter has arrived for you. Break the seal to step into the garden.">
+<meta property="og:url" content="https://amarisct.github.io/Behind-The-Creator/"><meta property="og:image" content="https://amarisct.github.io/Behind-The-Creator/og-card.jpg"><meta property="og:image:width" content="1200"><meta property="og:image:height" content="630"><meta property="og:image:alt" content="A wine-red velvet envelope sealed with a JKA wax seal">
+<meta name="twitter:card" content="summary_large_image"><meta name="twitter:title" content="Behind The Creator · a letter from Jasleen Kaur Ahluwalia"><meta name="twitter:description" content="A letter has arrived for you. Break the seal."><meta name="twitter:image" content="https://amarisct.github.io/Behind-The-Creator/og-card.jpg">
 <link rel="preconnect" href="https://fonts.googleapis.com">
 <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
 <link href="https://fonts.googleapis.com/css2?family=Cormorant+Garamond:ital,wght@0,400;0,500;0,600;1,400;1,500&family=Italiana&family=Pinyon+Script&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
@@ -291,6 +298,56 @@ html.quill,html.quill body{cursor:url("data:image/svg+xml,%3Csvg xmlns='http://w
 html.quill a,html.quill button,html.quill [role=button],html.quill .fl{cursor:pointer}
 #shimmerTrail{position:fixed;inset:0;z-index:60;pointer-events:none}
 
+
+/* ---------------- ACCESSIBILITY + CALM ---------------- */
+.skiplink{position:fixed;left:16px;top:-60px;z-index:100;background:var(--parch);color:var(--wine);padding:10px 16px;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.2em;box-shadow:0 6px 18px rgba(0,0,0,.25);transition:top .3s}
+.skiplink:focus{top:16px}
+:focus-visible{outline:2px solid #c9a24e;outline-offset:3px;border-radius:2px}
+#calmBtn{position:fixed;left:72px;bottom:18px;z-index:45;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;color:#4a1420;background:rgba(247,242,228,.94);
+  box-shadow:0 6px 16px rgba(50,25,5,.3),inset 0 0 0 1px rgba(181,140,76,.7),inset 0 0 0 4px rgba(247,242,228,.94),inset 0 0 0 5px rgba(181,140,76,.35);display:grid;place-items:center}
+#calmBtn svg{width:22px;height:22px}#calmBtn[aria-pressed="true"]{background:#4a1420;color:#f3dcae}
+html.calm *,html.calm *::before,html.calm *::after{animation-play-state:paused!important}
+html.calm .page,html.calm .tabwrap,html.calm footer{transition:none!important}
+.h-corner.l{left:128px!important}
+.nc-alt{display:block;margin-top:12px;font-style:italic;color:var(--sepia);font-size:16px}
+#stats{position:fixed;inset:0;z-index:60;display:grid;place-items:center;background:rgba(40,22,10,.45)}#stats[hidden]{display:none}
+#stats .nc{transform:none}.stats-note{font-size:14px!important;color:var(--muted);margin-top:10px}
+#statsBody b{font-family:'Italiana',serif;font-weight:400;font-size:34px;color:var(--wine);display:block;line-height:1.1}
+/* ---------------- EASTER EGG ---------------- */
+.hero svg.scene #moon,.hero svg.scene .orb{pointer-events:visiblePainted!important;cursor:pointer}.parrot{pointer-events:none}.parrot .pw{transform-box:fill-box;transform-origin:80% 80%}
+/* ---------------- PHONES ---------------- */
+@media (max-width:700px){
+  .page{width:100%;margin-top:0;box-shadow:none}
+  .hero{height:auto;min-height:100svh;max-height:none}
+  .hero svg.scene{height:100%}
+  .hero .titles{padding-top:max(28px,env(safe-area-inset-top))}
+  .wreath{width:78px}.benvenuti{margin-top:34px}
+  .name{font-size:clamp(46px,14vw,64px);letter-spacing:.05em}
+  .name .surname{letter-spacing:.45em;margin-left:.45em}
+  .subtitle{font-size:clamp(24px,7vw,32px);gap:8px}.subtitle svg{width:32px}
+  .holiday-note{font-size:13.5px;padding:0 18px}
+  nav.top{bottom:max(22px,env(safe-area-inset-bottom));flex-wrap:wrap;row-gap:10px;padding:0 16px;font-size:10px;letter-spacing:.18em}
+  .story{padding:64px 22px 30px}.hairframe{inset:18px 10px 10px}.corner{width:52px;height:52px}
+  .cols{columns:1;font-size:17px}
+  .works{padding:30px 20px 70px}.works-head{flex-direction:column;gap:2px}
+  .ledger li{grid-template-columns:24px 30px 1fr;gap:0 8px}.ledger .row b{white-space:normal;font-size:17.5px}
+  .sea{padding:90px 18px 80px}.cartouche{max-width:300px}
+  .closing{padding:64px 26px 60px}.closing::before{left:14px}.closing p{font-size:17.5px;line-height:30px;margin-bottom:30px}
+  .closing .sigwrap{margin-left:0;gap:14px}.closing svg.sig{width:min(290px,72vw)}.closing .seal-sm{width:54px;height:54px}
+  .finale{height:640px}
+  .tabwrap{margin-top:-10px}
+  .sqenv{width:clamp(170px,46vw,210px)}
+  .env-wrap{width:min(92vw,420px)}
+  .hint{font-size:10.5px;letter-spacing:.26em;padding:10px 18px;max-width:88vw}.hint b{font-size:24px}
+  .postage{width:clamp(110px,34%,150px)}
+  #soundBtn,#calmBtn{bottom:max(14px,env(safe-area-inset-bottom));width:42px;height:42px}#calmBtn{left:66px}
+  .toast{width:min(300px,86vw)}
+  .h-orn,.h-corner{display:none}
+  .h-web{width:150px;height:150px}.h-web svg{width:150px;height:150px}
+  .webx{transform:scale(.75);transform-origin:top left}
+  .leaf-hint{bottom:auto;top:12px;left:12px}
+}
+
 /* ---------------- THE LETTER ---------------- */
 body.sealed{overflow:hidden}
 body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:translateY(30px) scale(.97)}
@@ -349,6 +406,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
 </style>
 </head>
 <body class="sealed">
+<a class="skiplink" href="#story" id="skipLink">Skip to the letter</a>
 
 <!-- ================= shared defs ================= -->
 <svg width="0" height="0" style="position:absolute" aria-hidden="true">
@@ -457,6 +515,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
       <g fill="#b58c4c"><circle cx="10" cy="17" r="1.6"/><circle cx="410" cy="17" r="1.6"/><circle cx="120" cy="17" r="1.1"/><circle cx="300" cy="17" r="1.1"/></g>
     </symbol>
     <symbol id="laurel" viewBox="0 0 120 120"><g id="laurelG"></g></symbol>
+    <symbol id="jka" viewBox="-8 -4 230 114"><g><path d="M10 0 H44 V4 H36 V76 C36 99 22 108 9 104 C1 101 -1 93 5 90 C9 94 15 97 19 93 C23 89 24 84 24 76 V4 H10Z"/><circle cx="5.5" cy="95" r="5.2"/></g><g transform="translate(58 0)"><path d="M0 0 H26 V4 H18 V96 H26 V100 H0 V96 H7 V4 H0Z"/><path d="M18 56 L52 4 H45 V0 H66 V4 H57 L21 60Z"/><path d="M27 44 L36 38 L64 96 H70 V100 H46 V96 H51Z"/></g><g transform="translate(134 0)"><path d="M34 0 H43 L72 96 H78 V100 H52 V96 H59 L52 72 H22 L16 96 H24 V100 H2 V96 H11 Z M23.5 67 H50.6 L38 22 Z" fill-rule="evenodd"/></g></symbol>
   </defs>
 </svg>
 
@@ -474,7 +533,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
       </svg>
     </div>
     <div class="letter" id="letter" tabindex="-1" aria-label="Pull the letter out to open it">
-      <svg class="lw" viewBox="0 0 120 120" aria-hidden="true"><use href="#laurel"/><text x="60" y="76" text-anchor="middle" font-family="Pinyon Script" font-size="52" fill="#b58c4c">J</text></svg>
+      <svg class="lw" viewBox="0 0 120 120" aria-hidden="true"><use href="#laurel"/><use href="#jka" x="33" y="46" width="54" height="27" fill="#b58c4c"/></svg>
       <div class="lb">Benvenuti nel giardino di</div>
       <div class="ln">JASLEEN</div><div class="ln2">AHLUWALIA</div>
       <svg viewBox="0 0 420 34" style="width:62%;height:20px;margin-top:4px" aria-hidden="true"><use href="#flourish"/></svg>
@@ -512,7 +571,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
         <path d="M50 6 C66 4 80 12 88 26 C96 40 94 58 84 72 C74 86 58 94 42 92 C26 90 12 80 7 64 C2 48 8 30 20 18 C28 10 38 7 50 6Z" fill="#a3242a"/>
         <circle cx="50" cy="49" r="31" fill="#b8312f"/><circle cx="50" cy="49" r="27" fill="none" stroke="#e98d86" stroke-width=".8" stroke-dasharray="1.5 2.5" opacity=".6"/>
         <circle cx="50" cy="49" r="31" fill="none" stroke="#7d1418" stroke-width="2" opacity=".4"/>
-        <text x="50" y="64" text-anchor="middle" font-family="Pinyon Script" font-size="44" fill="#f4cdb6" opacity=".95">J</text>
+        <use href="#jka" x="25" y="36" width="50" height="25" fill="#f4cdb6" opacity=".95"/>
         <ellipse cx="38" cy="30" rx="10" ry="5" fill="#fff" opacity=".18" transform="rotate(-30 38 30)"/>
       </svg>
     </button>
@@ -525,7 +584,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
 
   <!-- ================= I. THE GARDEN ================= -->
   <section class="hero" id="top">
-    <svg class="scene" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <svg class="scene" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A painted Italian garden at the edge of a lake, with mountains, cypress trees and a stone balustrade. The sky and season follow your local weather.">
       <defs>
         <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop id="hs0" offset="0" stop-color="#71889e"/><stop id="hs1" offset=".4" stop-color="#a9b8c1"/><stop id="hs2" offset=".68" stop-color="#dcd5bd"/><stop id="hs3" offset="1" stop-color="#ecdfba"/></linearGradient>
         <linearGradient id="mtn1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a9caa"/><stop offset="1" stop-color="#bcc4c2"/></linearGradient>
@@ -615,7 +674,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     </svg>
 
     <div class="titles">
-      <svg class="wreath" viewBox="0 0 120 120" aria-hidden="true"><use href="#laurel"/><text x="60" y="78" text-anchor="middle" font-family="Pinyon Script" font-size="56" fill="#f1e6c8">J</text></svg>
+      <svg class="wreath" viewBox="0 0 120 120" aria-hidden="true"><use href="#laurel"/><use href="#jka" x="32" y="47" width="56" height="28" fill="#f1e6c8"/></svg>
       <div class="benvenuti">Benvenuti nel giardino di</div>
       <h1 class="name">JASLEEN<span class="surname">AHLUWALIA</span></h1>
       <div class="subtitle">
@@ -660,7 +719,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
           <ellipse cx="84" cy="104" rx="64" ry="76" fill="none" stroke="#6e4a1c" stroke-width="1"/>
           <ellipse cx="84" cy="104" rx="58.5" ry="70" fill="none" stroke="#fff1c2" stroke-width="1.6" stroke-dasharray="1.2 3.4" opacity=".75"/>
           <ellipse cx="84" cy="104" rx="52" ry="63" fill="url(#ovalIn)" stroke="#5a3c16" stroke-width="2"/>
-          <text x="84" y="128" text-anchor="middle" font-family="Pinyon Script" font-size="70" fill="#5b7669">J</text>
+          <use href="#jka" x="50" y="86" width="68" height="34" fill="#5b7669"/>
           <g fill="url(#pearl)"><circle cx="84" cy="27" r="4"/><circle cx="84" cy="181" r="4"/><circle cx="20" cy="104" r="3.4"/><circle cx="148" cy="104" r="3.4"/></g>
           <!-- ribbon bow -->
           <g transform="translate(84 22)">
@@ -710,6 +769,9 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
           <svg class="ic" viewBox="0 0 30 30"><path d="M20 3 L12 17"/><path d="M12 17 C8 17 5 22 5 27 C9 27 15 26 17 21 Z"/><path d="M8 26 L11 20 M11 26.5 L13 21 M14 25 L15 21"/><circle cx="23" cy="8" r=".8"/><circle cx="25" cy="12" r=".6"/></svg>
           <div><div class="row"><b><a href="https://amarisct.github.io/pierce-county-cleaning-website/" target="_blank" rel="noopener">Pierce County Cleaning Services</a></b><span class="lead"></span><em>a business</em></div><small>homes cared for across the state of Washington</small></div></li>
         <li><span class="num">VII.</span>
+          <svg class="ic" viewBox="0 0 30 30"><path d="M6 5 h14 l4 4 v16 h-18Z"/><path d="M20 5 v4 h4"/><path d="M9.5 13 h11 M9.5 17 h11 M9.5 21 h7"/></svg>
+          <div><div class="row"><b><a href="https://jasleenahluwalia.substack.com" target="_blank" rel="noopener">Substack</a></b><span class="lead"></span><em>writing</em></div><small>essays and letters, delivered by post</small></div></li>
+        <li><span class="num">VIII.</span>
           <svg class="ic" viewBox="0 0 30 30"><rect x="4" y="8" width="22" height="15" rx="1"/><path d="M4 9 L15 17 L26 9"/><circle cx="15" cy="17" r="2.4"/></svg>
           <div><div class="row"><b><a href="https://www.linkedin.com/in/jojomojojo222/" target="_blank" rel="noopener">LinkedIn</a></b><span class="lead"></span><em>correspondence</em></div><small>the surest way to reach me</small></div></li>
       </ol>
@@ -769,6 +831,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   <section class="closing" id="closing">
     <svg class="pressed" viewBox="0 0 120 120" aria-hidden="true"><use href="#rose"/></svg>
     <p>And so this is where my letter ends, for now. Every room in this garden is still growing. Some are blooming, some are only seeds, and a few are being argued over by a parrot with strong opinions about tarot.</p>
+    <p id="seasonLine"></p>
     <p>Thank you for reading this far. Wander back whenever you like, and if something here sparks an idea, a question or a collaboration, the envelope below is always open.</p>
     <p class="valediction">With warmth &amp; wonder,</p>
     <div class="sigwrap">
@@ -776,7 +839,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
       <svg class="seal-sm" id="sealSm" viewBox="0 0 100 100" aria-hidden="true">
         <path d="M50 6 C66 4 80 12 88 26 C96 40 94 58 84 72 C74 86 58 94 42 92 C26 90 12 80 7 64 C2 48 8 30 20 18 C28 10 38 7 50 6Z" fill="#a3242a"/>
         <circle cx="50" cy="49" r="30" fill="#b8312f"/><circle cx="50" cy="49" r="26" fill="none" stroke="#e98d86" stroke-width=".8" stroke-dasharray="1.5 2.5" opacity=".6"/>
-        <text x="50" y="64" text-anchor="middle" font-family="Pinyon Script" font-size="42" fill="#f4cdb6">J</text>
+        <use href="#jka" x="26" y="37" width="48" height="24" fill="#f4cdb6"/>
       </svg>
     </div>
     <p class="ps">P.S. If you find the dessert you’ve been craving, you know which app to thank.</p>
@@ -784,7 +847,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
 
   <!-- ================= VI. THE SHELL ================= -->
   <section class="finale" id="write">
-    <svg class="shore" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+    <svg class="shore" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" role="img" aria-label="A seashore with a lighthouse, a sailboat, a scallop shell rising from the sea and a tree in blossom.">
       <defs>
         <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop id="fs0" offset="0" stop-color="#b6c2b2"/><stop id="fs1" offset=".55" stop-color="#d2d5bf"/><stop id="fs2" offset=".56" stop-color="#83a09a"/><stop id="fs3" offset="1" stop-color="#5b7e7a"/></linearGradient>
         <radialGradient id="shellG" cx=".5" cy="1" r="1"><stop offset="0" stop-color="#e3b98f"/><stop offset=".35" stop-color="#f6e6c8"/><stop offset=".62" stop-color="#f3dccd"/><stop offset=".85" stop-color="#ead4b0"/><stop offset="1" stop-color="#c39463"/></radialGradient>
@@ -816,7 +879,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
       <svg class="sq-seal" viewBox="0 0 100 100" aria-hidden="true">
         <path d="M50 6 C66 4 80 12 88 26 C96 40 94 58 84 72 C74 86 58 94 42 92 C26 90 12 80 7 64 C2 48 8 30 20 18 C28 10 38 7 50 6Z" fill="#a3242a"/>
         <circle cx="50" cy="49" r="30" fill="#b8312f"/><circle cx="50" cy="49" r="26" fill="none" stroke="#e98d86" stroke-width=".8" stroke-dasharray="1.5 2.5" opacity=".6"/>
-        <text x="50" y="64" text-anchor="middle" font-family="Pinyon Script" font-size="42" fill="#f4cdb6">J</text>
+        <use href="#jka" x="26" y="37" width="48" height="24" fill="#f4cdb6"/>
       </svg>
       <div class="sq-hint">open me</div>
     </div>
@@ -832,7 +895,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
       <path d="M36 0 V108 L75 132 L114 108 V0" fill="none" stroke="#dcc088" stroke-width=".7" stroke-dasharray="2 2.6" opacity=".75"/>
       <g transform="translate(75 96)">
         <path d="M0 -15 C10 -15 16 -8 15 2 C14 11 7 16 -1 15 C-10 14 -16 8 -15 -1 C-14 -10 -8 -15 0 -15Z" fill="#a3242a"/>
-        <circle r="10" fill="#b8312f"/><text y="5.5" text-anchor="middle" font-family="Pinyon Script" font-size="16" fill="#f4cdb6">J</text>
+        <circle r="10" fill="#b8312f"/><use href="#jka" x="-8" y="-4" width="16" height="8" fill="#f4cdb6"/>
       </g>
     </svg>
     <span><b>close the letter</b>fold &amp; seal</span>
@@ -840,9 +903,13 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
 </div>
 <footer>amaris ct · Jasleen Ahluwalia · MMXXVI</footer>
 
+<button id="calmBtn" aria-pressed="false" aria-label="Calm mode off. Turn calm mode on to stop the animations" title="Calm mode"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 C7 8 7 16 12 21 C17 16 17 8 12 3Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7 V18" stroke="currentColor" stroke-width="1.2"/></svg></button>
 <button id="soundBtn" aria-pressed="false" aria-label="Sound off. Turn sound on" title="Sound">
   <svg viewBox="0 0 24 24" aria-hidden="true"><path d="M4 9.5h3.5L12 5.5v13l-4.5-4H4z" fill="currentColor"/><g class="on"><path d="M15 9c1.2 1.6 1.2 4.4 0 6" /><path d="M17.6 6.8c2.4 2.9 2.4 7.5 0 10.4"/></g><g class="off"><path d="M15.5 9.5l5 5M20.5 9.5l-5 5"/></g></svg>
 </button>
+
+<div id="stats" role="dialog" aria-label="Visit counts" hidden><div class="nc"><button class="nc-x" id="statsClose" aria-label="Close">×</button><div class="nc-k">THE GUEST LEDGER</div><div class="nc-h">who has visited</div>
+  <p id="statsBody">counting…</p><p class="stats-note">Counted anonymously, with no cookies and nothing personal stored.</p></div></div>
 
 <!-- ================= THE NOTECARD ================= -->
 <div id="notecard" role="dialog" aria-modal="true" aria-label="A notecard from Jasleen">
@@ -855,12 +922,14 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     <div class="nc-h">Dear friend,</div>
     <p>If something here sparked an idea, a question or a collaboration, I would love to hear from you. My correspondence lives on LinkedIn, so leave a note there and I’ll write back.</p>
     <a class="nc-btn" href="https://www.linkedin.com/in/jojomojojo222/" target="_blank" rel="noopener">Write to me on LinkedIn <span>→</span></a>
+    <a class="nc-alt" href="https://jasleenahluwalia.substack.com" target="_blank" rel="noopener">or read my letters on Substack →</a>
     <div class="nc-sig">Jasleen Ahluwalia</div>
     <svg viewBox="0 0 420 34" class="nc-fl" aria-hidden="true"><use href="#flourish"/></svg>
   </div>
 </div>
 
 <script>
+window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurrency||8)<=4;if(window.LITE)document.documentElement.classList.add('lite');
 (function(){
   const NS='http://www.w3.org/2000/svg';
   const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
@@ -884,7 +953,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   })();
 
   // ---------- hero painting details ----------
-  const canopy=(g,cx,cy,rx,ry,n,pal,light)=>{
+  const canopy=(g,cx,cy,rx,ry,n,pal,light)=>{if(window.LITE)n=Math.round(n*.55);
     for(let i=0;i<n;i++){const a=rnd()*Math.PI*2,r=Math.sqrt(rnd());
       const x=cx+Math.cos(a)*rx*r,y=cy+Math.sin(a)*ry*r;
       const lit=(x-cx)/rx*light[0]+(cy-y)/ry*light[1]+rnd()*.6;
@@ -987,10 +1056,10 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   const B=$('backdrop');el('rect',{width:1600,height:1000,fill:'#dcc8a0'},B);
   const g=el('g',{fill:'none','stroke-linecap':'round'},B);
   const cols=['#c88a3a','#e3b064','#a9682a','#f2d08e','#b87a34','#d99b48','#8a5220','#efdcb0'];
-  for(let i=0;i<300;i++){let x=-100+rnd()*1800,y=-100+rnd()*1200;let dd=`M${x} ${y}`;
+  for(let i=0;i<(window.LITE?110:300);i++){let x=-100+rnd()*1800,y=-100+rnd()*1200;let dd=`M${x} ${y}`;
     for(let k=0;k<5;k++){const dx=120+rnd()*120,dy=80+rnd()*60*(rnd()<.5?-1:1);dd+=` q${dx/2} ${dy} ${dx} ${dy*.2}`}
     el('path',{d:dd,stroke:cols[i%cols.length],'stroke-width':(3+rnd()*20).toFixed(1),opacity:(.22+rnd()*.45).toFixed(2)},g)}
-  for(let i=0;i<220;i++){let x=-100+rnd()*1800,y=-100+rnd()*1200;el('path',{d:`M${x} ${y} q90 ${rnd()*80-40} 180 ${rnd()*30-15} t180 ${rnd()*40-20}`,stroke:pick(['#f6e2b0','#fff0cc','#7a4518']),'stroke-width':(.6+rnd()*1.6).toFixed(1),opacity:(.3+rnd()*.4).toFixed(2)},g)}
+  for(let i=0;i<(window.LITE?80:220);i++){let x=-100+rnd()*1800,y=-100+rnd()*1200;el('path',{d:`M${x} ${y} q90 ${rnd()*80-40} 180 ${rnd()*30-15} t180 ${rnd()*40-20}`,stroke:pick(['#f6e2b0','#fff0cc','#7a4518']),'stroke-width':(.6+rnd()*1.6).toFixed(1),opacity:(.3+rnd()*.4).toFixed(2)},g)}
   el('rect',{width:1600,height:1000,fill:'#000',filter:'url(#canvas)'},B);
 
   // ---------- the letter: open → pull → unfold; and close again ----------
@@ -1093,7 +1162,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
       // sun
       sc.sun=G(sc.skyBefore,false);
       sc.sunGlow=el('circle',{cx:sc.sunX,cy:120,r:70,fill:'#fff3cf',filter:'url(#blur8)',opacity:.7},sc.sun);
-      sc.sunDisc=el('circle',{cx:sc.sunX,cy:120,r:17,fill:'#fff7df'},sc.sun);
+      sc.sunDisc=el('circle',{cx:sc.sunX,cy:120,r:17,fill:'#fff7df',class:'orb'},sc.sun);
       // lightning bolt
       sc.bolt=G(sc.skyBefore,false);
       el('path',{d:`M${sc.W*.7} 0 l-18 70 l14 -4 l-26 86 l12 -3 l-30 90`,stroke:'#fffbe8','stroke-width':2.4,fill:'none',filter:'url(#blur2)'},sc.bolt);
@@ -1746,7 +1815,45 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     $('rose').innerHTML=F.svg;
     $('bud').innerHTML=`<path d="M20 30 C20 42 18 52 14 58" stroke="#4d6b3c" stroke-width="1.6" fill="none"/><path d="M20 8 C12 14 12 26 20 30 C28 26 28 14 20 8Z" fill="${F.bud}"/><path d="M20 8 C16 14 17 24 20 30" stroke="rgba(0,0,0,.25)" stroke-width="1" fill="none"/><path d="M13 24 C14 31 18 33 20 32 C16 30 14 27 13 24Z M27 24 C26 31 22 33 20 32 C24 30 26 27 27 24Z" fill="#4a6b3a"/>`;
     petalsG.querySelectorAll('ellipse').forEach(e=>e.setAttribute('fill',pick(F.pet)))};
-  const pageTheme=()=>{const k=(active[0]||{}).k;theme=k?TH[k]:null;dress();flowers();setNow()};
+
+  // ---------- seasonal closing letters ----------
+  const LETTERS={
+    halloween:'I am writing this with a candle lit and the garden full of pumpkins. If a little spider crossed your page, she means no harm. She only wanted to read along.',
+    muertos:'These are the days for remembering. I keep a marigold on my desk for the people who made me, and I hope yours are close to you tonight.',
+    diwali:'The diyas are lit along the balustrade as I write. I hope this season fills your home with light, sweets and every good beginning.',
+    gurpurab:'Today the garden is quiet and grateful. I am thinking about service, and about the people who taught me what it means.',
+    vaisakhi:'It is harvest time, and I am counting what has grown this year, you among it.',
+    lohri:'There is a bonfire in the courtyard tonight. Come and warm your hands before you go.',
+    christmas:'The garden is dressed in lights and evergreen tonight. Wherever you are, I hope it is warm, and full of people you love.',
+    december:'The year is folding itself up like a letter. Thank you for being part of mine.',
+    hanukkah:'A candle a night, and a little more light each time. I hope these eight nights are good to you.',
+    kwanzaa:'I am thinking about unity, purpose and creativity, the very things this little garden was built on.',
+    newyear:'A new year is opening like an envelope. I hope the first page of yours is a kind one.',
+    lny:'The lanterns are up and the year has turned. I wish you luck, health and a bright beginning.',
+    lantern:'The last lanterns are rising tonight. Make a wish on one for me.',
+    midautumn:'The moon is at its fullest tonight. I hope you are sharing it with someone dear.',
+    ramadan:'The evenings are long and quiet this month. I hope your fasts are gentle and your nights are full.',
+    eidf:'Eid Mubarak. May your table be full and your heart even fuller.',
+    eida:'Eid Mubarak. I hope this day is generous to you in every way.',
+    holi:'I wish I could send colour through the post. Consider this letter dusted in pink and saffron.',
+    passover:'I hope your table is full and your evenings are long with stories.',
+    rosh:'I am dipping apples in honey as I write this, and wishing you a sweet year.',
+    easter:'The garden is waking up and the lilies are out. I hope this spring brings you something new.',
+    valentine:'This one is sealed with a little extra love. You are the reason I keep writing.',
+    stpatrick:'I tucked a shamrock into the envelope for luck. Keep it.',
+    mothers:'I am thinking of the women who raised me, and sending a carnation to the ones who raised you.',
+    fathers:'Here is to the people who taught us to build things. I hope you can thank one today.',
+    thanks:'I am grateful, truly, that you read this far. Thank you for the time you gave this letter.',
+    cathanks:'I am grateful, truly, that you read this far. Thank you for the time you gave this letter.',
+    july4:'There are fireworks over the water tonight. I hope you are watching them with someone you love.',
+    earth:'Today I am thinking about the gardens we are leaving for whoever comes next.',
+    spring:'I am writing this with the windows open and blossoms on the sill. I hope something new is beginning for you, too.',
+    summer:'It is long-light season here. I hope you are reading this somewhere warm, with nowhere you have to be.',
+    autumn:'The leaves are turning as I write, and I am wrapped in a sweater with tea going cold beside me. It is my favourite time to begin things.',
+    winter:'It is cold outside, so I wrote this one by the fire. I hope it found you somewhere cosy.'};
+  const seasonLine=$('seasonLine');let lastLetter=null;
+  const setLetter=(k)=>{const t=LETTERS[k];if(!t||t===lastLetter)return;lastLetter=t;const was=seasonLine.classList.contains('inked');seasonLine.textContent=t;words(seasonLine);if(was||reduce)seasonLine.classList.add('inked')};
+  const pageTheme=()=>{const k=(active[0]||{}).k;theme=k?TH[k]:null;dress();flowers();setNow();setLetter(active.map(h=>h.k).find(x=>LETTERS[x])||seasonNow())};
   addEventListener('resize',()=>{if(theme)dress()});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&ptype!=='none'&&!rafOn&&!reduce){rafOn=true;requestAnimationFrame(tick)}});
   const render=(country)=>{hg.innerHTML='';nightFx.innerHTML='';glows=[];
     let list=HOL.filter(h=>(!h.c||h.c===country)&&h.w());if(qs.get('holiday'))list=HOL.filter(h=>h.k===qs.get('holiday'));
@@ -1766,6 +1873,35 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   const tickClock=()=>{const t=new Date();if(t.getHours()!==lastHour){lastHour=t.getHours();setGreeting()}
     if(!pinned&&t.toDateString()!==lastDay){lastDay=t.toDateString();today=t;Y=t.getFullYear();day=new Date(Y,t.getMonth(),t.getDate());setGreeting();render((window.__geo||{}).country_code)}};
   setInterval(tickClock,60*1000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')tickClock()});
+
+
+  // ---------- calm mode (honours prefers-reduced-motion) ----------
+  const calmBtn=$('calmBtn');const setCalm=on=>{document.documentElement.classList.toggle('calm',on);calmBtn.setAttribute('aria-pressed',on);calmBtn.setAttribute('aria-label',on?'Calm mode on. Turn it off to bring the garden back to life':'Calm mode off. Turn calm mode on to stop the animations');store.set('btc-calm',on?'1':'0');window.CALM=on};
+  setCalm(store.get('btc-calm')?store.get('btc-calm')==='1':reduce);calmBtn.addEventListener('click',()=>setCalm(!window.CALM));
+
+  // ---------- privacy-friendly visit counts (no cookies, nothing personal) ----------
+  const AB='https://abacus.jasoncameron.dev',NSP='behind-the-creator-jka';
+  const hit=k=>{try{if(qs.has('stats')||navigator.webdriver)return;const key='btc-hit-'+k+'-'+new Date().toDateString();if(k!=='visits'&&sessionStorage.getItem(key))return;sessionStorage.setItem(key,1);fetch(`${AB}/hit/${NSP}/${k}`,{mode:'cors',keepalive:true}).catch(()=>{})}catch(e){}};
+  hit('visits');
+  $('seal').addEventListener('click',()=>hit('opened'),{once:true});
+  new IntersectionObserver((es,o)=>es.forEach(e=>{if(e.isIntersecting){hit('read-to-end');o.disconnect()}}),{threshold:.5}).observe(document.querySelector('.finale'));
+  if(qs.has('stats')){const box=$('stats');box.hidden=false;$('statsClose').onclick=()=>box.hidden=true;
+    Promise.all(['visits','opened','read-to-end'].map(k=>fetch(`${AB}/get/${NSP}/${k}`).then(r=>r.ok?r.json():{value:0}).then(j=>j.value||0).catch(()=>'—'))).then(([v,o,r])=>{
+      $('statsBody').innerHTML=`<b>${v}</b>visits to the garden<br><br><b>${o}</b>letters opened<br><br><b>${r}</b>read all the way to the end`})}
+
+  // ---------- hidden: the parrot ----------
+  (function(){let n=0,tm;const hero=document.querySelector('.hero svg.scene');
+    const parrot=()=>{const g=el('g',{class:'parrot'},hero);
+      g.innerHTML=`<g transform="scale(1.1)"><path d="M0 0 C10 -14 30 -16 38 -4 C44 4 40 16 28 20 L6 20 C-4 16 -6 6 0 0Z" fill="#2fa65a"/><path d="M6 20 C-2 34 -14 44 -30 50 C-18 40 -12 30 -8 20Z" fill="#c8323c"/><path d="M-4 22 C-12 38 -22 48 -36 58 C-24 44 -16 34 -12 22Z" fill="#2f6fc2"/>
+        <path class="pw" d="M12 2 C2 -22 -18 -30 -34 -26 C-20 -18 -8 -8 4 6Z" fill="#3cba62"/><path class="pw" d="M10 4 C0 -16 -14 -22 -26 -20 C-16 -12 -6 -4 4 8Z" fill="#e9c23c"/>
+        <path d="M36 -6 C44 -10 50 -4 46 4 C44 8 40 6 38 4Z" fill="#f2e6c8"/><circle cx="32" cy="-6" r="2.2" fill="#1a1208"/><path d="M14 22 l-2 8 M22 22 l1 8" stroke="#5a4a2a" stroke-width="2"/>
+        <g transform="translate(6 26) rotate(-8)"><rect x="0" y="0" width="22" height="34" rx="2" fill="#f7f0dc" stroke="#b58c4c" stroke-width="1.2"/><rect x="3" y="3" width="16" height="28" fill="none" stroke="#c9a24e" stroke-width=".6"/><circle cx="11" cy="15" r="5" fill="none" stroke="#7a1f2b" stroke-width=".8"/><path d="M11 9 v12 M5 15 h12" stroke="#7a1f2b" stroke-width=".5"/></g></g>`;
+      g.animate([{transform:'translate(-80px,200px) rotate(-4deg)'},{transform:'translate(300px,120px) rotate(3deg)'},{transform:'translate(620px,150px) rotate(-3deg)'},{transform:'translate(1100px,90px) rotate(4deg)'}],{duration:window.CALM?1:7000,easing:'ease-in-out'}).onfinish=()=>g.remove();
+      g.querySelectorAll('.pw').forEach(w=>w.animate([{transform:'rotate(0)'},{transform:'rotate(28deg)'},{transform:'rotate(0)'}],{duration:340,iterations:20,transformOrigin:'8px 4px'}));
+      window.SND&&SND.chime&&SND.chime();
+      setTimeout(()=>{const c=cardOfDay(),b=hero.getBoundingClientRect();toast(b.left+b.width/2,b.top+b.height*.45,{h:'the parrot found you',t:`You found my parrot. She brought you <em>${c[0]}</em> for today: ${c[1]}.`,a:['ask her another question','https://amarisct.github.io/TarotParot/']})},3200)};
+    hero.addEventListener('click',e=>{if(!e.target.closest('#moon,.orb'))return;n++;clearTimeout(tm);tm=setTimeout(()=>n=0,2500);if(n>=5){n=0;parrot()}});
+  })();
 
   // ---------- 7. quill cursor + gold shimmer ----------
   if(matchMedia('(pointer:fine)').matches){document.documentElement.classList.add('quill');
