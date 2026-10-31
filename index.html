@@ -219,6 +219,10 @@ footer{position:relative;z-index:1;text-align:center;padding:0 0 40px;font-famil
 .h-orn i{display:block;width:1px;background:rgba(60,45,30,.55)}
 @keyframes ornsway{from{transform:rotate(-3deg)}to{transform:rotate(3deg)}}
 .h-corner{position:absolute;bottom:6px}.h-corner.l{left:72px}.h-corner.r{right:6px;transform:scaleX(-1)}
+.h-web{position:absolute;width:260px;height:260px}.h-web svg{overflow:visible}
+.h-web.tl{left:0;top:0}.h-web.tr{right:0;top:0}.h-web.bl{left:0;bottom:0}.h-web.br{right:0;bottom:0}
+.dangle{animation:dangle 6s ease-in-out infinite}
+@keyframes dangle{0%,100%{transform:translateY(0)}45%{transform:translateY(-34px)}60%{transform:translateY(-34px)}}
 #backdrop path{transition:stroke 2s}
 body{transition:background 2s}
 #soundBtn{position:fixed;left:18px;bottom:18px;z-index:45;width:46px;height:46px;border-radius:50%;border:none;cursor:pointer;color:#4a1420;
@@ -1515,7 +1519,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     ['M-40 0 c4 -6 9 -7 12 -2 c2 -4 5 -4 7 0','M-21 0 c2 -4 5 -4 7 0 c3 -5 8 -4 12 2'].forEach(d=>{const w=el('path',{d,transform:`translate(0 ${y}) scale(${k})`,fill:'#1d1a22',class:'wing'},b);w.style.setProperty('--fl','.22s')})}
   // ---------- 6b. dress the whole page: background, top garland, hanging ornaments, corners, falling particles ----------
   const TH={
-    halloween:{bg:['#3a2340','#5b2e4a','#e07b2a','#8a4a1c','#2a1a2e','#f2a65a'],tint:'rgba(36,10,46,.42)',top:'cobweb',hang:['spider','bat','spider'],corner:'pumpkin',fall:'leaves'},
+    halloween:{bg:['#3a2340','#5b2e4a','#e07b2a','#8a4a1c','#2a1a2e','#f2a65a'],tint:'rgba(36,10,46,.42)',top:'bunting:halloween',webs:true,hang:['spider','bat','spider'],corner:'pumpkin',fall:'leaves'},
     muertos:{bg:['#f29f05','#e8730c','#b5179e','#7a1f5c','#ffd166','#ff4f8b'],tint:'rgba(90,20,60,.25)',top:'papel',hang:['marigoldstrand'],corner:'candle',fall:'marigold'},
     diwali:{bg:['#2b1b4f','#4a2c6e','#f2b705','#e8730c','#7a1f5c','#ffcf6a'],tint:'rgba(30,12,60,.4)',top:'toran',hang:['kandil','diyahang','kandil'],corner:'diya',fall:'sparkles'},
     gurpurab:{bg:['#1f2a5a','#f2a900','#e8730c','#3a4a8a','#ffcf6a'],tint:'rgba(20,24,70,.35)',top:'lights:gold',hang:['diyahang'],corner:'diya',fall:'sparkles'},
@@ -1556,9 +1560,9 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     eqS:{bg:['#f7c6d9','#cdeccd','#fbe7a1','#c6e2f7'],tint:'rgba(255,255,255,.1)',top:'none',hang:['flower'],corner:'none',fall:'petals'},
     eqA:{bg:['#a0522d','#d2691e','#e9a03b','#7a3b10'],tint:'rgba(90,40,10,.15)',top:'none',hang:[],corner:'none',fall:'leaves'}
   };
-  const BUNT={gold:['#c9a24e','#f4e3b2','#e9c46a'],multi:['#ff006e','#fb5607','#ffbe0b','#3a86ff','#8338ec','#06d6a0'],pink:['#e8909f','#fbe4e8','#b5304a'],green:['#2d8a3e','#e7c873','#ffffff'],
+  const BUNT={halloween:['#e07b2a','#1d1a22','#7b3fa0'],gold:['#c9a24e','#f4e3b2','#e9c46a'],multi:['#ff006e','#fb5607','#ffbe0b','#3a86ff','#8338ec','#06d6a0'],pink:['#e8909f','#fbe4e8','#b5304a'],green:['#2d8a3e','#e7c873','#ffffff'],
     pastel:['#f7c6d9','#c6e2f7','#fbe7a1','#cdeccd','#e2d1f9'],india:['#ff9933','#ffffff','#138808'],usa:['#b22234','#ffffff','#3c3b6e'],canada:['#d52b1e','#ffffff'],autumn:['#a0522d','#e9a03b','#c8692a','#7a3b10'],jt:['#b22234','#f2c14e','#138808']};
-  const layer=document.createElement('div');layer.id='holidayLayer';layer.innerHTML='<div class="h-tint"></div><canvas class="h-fall"></canvas><div class="h-top"></div><div class="h-hang"></div><div class="h-corners"></div>';
+  const layer=document.createElement('div');layer.id='holidayLayer';layer.innerHTML='<div class="h-tint"></div><canvas class="h-fall"></canvas><div class="h-top"></div><div class="h-hang"></div><div class="h-corners"></div><div class="h-webs"></div>';
   document.querySelector('.veil').after(layer);
   const bdPaths=[...document.querySelectorAll('#backdrop path')];bdPaths.forEach(p=>p.dataset.s=p.getAttribute('stroke'));
   const svgw=(w,h,inner,cls='')=>`<svg class="${cls}" viewBox="0 0 ${w} ${h}" width="${w}" height="${h}" aria-hidden="true">${inner}</svg>`;
@@ -1629,14 +1633,25 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   const sizeCv=()=>{cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)};
   let theme=null;
   const dress=()=>{const t=theme;const tint=layer.querySelector('.h-tint'),top=layer.querySelector('.h-top'),hang=layer.querySelector('.h-hang'),cor=layer.querySelector('.h-corners');
-    if(!t){layer.classList.remove('on');bdPaths.forEach(p=>p.setAttribute('stroke',p.dataset.s));document.body.style.background='';ptype='none';cx.clearRect(0,0,innerWidth,innerHeight);top.innerHTML=hang.innerHTML=cor.innerHTML='';return}
+    if(!t){webs(false);layer.classList.remove('on');bdPaths.forEach(p=>p.setAttribute('stroke',p.dataset.s));document.body.style.background='';ptype='none';cx.clearRect(0,0,innerWidth,innerHeight);top.innerHTML=hang.innerHTML=cor.innerHTML='';return}
     layer.classList.add('on');bdPaths.forEach((p,i)=>p.setAttribute('stroke',t.bg[i%t.bg.length]));document.body.style.background=t.bg[0];tint.style.background=t.tint;
     const W=innerWidth;top.innerHTML=t.top&&t.top!=='none'?svgw(W,110,TOP(t.top,W)):'';
     const pageW=Math.min(1000,W*.94),m=(W-pageW)/2;hang.innerHTML='';
     if(t.hang.length&&m>54){const per=Math.max(1,Math.floor(m/70));[0,1].forEach(side=>{for(let i=0;i<per;i++){const x=side?W-m+18+i*((m-60)/Math.max(1,per-1)||0):18+i*((m-60)/Math.max(1,per-1)||0),len=R(40,Math.min(300,innerHeight*.45));
       const d=document.createElement('div');d.className='h-orn';d.style.left=x+'px';d.style.animationDelay=-R(0,4)+'s';d.innerHTML=`<i style="height:${len}px"></i>`+svgw(60,96,ORN[t.hang[(i+side)%t.hang.length]]());hang.appendChild(d)}})}
     cor.innerHTML='';if(t.corner&&t.corner!=='none'&&CORNER[t.corner]){[0,1].forEach(side=>{const d=document.createElement('div');d.className='h-corner '+(side?'r':'l');d.innerHTML=svgw(150,70,CORNER[t.corner](0)+CORNER[t.corner](45)+CORNER[t.corner](90));cor.appendChild(d)})}
-    ptype=t.fall||'none';sizeCv();parts=Array.from({length:ptype==='powder'?16:ptype==='snow'?90:55},()=>spawn(ptype,true));if(!rafOn&&ptype!=='none'&&!reduce){rafOn=true;requestAnimationFrame(tick)}};
+    webs(!!t.webs);ptype=t.fall||'none';sizeCv();parts=Array.from({length:ptype==='powder'?16:ptype==='snow'?90:55},()=>spawn(ptype,true));if(!rafOn&&ptype!=='none'&&!reduce){rafOn=true;requestAnimationFrame(tick)}};
+
+  const WEB=()=>{const N=11,R0=230,spokes=[];for(let i=0;i<N;i++){const a=(i/(N-1))*Math.PI/2,j=R(-.04,.04);spokes.push([Math.cos(a+j),Math.sin(a+j),R0*R(.86,1.04)])}
+    let o=spokes.map(([c,s2,r])=>`<path d="M0 0 L${(c*r).toFixed(1)} ${(s2*r).toFixed(1)}" stroke-width=".9"/>`).join('');
+    for(let k=1;k<=12;k++){const f=Math.pow(k/12,1.12);let d='';spokes.forEach(([c,s2,r],i)=>{const x=c*r*f,y=s2*r*f;if(!i){d+=`M${x.toFixed(1)} ${y.toFixed(1)}`;return}
+      const [pc,ps,pr]=spokes[i-1],px=pc*pr*f,py=ps*pr*f,mx=(px+x)/2,my=(py+y)/2,sag=.9-.06;d+=` Q${(mx*sag).toFixed(1)} ${(my*sag).toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`});o+=`<path d="${d}" stroke-width="${(.5+k*.03).toFixed(2)}"/>`}
+    let dew='';for(let i=0;i<14;i++){const sp=pick(spokes),f=R(.25,.95);dew+=`<circle cx="${(sp[0]*sp[2]*f).toFixed(1)}" cy="${(sp[1]*sp[2]*f).toFixed(1)}" r="${R(1,2.2).toFixed(1)}" fill="#fff" opacity="${R(.4,.8).toFixed(2)}"/>`}
+    return `<g fill="none" stroke="#efe8f5" stroke-opacity=".62">${o}</g>${dew}`};
+  const SPIDER=`<g class="dangle"><path d="M0 -400 V0" stroke="#efe8f5" stroke-opacity=".6" stroke-width=".8"/><g transform="translate(0 8)"><ellipse rx="7" ry="9" fill="#1d1a22"/><circle cy="-10" r="5" fill="#1d1a22"/>${[-1,1].map(s2=>[0,1,2,3].map(i=>`<path d="M0 ${-4+i*3} q${s2*12} ${-6+i*3} ${s2*18} ${2+i*5}" stroke="#1d1a22" stroke-width="1.4" fill="none"/>`).join('')).join('')}<circle cx="-2" cy="-11" r="1" fill="#e07b2a"/><circle cx="2" cy="-11" r="1" fill="#e07b2a"/></g></g>`;
+  const webs=(on)=>{const box=layer.querySelector('.h-webs');box.innerHTML='';if(!on)return;
+    [['tl',''],['tr','scale(-1 1)'],['bl','scale(1 -1)'],['br','scale(-1 -1)']].forEach(([c,tr],i)=>{const d=document.createElement('div');d.className='h-web '+c;
+      d.innerHTML=`<svg viewBox="0 0 260 260" width="260" height="260" aria-hidden="true"><g transform="${tr?`translate(${tr.includes('-1 1')||tr.includes('-1 -1')?260:0} ${tr.includes('1 -1')||tr.includes('-1 -1')?260:0}) ${tr}`:''}">${WEB()}</g>${i===0?`<g transform="translate(150 0)"><g transform="translate(0 ${R(150,200).toFixed(0)})">${SPIDER}</g></g>`:''}${i===1?`<g transform="translate(70 0)"><g transform="translate(0 ${R(90,130).toFixed(0)})">${SPIDER}</g></g>`:''}</svg>`;box.appendChild(d)})};
   const pageTheme=()=>{const k=(active[0]||{}).k;theme=k?TH[k]:null;dress()};
   addEventListener('resize',()=>{if(theme)dress()});document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&ptype!=='none'&&!rafOn&&!reduce){rafOn=true;requestAnimationFrame(tick)}});
   const render=(country)=>{hg.innerHTML='';nightFx.innerHTML='';glows=[];
