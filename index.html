@@ -229,6 +229,7 @@ footer{position:relative;z-index:1;text-align:center;padding:0 0 40px;font-famil
 .webx{position:absolute;pointer-events:none;z-index:4;aspect-ratio:1}.webx svg{width:100%;height:100%;overflow:visible;display:block}
 .gossamer{inset:0;width:auto;height:auto}.gthread{stroke-opacity:0;animation:gossamer 18s ease-in-out infinite}
 @keyframes gossamer{0%,100%{stroke-opacity:0;transform:translateY(0)}30%{stroke-opacity:.35}50%{stroke-opacity:.5;transform:translateY(-18px)}70%{stroke-opacity:.3}}
+.gossamer{transition:opacity .6s}html.at-sea .gossamer{opacity:0}
 .crawler{position:absolute;top:16px;left:40px;z-index:5;pointer-events:none;animation:crawl 26s linear infinite}
 .crawler svg{display:block;animation:crawlbob .3s steps(2) infinite}
 @keyframes crawl{0%{transform:translateX(0) rotate(90deg)}38%{transform:translateX(340px) rotate(90deg)}45%{transform:translateX(340px) rotate(90deg)}48%{transform:translateX(340px) rotate(-90deg)}88%{transform:translateX(0) rotate(-90deg)}95%{transform:translateX(0) rotate(-90deg)}98%,100%{transform:translateX(0) rotate(90deg)}}
@@ -1848,7 +1849,6 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     {sel:'.story',css:'right:18px;top:22px;width:150px',mode:'corner',flip:'scaleX(-1)',silk:'#6f6455',so:.42},
     {sel:'.vignette',css:'left:-6px;bottom:-6px;width:96px',mode:'corner',flip:'scaleY(-1)',silk:'#f1eef8',so:.6},
     {sel:'.works',css:'right:30px;top:120px;width:170px',mode:'free',silk:'#6f6455',so:.4},
-    {sel:'#now .cartouche',css:'left:-14px;top:-14px;width:110px',mode:'corner',silk:'#f8f6f0',so:.6},
     {sel:'.closing',css:'right:0;bottom:0;width:210px',mode:'corner',flip:'scale(-1,-1)',silk:'#6f6455',so:.38},
     {sel:'.sqenv',css:'right:-34px;top:-34px;width:110px',mode:'corner',flip:'scaleX(-1)',silk:'#f8f6f0',so:.6}
   ];
@@ -2103,6 +2103,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
       try{if(r<.45)await pod();else if(r<.9)await seal();else await orca()}catch(e){}setTimeout(()=>busy=false,4000)}next()},R(9000,22000));
   // the first visitor arrives a few seconds after you reach the sea
   let first=false;new IntersectionObserver(es=>{if(!first&&es.some(e=>e.isIntersecting)){first=true;setTimeout(()=>{if(!window.CALM&&!reduce)(Math.random()<.5?pod:seal)()},R(2500,4500));next()}},{threshold:.3}).observe(sea);
+  new IntersectionObserver(es=>es.forEach(e=>document.documentElement.classList.toggle('at-sea',e.intersectionRatio>.25)),{threshold:[0,.25,.5]}).observe(sea);
   window.__sealife={pod,seal,orca};
 })();
 </script>
