@@ -97,6 +97,19 @@ h2.script{font-family:'Pinyon Script',cursive;font-weight:400;color:var(--sage);
 .duo{position:relative;display:grid;grid-template-columns:1fr 1fr;text-align:center;gap:26px;z-index:3}
 .cartouche{position:relative;padding:34px 20px 30px;max-width:330px;margin:0 auto}
 .cartouche svg.cf{position:absolute;inset:0;width:100%;height:100%;overflow:visible}
+.cartouche svg.cf path:first-child{fill:var(--cart,rgba(247,242,228,.55));transition:fill 2.5s}
+.wv{transform-box:view-box;animation:swell var(--wspeed,9s) ease-in-out infinite}
+#wv2{animation-name:swell2;animation-delay:-3s}#wv3{animation-name:swell3;animation-delay:-5s}
+@keyframes swell{0%,100%{transform:translate(0,0)}50%{transform:translate(-18px,4px)}}
+@keyframes swell2{0%,100%{transform:translate(0,0)}50%{transform:translate(16px,-3px)}}
+@keyframes swell3{0%,100%{transform:translate(0,2px)}50%{transform:translate(-10px,-4px)}}
+#waves{transition:stroke 2.5s}
+.drop{animation:fall var(--fall,1.1s) linear infinite}
+@keyframes fall{from{transform:translate(0,-40px)}to{transform:translate(-14px,500px)}}
+.flake{animation:snow var(--fall,6s) linear infinite}
+@keyframes snow{from{transform:translate(0,-30px)}to{transform:translate(20px,500px)}}
+.sea-note{position:absolute;left:0;right:0;bottom:22px;text-align:center;z-index:3;font-style:italic;font-size:15.5px;color:var(--note,#3d4a40);transition:color 2.5s;letter-spacing:.02em}
+.sea-note::before,.sea-note::after{content:"";display:inline-block;width:34px;height:.5px;background:currentColor;opacity:.6;vertical-align:middle;margin:0 12px}
 .cartouche h3{font-family:'Pinyon Script',cursive;font-weight:400;color:var(--rose);font-size:clamp(42px,5vw,56px);line-height:1;position:relative}
 .cartouche .big{font-size:clamp(20px,2.4vw,24px);margin-top:4px;position:relative}
 .cartouche .small{font-size:16.5px;color:#3d4a40;line-height:1.35;margin-top:3px;font-style:italic;position:relative}
@@ -582,9 +595,10 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   <!-- ================= IV. THE SEA ================= -->
   <section class="sea" id="now">
     <svg class="water" preserveAspectRatio="none" viewBox="0 0 1000 460" aria-hidden="true">
-      <defs><linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cfd3b6"/><stop offset=".5" stop-color="#b7c2a4"/><stop offset="1" stop-color="#a1b298"/></linearGradient></defs>
+      <defs><linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop id="sea0" offset="0" stop-color="#cfd3b6"/><stop id="sea1" offset=".5" stop-color="#b7c2a4"/><stop id="sea2" offset="1" stop-color="#a1b298"/></linearGradient></defs>
       <rect width="1000" height="460" fill="url(#seaG)"/>
-      <g id="waves" stroke="#f6f3e4" fill="none" stroke-linecap="round"></g>
+      <g id="waves" stroke="#f6f3e4" fill="none" stroke-linecap="round"><g id="wv1" class="wv"></g><g id="wv2" class="wv"></g><g id="wv3" class="wv"></g></g>
+      <g id="precip"></g>
       <g id="petals"></g>
       <rect width="1000" height="460" filter="url(#canvas)" fill="#000"/>
     </svg>
@@ -598,6 +612,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     <svg class="float" style="left:62%;bottom:16%;--r:80deg;animation-delay:-7s" width="22" height="34"><use href="#bud"/></svg>
     <svg class="bfly" style="left:42%;top:20%;--r:-14deg" width="30" height="25"><use href="#bfly"/></svg>
     <svg class="bfly" style="right:30%;bottom:22%;--r:20deg;animation-delay:-1.8s" width="24" height="20"><use href="#bfly"/></svg>
+    <div class="sea-note" id="seaNote">the sea, as it is right now</div>
     <div class="duo">
       <div class="cartouche">
         <svg class="cf" viewBox="0 0 330 200" preserveAspectRatio="none" aria-hidden="true">
@@ -773,7 +788,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   // ---------- sea ----------
   const wv=(g,w,h,n,y0,sw)=>{for(let i=0;i<n;i++){const x=rnd()*w,y=y0+rnd()*(h-y0),sz=3+rnd()*6;
     el('path',{d:`M${x-sz} ${y} q${sz/2} ${sz*.55} ${sz} 0 q${sz/2} ${sz*.55} ${sz} 0`,'stroke-width':(sw*(.6+rnd()*.7)).toFixed(2),opacity:(.45+rnd()*.45).toFixed(2)},g)}};
-  wv($('waves'),1000,460,420,0,1.3);
+  wv($('wv1'),1000,460,150,0,1.3);wv($('wv2'),1000,460,150,0,1.1);wv($('wv3'),1000,460,130,0,1.5);
   const pe=$('petals');for(let i=0;i<40;i++){const x=rnd()*1000,y=rnd()*460;el('ellipse',{cx:x,cy:y,rx:2.4+rnd()*3,ry:1.4+rnd()*1.6,fill:pick(['#eab2ae','#dd8a8d','#f3cfca']),transform:`rotate(${rnd()*180} ${x} ${y})`,opacity:.85},pe)}
 
   // ---------- finale ----------
@@ -844,6 +859,57 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   letter.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();unfold()}});
   $('skip').addEventListener('click',()=>{if(done)return;opened=true;intro.classList.add('open');setTimeout(unfold,300)});
   $('closeLetter').addEventListener('click',closeLetter);
+
+  // ---------- living sea: colour follows the visitor's local weather ----------
+  (function(){
+    const P={
+      clear:{c:['#c3e2dc','#86c1bd','#4f979b'],w:'#f6fcf8',n:'#21403f',sp:'9s',label:'clear skies'},
+      partly:{c:['#cfe0d6','#9fc0b6','#6c9a96'],w:'#f6fbf6',n:'#2b4542',sp:'9s',label:'a few clouds'},
+      golden:{c:['#f2d6b8','#d4bba6','#86a3a1'],w:'#fff4e4',n:'#4a3a2c',sp:'10s',label:'golden hour'},
+      cloudy:{c:['#d3d6ca','#aeb9ad','#8c9c93'],w:'#f3f3ea',n:'#36433c',sp:'8s',label:'overcast'},
+      fog:{c:['#e6e5dc','#d2d4ca','#bbc1b7'],w:'#fbfbf5',n:'#4a4f48',sp:'12s',label:'fog'},
+      rain:{c:['#aeb8ba','#82939a','#5e707a'],w:'#e8eef0',n:'#1f2d33',sp:'5s',label:'rain',pr:'rain'},
+      snow:{c:['#eff4f7','#d6e2ea','#b6c8d4'],w:'#ffffff',n:'#3b4a56',sp:'11s',label:'snow',pr:'snow'},
+      storm:{c:['#80898f','#58646d','#3b4650'],w:'#d9dee1',n:'#eef1f2',sp:'3.6s',label:'a storm',pr:'rain'},
+      night:{c:['#40506c','#2c3c57','#1b2841'],w:'#c9d6ea',n:'#e9eef6',sp:'10s',label:'a clear night'}
+    };
+    const sec=document.getElementById('now'),note=$('seaNote');
+    const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
+    const mix=(a,b,t)=>'#'+hex(a).map((v,i)=>Math.round(v+(hex(b)[i]-v)*t).toString(16).padStart(2,'0')).join('');
+    const ids=['sea0','sea1','sea2'];
+    const apply=(p,night,text)=>{
+      let c=p.c.slice(),w=p.w,n=p.n,cart='rgba(247,242,228,.55)';
+      if(night&&p!==P.night){c=c.map(x=>mix(x,'#16223a',.55));w=mix(w,'#b9c6dc',.4);n='#e9eef6'}
+      if(night||p===P.storm)cart='rgba(247,242,228,.86)';
+      const from=ids.map(id=>$(id).getAttribute('stop-color'));let t0=null;
+      const step=ts=>{t0=t0||ts;const k=Math.min(1,(ts-t0)/2500);ids.forEach((id,i)=>$(id).setAttribute('stop-color',mix(from[i],c[i],k)));if(k<1)requestAnimationFrame(step)};
+      requestAnimationFrame(step);
+      $('waves').setAttribute('stroke',w);sec.style.setProperty('--wspeed',p.sp);sec.style.setProperty('--note',n);sec.style.setProperty('--cart',cart);
+      const pg=$('precip');pg.innerHTML='';
+      if(p.pr==='rain'){for(let i=0;i<70;i++){const x=rnd()*1040,y=rnd()*460;const d=el('path',{d:`M${x} ${y} l-5 14`,stroke:w,'stroke-width':.9,opacity:.55,class:'drop'},pg);d.style.animationDelay=(-rnd()*1.2).toFixed(2)+'s';d.style.setProperty('--fall',(p===P.storm?.7:1)+rnd()*.5+'s')}}
+      if(p.pr==='snow'){for(let i=0;i<60;i++){const x=rnd()*1000,y=rnd()*460;const d=el('circle',{cx:x,cy:y,r:1.2+rnd()*1.8,fill:'#fff',opacity:.85,class:'flake'},pg);d.style.animationDelay=(-rnd()*6).toFixed(2)+'s';d.style.setProperty('--fall',5+rnd()*4+'s')}}
+      if(text)note.textContent=text;
+    };
+    // first guess from the visitor's own clock
+    const h=new Date().getHours(),isNight=h<6||h>=20;
+    apply(isNight?P.night:(h<8||h>=18)?P.golden:P.clear,false,isNight?'the sea, under your night sky':'the sea, as your day looks right now');
+    const pick=(code,cloud)=>code>=95?P.storm:(code>=71&&code<=77)||code===85||code===86?P.snow:(code>=51&&code<=67)||(code>=80&&code<=82)?P.rain:(code===45||code===48)?P.fog:code===3||cloud>85?P.cloudy:code===2||cloud>40?P.partly:P.clear;
+    const words={0:'clear skies',1:'mostly clear',2:'a few clouds',3:'overcast',45:'fog',48:'frosty fog',51:'light drizzle',53:'drizzle',55:'heavy drizzle',56:'freezing drizzle',57:'freezing drizzle',61:'light rain',63:'rain',65:'heavy rain',66:'freezing rain',67:'freezing rain',71:'light snow',73:'snow',75:'heavy snow',77:'snow grains',80:'passing showers',81:'showers',82:'heavy showers',85:'snow showers',86:'heavy snow showers',95:'a thunderstorm',96:'a thunderstorm with hail',99:'a thunderstorm with hail'};
+    const tmo=(u,ms=6000)=>{const c=new AbortController();setTimeout(()=>c.abort(),ms);return fetch(u,{signal:c.signal}).then(r=>{if(!r.ok)throw 0;return r.json()})};
+    tmo('https://get.geojs.io/v1/ip/geo.json').then(g=>{
+      const lat=+g.latitude,lon=+g.longitude,city=g.city||g.region||'',us=(g.country_code||'')==='US';
+      return tmo(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code,is_day,cloud_cover,temperature_2m&daily=sunrise,sunset&timezone=auto&forecast_days=1${us?'&temperature_unit=fahrenheit':''}`).then(w=>{
+        const cur=w.current,code=cur.weather_code,night=!cur.is_day;let p=pick(code,cur.cloud_cover);
+        const now=new Date(cur.time).getTime(),sr=new Date(w.daily.sunrise[0]).getTime(),ss=new Date(w.daily.sunset[0]).getTime();
+        const nearSun=Math.min(Math.abs(now-sr),Math.abs(now-ss))<50*60*1000;
+        if(!night&&nearSun&&(p===P.clear||p===P.partly))p=P.golden;
+        if(night&&(p===P.clear||p===P.partly))p=P.night;
+        const temp=Math.round(cur.temperature_2m)+(us?'°F':'°C');
+        apply(p,night,`the sea, as it is${city?' in '+city:''} right now · ${words[code]||p.label}${night&&p!==P.night?' tonight':''} · ${temp}`);
+      });
+    }).catch(()=>{});
+  })();
+
 
   // ---------- square envelope → notecard ----------
   const sq=$('sqenv'),nc=$('notecard');
