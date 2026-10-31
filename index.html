@@ -222,6 +222,8 @@ footer{position:relative;z-index:1;text-align:center;padding:0 0 40px;font-famil
 .h-web{position:absolute;width:260px;height:260px}.h-web svg{overflow:visible}
 .h-web.tl{left:0;top:0}.h-web.tr{right:0;top:0}.h-web.bl{left:0;bottom:0}.h-web.br{right:0;bottom:0}
 .dangle{animation:dangle 6s ease-in-out infinite}
+.webbreeze{transform-box:view-box;transform-origin:0 0;animation:webbreeze 7s ease-in-out infinite alternate}
+@keyframes webbreeze{from{transform:skew(.6deg,-.4deg) scale(1)}to{transform:skew(-.5deg,.6deg) scale(1.012)}}
 @keyframes dangle{0%,100%{transform:translateY(0)}45%{transform:translateY(-34px)}60%{transform:translateY(-34px)}}
 #backdrop path{transition:stroke 2s}
 body{transition:background 2s}
@@ -1648,12 +1650,39 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     cor.innerHTML='';if(t.corner&&t.corner!=='none'&&CORNER[t.corner]){[0,1].forEach(side=>{const d=document.createElement('div');d.className='h-corner '+(side?'r':'l');d.innerHTML=svgw(150,70,CORNER[t.corner](0)+CORNER[t.corner](45)+CORNER[t.corner](90));cor.appendChild(d)})}
     webs(!!t.webs);ptype=t.fall||'none';sizeCv();parts=Array.from({length:ptype==='powder'?16:ptype==='snow'?90:55},()=>spawn(ptype,true));if(!rafOn&&ptype!=='none'&&!reduce){rafOn=true;requestAnimationFrame(tick)}};
 
-  const WEB=()=>{const N=11,R0=230,spokes=[];for(let i=0;i<N;i++){const a=(i/(N-1))*Math.PI/2,j=R(-.04,.04);spokes.push([Math.cos(a+j),Math.sin(a+j),R0*R(.86,1.04)])}
-    let o=spokes.map(([c,s2,r])=>`<path d="M0 0 L${(c*r).toFixed(1)} ${(s2*r).toFixed(1)}" stroke-width=".9"/>`).join('');
-    for(let k=1;k<=12;k++){const f=Math.pow(k/12,1.12);let d='';spokes.forEach(([c,s2,r],i)=>{const x=c*r*f,y=s2*r*f;if(!i){d+=`M${x.toFixed(1)} ${y.toFixed(1)}`;return}
-      const [pc,ps,pr]=spokes[i-1],px=pc*pr*f,py=ps*pr*f,mx=(px+x)/2,my=(py+y)/2,sag=.9-.06;d+=` Q${(mx*sag).toFixed(1)} ${(my*sag).toFixed(1)} ${x.toFixed(1)} ${y.toFixed(1)}`});o+=`<path d="${d}" stroke-width="${(.5+k*.03).toFixed(2)}"/>`}
-    let dew='';for(let i=0;i<14;i++){const sp=pick(spokes),f=R(.25,.95);dew+=`<circle cx="${(sp[0]*sp[2]*f).toFixed(1)}" cy="${(sp[1]*sp[2]*f).toFixed(1)}" r="${R(1,2.2).toFixed(1)}" fill="#fff" opacity="${R(.4,.8).toFixed(2)}"/>`}
-    return `<g fill="none" stroke="#efe8f5" stroke-opacity=".62">${o}</g>${dew}`};
+  const WEB=()=>{
+    // an orb web strung across a corner: frame anchored to both walls, uneven spokes, one continuous sagging capture spiral
+    const ax=R(190,250),by=R(190,250),D=[R(150,200),R(150,200)];
+    const poly=[[0,0],[ax,0],[D[0]+R(10,30),D[1]*R(.35,.55)],D,[D[0]*R(.35,.55),D[1]+R(10,30)],[0,by]];
+    const hub=[R(72,98),R(72,98)];
+    const hit=(a)=>{const dx=Math.cos(a),dy=Math.sin(a);let best=1e9;for(let i=0;i<poly.length;i++){const [x1,y1]=poly[i],[x2,y2]=poly[(i+1)%poly.length],ex=x2-x1,ey=y2-y1,den=dx*ey-dy*ex;if(Math.abs(den)<1e-9)continue;
+      const t=((x1-hub[0])*ey-(y1-hub[1])*ex)/den,u=((x1-hub[0])*dy-(y1-hub[1])*dx)/den;if(t>0&&u>=0&&u<=1&&t<best)best=t}return best};
+    const n=Math.floor(R(19,25));let ang=[],a0=R(0,6.28);for(let i=0;i<n;i++){ang.push(a0+i*2*Math.PI/n+R(-.11,.11))}
+    const spokes=ang.map(a=>{const L=hit(a);return {a,L,x:hub[0]+Math.cos(a)*L,y:hub[1]+Math.sin(a)*L}});
+    const P=(sp,f)=>[hub[0]+Math.cos(sp.a)*sp.L*f,hub[1]+Math.sin(sp.a)*sp.L*f];
+    let o='';
+    // anchor lines running on to the walls and beyond
+    o+=`<path d="M${ax} 0 L${ax+R(10,40)} 0 M0 ${by} L0 ${by+R(10,40)} M${D[0]} ${D[1]} L${D[0]+R(40,90)} ${D[1]+R(40,90)}" stroke-width=".7" stroke-opacity=".5"/>`;
+    o+=`<path d="M${poly.map(p=>p.map(v=>v.toFixed(1)).join(' ')).join(' L')}Z" stroke-width=".8"/>`;
+    spokes.forEach(sp=>o+=`<path d="M${hub[0].toFixed(1)} ${hub[1].toFixed(1)} L${sp.x.toFixed(1)} ${sp.y.toFixed(1)}" stroke-width="${R(.5,.8).toFixed(2)}"/>`);
+    // capture spiral (outside → in), sagging toward the hub between spokes, with a few broken strands and a torn gap
+    let d='',f=.96,i=0,drops=[];const gapAt=Math.floor(R(0,n)),gapW=Math.random()<.6?Math.floor(R(1,3)):0,step=R(.0085,.012);
+    let prev=P(spokes[0],f);d+=`M${prev[0].toFixed(1)} ${prev[1].toFixed(1)}`;
+    while(f>.2){i++;const sp=spokes[i%n];f-=step*(1+R(-.25,.25));const pt=P(sp,Math.max(.2,f));
+      const inGap=gapW&&((i%n)>=gapAt&&(i%n)<gapAt+gapW)&&f<.75&&f>.4,broken=Math.random()<.03||inGap;
+      if(broken){d+=` M${pt[0].toFixed(1)} ${pt[1].toFixed(1)}`;if(!inGap&&Math.random()<.5)o+=`<path d="M${pt[0].toFixed(1)} ${pt[1].toFixed(1)} q${R(-6,6).toFixed(1)} ${R(6,12).toFixed(1)} ${R(-4,4).toFixed(1)} ${R(12,24).toFixed(1)}" stroke-width=".4" stroke-opacity=".45"/>`}
+      else{const mx=(prev[0]+pt[0])/2,my=(prev[1]+pt[1])/2,s2=R(.05,.11),cx2=mx+(hub[0]-mx)*s2,cy2=my+(hub[1]-my)*s2;d+=` Q${cx2.toFixed(1)} ${cy2.toFixed(1)} ${pt[0].toFixed(1)} ${pt[1].toFixed(1)}`;
+        if(Math.random()<.055)drops.push([cx2*.5+mx*.5,cy2*.5+my*.5])}
+      prev=pt}
+    o+=`<path d="${d}" stroke-width=".34"/>`;
+    // hub: a small dense tangle
+    let hd='';for(let k=0;k<n*2.2;k++){const sp=spokes[k%n],ff=.05+k*.0045;const p2=P(sp,ff);hd+=(k?' L':'M')+p2[0].toFixed(1)+' '+p2[1].toFixed(1)}o+=`<path d="${hd}" stroke-width=".35" stroke-opacity=".8"/>`;
+    // loose threads hanging from the frame
+    for(let k=0;k<2;k++){const e=pick(poly.slice(1)),len=R(30,70);o+=`<path d="M${e[0].toFixed(1)} ${e[1].toFixed(1)} c${R(-8,8).toFixed(1)} ${(len*.4).toFixed(1)} ${R(-12,12).toFixed(1)} ${(len*.7).toFixed(1)} ${R(-6,6).toFixed(1)} ${len.toFixed(1)}" stroke-width=".35" stroke-opacity=".4"/>`}
+    const dew=drops.map(([x,y])=>`<circle cx="${x.toFixed(1)}" cy="${y.toFixed(1)}" r="${R(.8,1.8).toFixed(2)}" fill="url(#dew)"/>`).join('');
+    return `<defs><radialGradient id="dew" cx=".35" cy=".35" r=".7"><stop offset="0" stop-color="#ffffff"/><stop offset=".6" stop-color="#eef2ff" stop-opacity=".8"/><stop offset="1" stop-color="#c9d2e8" stop-opacity=".2"/></radialGradient>
+      <filter id="silk" x="-5%" y="-5%" width="110%" height="110%"><feGaussianBlur stdDeviation=".35" result="b"/><feMerge><feMergeNode in="b"/><feMergeNode in="SourceGraphic"/></feMerge></filter></defs>
+      <g class="webbreeze"><g fill="none" stroke="#f1eef8" stroke-opacity=".5" stroke-linecap="round" filter="url(#silk)">${o}</g>${dew}</g>`};
   const SPIDER=`<g class="dangle"><path d="M0 -400 V0" stroke="#efe8f5" stroke-opacity=".6" stroke-width=".8"/><g transform="translate(0 8)"><ellipse rx="7" ry="9" fill="#1d1a22"/><circle cy="-10" r="5" fill="#1d1a22"/>${[-1,1].map(s2=>[0,1,2,3].map(i=>`<path d="M0 ${-4+i*3} q${s2*12} ${-6+i*3} ${s2*18} ${2+i*5}" stroke="#1d1a22" stroke-width="1.4" fill="none"/>`).join('')).join('')}<circle cx="-2" cy="-11" r="1" fill="#e07b2a"/><circle cx="2" cy="-11" r="1" fill="#e07b2a"/></g></g>`;
   const webs=(on)=>{const box=layer.querySelector('.h-webs');box.innerHTML='';if(!on)return;
     [['tl',''],['tr','scale(-1 1)'],['bl','scale(1 -1)'],['br','scale(-1 -1)']].forEach(([c,tr],i)=>{const d=document.createElement('div');d.className='h-web '+c;
