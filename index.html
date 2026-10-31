@@ -1,0 +1,589 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1">
+<title>Jasleen — A Garden of Works</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=EB+Garamond:ital,wght@0,400;0,500;1,400&family=Italiana&family=Pinyon+Script&family=Cinzel:wght@400;500&display=swap" rel="stylesheet">
+<style>
+  :root{
+    --cream:#efeadb; --cream-2:#e6dfcb; --ink:#2f2a22; --muted:#6d6555;
+    --sage:#5f7a6e; --rose:#b0404a; --rose-soft:#e7a8a6; --gold:#b48a4a; --gold-2:#e2c27f;
+    --wine:#4a1420; --parchment:#f4efe2; --hero-ink:#efe4c6;
+  }
+  *{box-sizing:border-box;margin:0;padding:0}
+  html{scroll-behavior:smooth}
+  body{font-family:'EB Garamond',Georgia,serif;color:var(--ink);background:#d8c39a;min-height:100vh;overflow-x:hidden}
+  /* painted backdrop of flowing golden hair */
+  #backdrop{position:fixed;inset:0;z-index:0;width:100%;height:100%;filter:blur(1.2px) saturate(.95)}
+  .veil{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at center,rgba(240,228,205,.0) 30%,rgba(120,85,45,.28) 100%)}
+  .page{position:relative;z-index:1;width:min(980px,94vw);margin:48px auto 64px;box-shadow:0 30px 80px rgba(60,35,10,.45),0 2px 0 rgba(255,255,255,.3) inset;background:var(--cream)}
+  section{position:relative}
+
+  /* HERO */
+  .hero{height:clamp(420px,62vw,600px);overflow:hidden;color:var(--hero-ink);text-align:center}
+  .hero svg.scene{position:absolute;inset:0;width:100%;height:100%}
+  .hero .titles{position:absolute;inset:0;display:flex;flex-direction:column;align-items:center;padding-top:clamp(28px,5vw,54px);text-shadow:0 2px 14px rgba(20,25,10,.55)}
+  .mono{font-family:'Italiana',serif;font-size:clamp(34px,5vw,52px);letter-spacing:.02em;line-height:1;position:relative}
+  .mono span{display:inline-block}
+  .mono .rule{display:block;width:1px;height:26px;margin:4px auto 0;background:currentColor;opacity:.7}
+  .benvenuti{font-family:'Pinyon Script',cursive;font-size:clamp(20px,3vw,30px);margin-top:clamp(40px,9vw,96px);opacity:.95}
+  .name{font-family:'Italiana',serif;font-size:clamp(48px,10vw,108px);letter-spacing:.06em;line-height:.95;font-weight:400}
+  .name .amp{font-family:'Pinyon Script',cursive;font-size:.55em;letter-spacing:0;vertical-align:.18em;margin:0 .1em}
+  .subtitle{font-family:'Pinyon Script',cursive;font-size:clamp(26px,4.4vw,46px);margin-top:4px}
+  nav.top{position:absolute;bottom:42px;left:0;right:0;display:flex;justify-content:center;gap:clamp(14px,3vw,34px);font-family:'Cinzel',serif;font-size:12px;letter-spacing:.28em;text-transform:uppercase}
+  nav.top a{color:var(--hero-ink);text-decoration:none;opacity:.85;padding-bottom:3px;border-bottom:1px solid transparent;transition:.3s}
+  nav.top a:hover{opacity:1;border-color:currentColor}
+
+  /* LACE */
+  .lace{display:block;width:100%;height:34px;position:relative;z-index:3;margin:-17px 0;pointer-events:none}
+
+  /* STORY */
+  .story{background:var(--cream);padding:clamp(56px,8vw,90px) clamp(22px,6vw,64px) 40px;
+    background-image:radial-gradient(rgba(150,130,90,.06) 1px,transparent 1px);background-size:5px 5px}
+  .story-grid{display:grid;grid-template-columns:240px 1fr;gap:clamp(24px,5vw,56px);align-items:start}
+  .frames{position:relative;height:300px}
+  .vignette{position:absolute;left:0;top:0;width:170px;height:200px;box-shadow:0 6px 16px rgba(50,30,10,.25)}
+  .oval{position:absolute;right:0;bottom:0;width:150px;height:170px}
+  .oval:hover,.vignette:hover{transform:rotate(-1deg);transition:.4s}
+  h2.script{font-family:'Pinyon Script',cursive;font-weight:400;color:var(--sage);font-size:clamp(40px,5.6vw,58px);line-height:1;margin-bottom:14px}
+  h2.script.rose{color:var(--rose)}
+  .cols{columns:2 260px;column-gap:28px;text-align:justify;hyphens:auto;font-size:16.5px;line-height:1.42}
+  .cols p{margin-bottom:.8em;break-inside:avoid-column}
+  .cols p:first-child::first-letter{font-family:'Italiana',serif;float:left;font-size:3.3em;line-height:.85;margin:4px 8px 0 0;color:var(--gold)}
+
+  .works{padding:36px clamp(22px,6vw,64px) 80px;background:var(--cream);position:relative;
+    background-image:radial-gradient(rgba(150,130,90,.06) 1px,transparent 1px);background-size:5px 5px}
+  .works-wrap{display:grid;grid-template-columns:1fr 200px;gap:30px;align-items:center}
+  .ledger{display:grid;grid-template-columns:1fr 1fr;gap:4px 34px}
+  .entry{display:grid;grid-template-columns:auto 1fr;gap:0 10px;padding:9px 0;border-bottom:1px dotted rgba(110,100,80,.35);font-size:16px;line-height:1.35}
+  .entry em{color:var(--sage);font-style:italic;white-space:nowrap}
+  .entry b{font-weight:500}
+  .entry small{display:block;color:var(--muted);font-size:14.5px;grid-column:2}
+  .entry a{color:inherit;text-decoration-color:rgba(180,138,74,.6);text-underline-offset:3px}
+  .sprig{width:100%;height:auto}
+
+  /* SEA */
+  .sea{position:relative;min-height:420px;overflow:hidden;padding:110px clamp(22px,6vw,64px) 80px}
+  .sea svg.water{position:absolute;inset:0;width:100%;height:100%}
+  .duo{position:relative;display:grid;grid-template-columns:1fr 1fr;text-align:center;gap:20px;z-index:2}
+  .duo h3{font-family:'Pinyon Script',cursive;font-weight:400;color:var(--rose);font-size:clamp(40px,5vw,54px);line-height:1}
+  .duo .big{font-size:clamp(20px,2.4vw,24px);margin-top:4px}
+  .duo .small{font-size:16px;color:#3e4a40;line-height:1.35;margin-top:2px}
+  .rose-float{position:absolute;z-index:1;animation:drift 9s ease-in-out infinite;transform-origin:center}
+  @keyframes drift{0%,100%{transform:translateY(0) rotate(var(--r,0deg))}50%{transform:translateY(-8px) rotate(calc(var(--r,0deg) + 6deg))}}
+
+  /* FINALE */
+  .finale{position:relative;height:clamp(460px,58vw,560px);overflow:hidden}
+  .finale svg.shore{position:absolute;inset:0;width:100%;height:100%}
+  .envelope{position:absolute;left:50%;bottom:clamp(36px,6vw,60px);transform:translateX(-50%);width:clamp(220px,30vw,280px);aspect-ratio:1.05/1;cursor:pointer;text-decoration:none;display:block;filter:drop-shadow(0 18px 24px rgba(20,5,5,.45));transition:transform .5s}
+  .envelope:hover{transform:translateX(-50%) translateY(-6px)}
+  .envelope .card{position:absolute;left:9%;right:9%;top:-15%;height:52%;background:var(--parchment);text-align:center;padding-top:14px;box-shadow:0 2px 6px rgba(0,0,0,.2);transition:top .5s}
+  .envelope:hover .card{top:-24%}
+  .card .k{font-family:'Italiana',serif;color:var(--rose);font-size:clamp(17px,2.3vw,22px);letter-spacing:.1em;border-bottom:1px solid var(--rose);display:inline-block;padding:0 4px 1px}
+  .card .r{font-family:'Pinyon Script',cursive;color:#5a4a3c;font-size:clamp(15px,1.9vw,18px);margin-top:4px;line-height:1.1}
+  .envelope svg{position:absolute;inset:0;width:100%;height:100%}
+  footer{position:relative;z-index:1;text-align:center;padding:0 0 40px;font-family:'Cinzel',serif;font-size:11px;letter-spacing:.3em;color:#4a3518;text-transform:uppercase;opacity:.8}
+
+  @media (max-width:720px){
+    .story-grid{grid-template-columns:1fr}
+    .frames{height:230px;max-width:300px;margin:0 auto}
+    .vignette{width:140px;height:165px}.oval{width:125px;height:142px}
+    .works-wrap{grid-template-columns:1fr}.sprig{display:none}
+    .ledger{grid-template-columns:1fr}
+    .duo{grid-template-columns:1fr;gap:36px}
+    nav.top{bottom:30px;letter-spacing:.18em;font-size:10.5px}
+  }
+  @media (prefers-reduced-motion:reduce){.rose-float{animation:none}}
+
+  /* ===== THE LETTER (intro) ===== */
+  body.sealed{overflow:hidden}
+  body.sealed .page, body.sealed footer{opacity:0;transform:translateY(30px) scale(.97)}
+  .page,footer{transition:opacity 1.1s ease .2s, transform 1.1s cubic-bezier(.2,.7,.2,1) .2s}
+  #intro{position:fixed;inset:0;z-index:20;display:flex;flex-direction:column;align-items:center;justify-content:center;
+    background:radial-gradient(ellipse at center,rgba(250,240,220,.15),rgba(70,40,15,.45));transition:opacity .9s ease}
+  #intro.gone{opacity:0;pointer-events:none}
+  .env-wrap{position:relative;width:min(520px,86vw);aspect-ratio:1.56/1;perspective:1400px;margin-top:8vh;
+    filter:drop-shadow(0 30px 40px rgba(40,10,5,.5));transition:transform .9s cubic-bezier(.2,.7,.2,1),opacity .7s}
+  #intro.pulled .env-wrap{transform:translateY(60vh) rotate(4deg);opacity:0}
+  .env-back,.env-front,.flap{position:absolute;inset:0;border-radius:6px}
+  .env-back{background:linear-gradient(#3a0d18,#24060d)}
+  .env-front{background:linear-gradient(160deg,#6a1f2f,#3a0d18 70%);z-index:3;
+    clip-path:polygon(0 0,50% 62%,100% 0,100% 100%,0 100%)}
+  .env-front::after{content:"";position:absolute;inset:0;background:
+    linear-gradient(to top right,transparent 49.6%,rgba(0,0,0,.25) 50%,transparent 50.6%) left/50% 100% no-repeat,
+    linear-gradient(to top left,transparent 49.6%,rgba(0,0,0,.25) 50%,transparent 50.6%) right/50% 100% no-repeat}
+  .env-front .to{position:absolute;bottom:13%;left:0;right:0;text-align:center;font-family:'Pinyon Script',cursive;color:#d9b77c;font-size:clamp(22px,4vw,34px);opacity:.9}
+  .flap{z-index:4;transform-origin:top center;transition:transform .9s cubic-bezier(.4,.1,.2,1),z-index 0s .45s;
+    background:linear-gradient(#7a2536,#4a1420);clip-path:polygon(0 0,100% 0,50% 66%);transform-style:preserve-3d}
+  #intro.open .flap{transform:rotateX(180deg);z-index:0;filter:brightness(.7)}
+  .seal{position:absolute;left:50%;top:66%;transform:translate(-50%,-50%);z-index:5;width:78px;height:78px;border:none;cursor:pointer;
+    border-radius:50% 46% 52% 48%/48% 52% 46% 50%;background:radial-gradient(circle at 38% 34%,#d65a52,#9b1f22 55%,#5e0d10);
+    box-shadow:0 4px 10px rgba(0,0,0,.45),inset 0 -4px 8px rgba(0,0,0,.35),inset 0 3px 6px rgba(255,180,160,.35);
+    display:grid;place-items:center;font-family:'Italiana',serif;font-size:38px;color:#f3c9b0;text-shadow:0 1px 0 #5e0d10,0 -1px 0 #e88;transition:transform .5s,opacity .5s}
+  .seal::before{content:"";position:absolute;inset:8px;border-radius:50%;border:1.5px dashed rgba(255,210,190,.4)}
+  .seal:hover{transform:translate(-50%,-50%) scale(1.06) rotate(-4deg)}
+  #intro.open .seal{opacity:0;transform:translate(-50%,-30%) scale(.6) rotate(20deg);pointer-events:none}
+  .letter{position:absolute;left:6%;right:6%;top:5%;height:90%;z-index:2;background:var(--parchment);border-radius:2px;
+    background-image:radial-gradient(rgba(150,130,90,.08) 1px,transparent 1px);background-size:5px 5px;
+    box-shadow:0 1px 4px rgba(0,0,0,.2);text-align:center;padding-top:7%;transition:transform 1s cubic-bezier(.2,.7,.2,1) .5s;touch-action:none;user-select:none}
+  #intro.open .letter{transform:translateY(-62%);cursor:grab}
+  #intro.open .letter.drag{transition:none;cursor:grabbing}
+  .letter .lm{font-family:'Italiana',serif;font-size:30px;color:var(--gold);line-height:1}
+  .letter .lb{font-family:'Pinyon Script',cursive;color:var(--sage);font-size:clamp(18px,3vw,24px);margin-top:6px}
+  .letter .ln{font-family:'Italiana',serif;font-size:clamp(30px,6vw,46px);letter-spacing:.08em;color:var(--ink);line-height:1.05}
+  .letter .ld{width:60%;height:12px;margin:8px auto 0;background:url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='16' height='12'%3E%3Ccircle cx='8' cy='6' r='2' fill='%23c9c0a8'/%3E%3C/svg%3E") repeat-x center}
+  .hint{margin-top:5vh;font-family:'Cinzel',serif;font-size:12px;letter-spacing:.32em;text-transform:uppercase;color:#4a2c10;opacity:.85;animation:breathe 2.6s ease-in-out infinite}
+  .hint b{display:block;font-family:'Pinyon Script',cursive;font-size:26px;letter-spacing:0;text-transform:none;font-weight:400;margin-bottom:2px}
+  @keyframes breathe{50%{opacity:.45}}
+  .skip{position:absolute;bottom:22px;right:24px;font-family:'Cinzel',serif;font-size:10px;letter-spacing:.25em;color:#4a2c10;opacity:.6;background:none;border:none;cursor:pointer;text-transform:uppercase}
+  .grow{position:fixed;z-index:30;background:var(--parchment);border-radius:2px;box-shadow:0 20px 60px rgba(0,0,0,.35);
+    transition:all .95s cubic-bezier(.65,0,.25,1);pointer-events:none}
+  .grow.full{border-radius:0;opacity:0;transition:all .95s cubic-bezier(.65,0,.25,1),opacity .6s ease .8s}
+
+  /* end of the letter */
+  .closing{background:var(--parchment);padding:clamp(60px,8vw,90px) clamp(22px,8vw,110px) 70px;text-align:left;
+    background-image:radial-gradient(rgba(150,130,90,.07) 1px,transparent 1px);background-size:5px 5px}
+  .closing p{font-size:18px;line-height:1.55;max-width:560px;margin-bottom:1em}
+  .closing .valediction{font-family:'Pinyon Script',cursive;font-size:30px;color:var(--sage);margin-top:28px;margin-bottom:0}
+  .closing .sig{font-family:'Pinyon Script',cursive;font-size:clamp(60px,9vw,88px);color:var(--ink);line-height:1;margin:4px 0 0 30px}
+  .closing .ps{font-style:italic;color:var(--muted);font-size:16px;margin-top:26px}
+  .salutation{font-family:'Pinyon Script',cursive;font-size:clamp(28px,3.4vw,36px);color:var(--ink);margin:-4px 0 14px}
+</style>
+</head>
+<body class="sealed">
+
+<!-- shared defs: filters, lace, rose -->
+<svg width="0" height="0" style="position:absolute" aria-hidden="true">
+  <defs>
+    <filter id="paint" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.035" numOctaves="3" seed="4" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="16" xChannelSelector="R" yChannelSelector="G"/>
+    </filter>
+    <filter id="paintSoft" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.012" numOctaves="2" seed="9" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="22"/>
+      <feGaussianBlur stdDeviation="1.4"/>
+    </filter>
+    <filter id="leafy" x="-10%" y="-10%" width="120%" height="120%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.09" numOctaves="2" seed="2" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="14"/>
+    </filter>
+    <filter id="cloud" x="-20%" y="-20%" width="140%" height="140%">
+      <feTurbulence type="fractalNoise" baseFrequency="0.018 0.05" numOctaves="4" seed="11" result="n"/>
+      <feDisplacementMap in="SourceGraphic" in2="n" scale="40"/>
+      <feGaussianBlur stdDeviation="6"/>
+    </filter>
+    <filter id="canvas">
+      <feTurbulence type="fractalNoise" baseFrequency="0.85" numOctaves="2" seed="3"/>
+      <feColorMatrix values="0 0 0 0 0.35  0 0 0 0 0.3  0 0 0 0 0.2  0 0 0 0.16 0"/>
+      <feComposite in2="SourceGraphic" operator="in"/>
+    </filter>
+    <filter id="velvet">
+      <feTurbulence type="fractalNoise" baseFrequency="0.6" numOctaves="2" seed="7" result="n"/>
+      <feColorMatrix in="n" values="0 0 0 0 0  0 0 0 0 0  0 0 0 0 0  0 0 0 .22 0" result="d"/>
+      <feComposite in="d" in2="SourceGraphic" operator="in" result="dd"/>
+      <feMerge><feMergeNode in="SourceGraphic"/><feMergeNode in="dd"/></feMerge>
+    </filter>
+    <pattern id="lacePat" width="44" height="34" patternUnits="userSpaceOnUse">
+      <rect width="44" height="12" y="11" fill="#f4efe2"/>
+      <path d="M0 22 Q11 36 22 22 Q33 36 44 22 L44 22 L0 22Z" fill="#f4efe2"/>
+      <path d="M0 12 Q11 -2 22 12 Q33 -2 44 12Z" fill="#f4efe2"/>
+      <circle cx="22" cy="17" r="3.4" fill="none" stroke="#c9c0a8" stroke-width="1"/>
+      <circle cx="22" cy="17" r="1.2" fill="#c9c0a8"/>
+      <circle cx="0" cy="17" r="2" fill="#c9c0a8" opacity=".7"/><circle cx="44" cy="17" r="2" fill="#c9c0a8" opacity=".7"/>
+      <circle cx="11" cy="27" r="1.6" fill="#c9c0a8"/><circle cx="33" cy="27" r="1.6" fill="#c9c0a8"/>
+      <circle cx="11" cy="7" r="1.6" fill="#c9c0a8"/><circle cx="33" cy="7" r="1.6" fill="#c9c0a8"/>
+      <path d="M4 17 h10 M30 17 h10" stroke="#c9c0a8" stroke-width=".8" stroke-dasharray="1.5 2"/>
+      <path d="M2 24 Q11 33 20 24 M24 24 Q33 33 42 24 M2 10 Q11 1 20 10 M24 10 Q33 1 42 10" fill="none" stroke="#d8d0bb" stroke-width=".9"/>
+    </pattern>
+    <symbol id="rose" viewBox="0 0 120 120">
+      <path d="M60 64 C58 84 48 100 30 114" stroke="#4d6b3c" stroke-width="2.6" fill="none" stroke-linecap="round"/>
+      <path d="M47 92 C30 86 18 92 10 104 C26 106 40 102 47 92Z" fill="#3f5e33"/>
+      <path d="M47 92 C30 92 18 96 10 104" stroke="#6f8f55" stroke-width=".8" fill="none"/>
+      <path d="M55 78 C66 70 82 72 92 82 C78 88 64 86 55 78Z" fill="#4a6b3a"/>
+      <g filter="url(#leafy)">
+        <path d="M60 64 C40 64 30 46 38 32 C44 22 54 20 60 26 C66 18 80 20 84 32 C90 48 80 64 60 64Z" fill="#e9a9a6"/>
+        <path d="M60 60 C46 58 40 46 46 36 C52 30 58 32 60 36 C64 30 72 30 76 38 C80 48 72 58 60 60Z" fill="#d97f84"/>
+        <path d="M60 54 C52 52 50 44 54 40 C58 37 62 40 62 42 C66 40 70 44 68 48 C66 52 64 54 60 54Z" fill="#b8525c"/>
+        <path d="M38 34 C34 44 40 58 52 62" stroke="#f6d3cf" stroke-width="2" fill="none" opacity=".8"/>
+      </g>
+    </symbol>
+  </defs>
+</svg>
+
+<svg id="backdrop" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1600 1000" aria-hidden="true"></svg>
+<div class="veil"></div>
+
+<div id="intro" role="dialog" aria-label="A sealed letter">
+  <div class="env-wrap">
+    <div class="env-back"></div>
+    <div class="letter" id="letter" tabindex="-1" aria-label="Pull the letter out to open it">
+      <div class="lm">J</div>
+      <div class="lb">Benvenuti nel giardino di</div>
+      <div class="ln">JASLEEN</div>
+      <div class="ld"></div>
+    </div>
+    <div class="env-front"><div class="to">for you</div></div>
+    <div class="flap"></div>
+    <button class="seal" id="seal" aria-label="Break the seal">J</button>
+  </div>
+  <p class="hint" id="hint"><b>a letter has arrived</b>Break the seal</p>
+  <button class="skip" id="skip">Skip ›</button>
+</div>
+
+<main class="page">
+
+  <!-- HERO: an Arcadian landscape -->
+  <section class="hero" id="top">
+    <svg class="scene" viewBox="0 0 1000 620" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1">
+          <stop offset="0" stop-color="#7d93a8"/><stop offset=".45" stop-color="#aebcc4"/><stop offset=".75" stop-color="#d9d3bd"/><stop offset="1" stop-color="#e8dcb8"/>
+        </linearGradient>
+        <linearGradient id="mtn" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8195a6"/><stop offset="1" stop-color="#b7c0bf"/></linearGradient>
+        <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9cdbd"/><stop offset=".5" stop-color="#8e9f93"/><stop offset="1" stop-color="#4f6559"/></linearGradient>
+        <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#e6dcbc" stop-opacity="0"/><stop offset="1" stop-color="#e6dcbc" stop-opacity=".55"/></linearGradient>
+        <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#bfae88"/><stop offset="1" stop-color="#7e6d4b"/></linearGradient>
+        <radialGradient id="glow" cx=".62" cy=".58" r=".5"><stop offset="0" stop-color="#fff3cf" stop-opacity=".55"/><stop offset="1" stop-color="#fff3cf" stop-opacity="0"/></radialGradient>
+        <linearGradient id="shade" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#1c2412" stop-opacity=".35"/><stop offset=".35" stop-color="#1c2412" stop-opacity="0"/><stop offset=".8" stop-color="#1c2412" stop-opacity="0"/><stop offset="1" stop-color="#1c2412" stop-opacity=".45"/></linearGradient>
+      </defs>
+      <rect width="1000" height="620" fill="url(#sky)"/>
+      <g filter="url(#cloud)" opacity=".85">
+        <ellipse cx="240" cy="90" rx="200" ry="34" fill="#eef0ea"/>
+        <ellipse cx="560" cy="60" rx="240" ry="28" fill="#e8ebe6"/>
+        <ellipse cx="860" cy="120" rx="170" ry="30" fill="#f2efe4"/>
+        <ellipse cx="420" cy="170" rx="160" ry="20" fill="#f3ead2"/>
+      </g>
+      <rect width="1000" height="620" fill="url(#glow)"/>
+      <!-- distant mountains -->
+      <g filter="url(#paintSoft)">
+        <path d="M300 330 L420 250 L500 270 L610 170 L700 220 L760 205 L880 300 L1000 290 L1000 360 L300 360Z" fill="url(#mtn)" opacity=".9"/>
+        <path d="M610 170 L640 210 L620 230 L660 260 L700 220Z" fill="#c9d0d2" opacity=".6"/>
+        <path d="M250 350 L360 300 L450 320 L540 290 L640 320 L760 300 L900 340 L1000 330 L1000 380 L250 380Z" fill="#93a49c" opacity=".85"/>
+      </g>
+      <rect y="240" width="1000" height="160" fill="url(#haze)"/>
+      <!-- lake -->
+      <rect y="372" width="1000" height="140" fill="url(#lake)"/>
+      <g opacity=".5" stroke="#eef0e0" stroke-width="1.4" stroke-linecap="round">
+        <path d="M420 392 h60 M540 400 h90 M480 414 h40 M600 424 h70 M380 436 h50 M660 446 h40 M520 452 h60"/>
+      </g>
+      <!-- mid hills right -->
+      <g filter="url(#paint)">
+        <path d="M640 380 C700 330 780 320 860 300 C920 290 980 300 1000 300 L1000 420 L640 420Z" fill="#5d6f43"/>
+        <path d="M700 390 C760 360 840 350 1000 350 L1000 430 L700 430Z" fill="#4a5c35"/>
+      </g>
+      <!-- right tree mass -->
+      <g filter="url(#leafy)">
+        <ellipse cx="930" cy="230" rx="90" ry="120" fill="#2f3f20"/>
+        <ellipse cx="880" cy="160" rx="60" ry="80" fill="#3d5128"/>
+        <ellipse cx="990" cy="140" rx="70" ry="110" fill="#26351a"/>
+        <ellipse cx="840" cy="300" rx="70" ry="70" fill="#3a4c25"/>
+        <ellipse cx="900" cy="130" rx="30" ry="40" fill="#6d8148" opacity=".7"/>
+        <ellipse cx="850" cy="270" rx="26" ry="22" fill="#7d8d4f" opacity=".6"/>
+      </g>
+      <!-- cypresses -->
+      <g filter="url(#leafy)" fill="#22301a">
+        <path d="M770 360 C760 320 764 270 772 240 C780 270 784 320 776 360Z"/>
+        <path d="M792 362 C784 330 787 290 794 268 C801 290 804 330 798 362Z"/>
+      </g>
+      <!-- left cliff with temple -->
+      <g filter="url(#paint)">
+        <path d="M0 120 C60 110 120 130 170 170 C210 210 230 270 270 330 C300 370 320 400 340 430 L0 430Z" fill="#4e5a33"/>
+        <path d="M0 200 C80 210 150 260 200 330 C230 370 250 400 270 430 L0 430Z" fill="#3a4527"/>
+        <path d="M150 170 C180 200 200 240 214 290" stroke="#8c8a5c" stroke-width="10" fill="none" opacity=".45"/>
+      </g>
+      <!-- temple on cliff -->
+      <g transform="translate(46 70)" opacity=".92">
+        <path d="M0 40 L50 22 L100 40Z" fill="#cfc2a0"/>
+        <rect x="4" y="40" width="92" height="6" fill="#bdb08e"/>
+        <g fill="#d8ccab"><rect x="10" y="46" width="6" height="34"/><rect x="28" y="46" width="6" height="34"/><rect x="46" y="46" width="6" height="34"/><rect x="64" y="46" width="6" height="34"/><rect x="82" y="46" width="6" height="34"/></g>
+        <rect x="2" y="80" width="96" height="6" fill="#a99b78"/>
+      </g>
+      <!-- left trees -->
+      <g filter="url(#leafy)">
+        <ellipse cx="40" cy="160" rx="80" ry="70" fill="#34441f"/>
+        <ellipse cx="140" cy="200" rx="60" ry="80" fill="#3b4c24"/>
+        <ellipse cx="210" cy="290" rx="70" ry="80" fill="#2c3a1a"/>
+        <ellipse cx="90" cy="300" rx="110" ry="90" fill="#263317"/>
+        <ellipse cx="110" cy="190" rx="30" ry="26" fill="#7a8a4c" opacity=".55"/>
+        <ellipse cx="200" cy="250" rx="22" ry="30" fill="#8b9a57" opacity=".45"/>
+      </g>
+      <!-- willow -->
+      <g filter="url(#leafy)" stroke="#6b7c3e" stroke-width="3" fill="none" opacity=".75">
+        <path d="M290 290 C296 330 300 360 298 400"/><path d="M300 288 C312 330 318 370 318 404"/><path d="M280 296 C278 340 280 370 276 404"/><path d="M310 300 C330 340 336 380 334 404"/><path d="M270 304 C262 340 262 370 258 400"/>
+      </g>
+      <ellipse cx="296" cy="290" rx="40" ry="26" fill="#55663a" filter="url(#leafy)"/>
+      <!-- statue on plinth -->
+      <g transform="translate(110 360)">
+        <rect x="0" y="22" width="80" height="54" fill="url(#stone)"/>
+        <rect x="-6" y="18" width="92" height="8" fill="#cbbb95"/>
+        <path d="M14 18 C18 4 34 -2 50 4 C62 8 70 12 74 18Z" fill="#d6c9a6"/>
+        <circle cx="22" cy="2" r="6" fill="#d6c9a6"/>
+      </g>
+      <!-- figures -->
+      <g fill="#7b2f2a" opacity=".85">
+        <path d="M712 404 l4 -16 l4 16Z"/><circle cx="716" cy="385" r="2.5" fill="#d9b48e"/>
+        <path d="M730 406 l3 -14 l4 14Z" fill="#e7dfcd"/><circle cx="733" cy="390" r="2.3" fill="#d9b48e"/>
+      </g>
+      <!-- balustrade -->
+      <rect y="500" width="1000" height="16" fill="#c8b994"/>
+      <rect y="512" width="1000" height="6" fill="#8e7e5a"/>
+      <g fill="#b9a982" id="balusters"></g>
+      <rect y="586" width="1000" height="34" fill="#8a7a56"/>
+      <rect y="586" width="1000" height="4" fill="#b3a27c"/>
+      <rect width="1000" height="620" fill="url(#shade)"/>
+      <rect width="1000" height="620" filter="url(#canvas)" fill="#000"/>
+    </svg>
+
+    <div class="titles">
+      <div class="mono" aria-hidden="true"><span>J</span><i class="rule"></i></div>
+      <div class="benvenuti">Benvenuti nel giardino di</div>
+      <h1 class="name">JASLEEN</h1>
+      <div class="subtitle">a garden of works &amp; wonders</div>
+    </div>
+    <nav class="top">
+      <a href="#story">Story</a><a href="#works">Works</a><a href="#now">Now</a><a href="#write">Write</a>
+    </nav>
+  </section>
+
+  <svg class="lace" preserveAspectRatio="none" aria-hidden="true"><rect width="100%" height="34" fill="url(#lacePat)"/></svg>
+
+  <!-- STORY -->
+  <section class="story" id="story">
+    <div class="story-grid">
+      <div class="frames" aria-hidden="true">
+        <!-- painted miniature: cypress at dusk -->
+        <svg class="vignette" viewBox="0 0 170 200" preserveAspectRatio="xMidYMid slice">
+          <defs><linearGradient id="dusk" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#3b3a4a"/><stop offset=".55" stop-color="#b98a6a"/><stop offset=".72" stop-color="#e9c89a"/><stop offset="1" stop-color="#2c2a22"/></linearGradient></defs>
+          <rect width="170" height="200" fill="url(#dusk)"/>
+          <circle cx="112" cy="128" r="12" fill="#fbe8c2" opacity=".9" filter="url(#paintSoft)"/>
+          <g filter="url(#paint)">
+            <path d="M0 150 C40 132 90 140 170 134 L170 200 L0 200Z" fill="#2a2a1e"/>
+            <path d="M44 150 C36 110 40 64 48 34 C56 64 60 110 52 150Z" fill="#1c2015"/>
+            <path d="M66 152 C60 120 63 90 69 70 C75 90 78 120 72 152Z" fill="#1f2417"/>
+            <path d="M140 140 C134 116 136 96 142 84 C148 96 150 116 144 140Z" fill="#1f2417"/>
+          </g>
+          <rect width="170" height="200" filter="url(#canvas)" fill="#000"/>
+        </svg>
+        <!-- gilded oval with a rose -->
+        <svg class="oval" viewBox="0 0 150 170">
+          <defs>
+            <linearGradient id="gilt" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#f3d995"/><stop offset=".35" stop-color="#a87a35"/><stop offset=".6" stop-color="#e8c77a"/><stop offset="1" stop-color="#6e4a1c"/></linearGradient>
+            <radialGradient id="ovalIn" cx=".5" cy=".4" r=".7"><stop offset="0" stop-color="#e9e2cf"/><stop offset="1" stop-color="#8f8a78"/></radialGradient>
+          </defs>
+          <ellipse cx="75" cy="85" rx="70" ry="80" fill="url(#gilt)"/>
+          <ellipse cx="75" cy="85" rx="70" ry="80" fill="none" stroke="#6e4a1c" stroke-width="1"/>
+          <g fill="none" stroke="#fff1c2" stroke-width="1.4" opacity=".7">
+            <ellipse cx="75" cy="85" rx="63" ry="73" stroke-dasharray="2 5"/>
+          </g>
+          <g fill="#f6dfa0" opacity=".9"><circle cx="75" cy="8" r="5"/><circle cx="75" cy="162" r="5"/><circle cx="7" cy="85" r="4"/><circle cx="143" cy="85" r="4"/></g>
+          <ellipse cx="75" cy="85" rx="56" ry="65" fill="url(#ovalIn)" stroke="#5a3c16" stroke-width="2"/>
+          <text x="75" y="110" text-anchor="middle" font-family="Pinyon Script" font-size="74" fill="#5f7a6e">J</text>
+          <rect x="19" y="20" width="112" height="130" filter="url(#canvas)" fill="#000" clip-path="ellipse(56px 65px at 56px 65px)"/>
+        </svg>
+      </div>
+      <div>
+        <div class="salutation">Dear friend,</div>
+        <h2 class="script">Her Story</h2>
+        <div class="cols">
+          <p>Jasleen has always been a builder of small worlds: the kind of person who starts with a question, a craving or a hunch and keeps going until it becomes something other people can hold, open and come back to.</p>
+          <p>What began as curiosity grew into a studio. Under <em>amaris ct</em> (amaris creative tech), she designs and ships her own sites and apps, each one its own room in a larger house, each built with the same care for how it looks and how it feels to use.</p>
+          <p>Her work moves easily between the serious and the delightful: independent research on human consciousness and machine intelligence on one side, and on the other an app that finds the closest place serving the dessert you can’t stop thinking about.</p>
+          <p>Now she is tending all of it at once: writing, designing, launching a local business and learning in public. Not one grand project, but a garden that keeps blooming.</p>
+        </div>
+      </div>
+    </div>
+  </section>
+
+  <!-- WORKS -->
+  <section class="works" id="works">
+    <h2 class="script">The Works</h2>
+    <div class="works-wrap">
+      <div class="ledger">
+        <div class="entry"><em>The studio —</em><span><b><a href="https://amarisct.github.io/Amaris/">amaris ct</a></b><small>amaris creative tech, home of everything below</small></span></div>
+        <div class="entry"><em>Research —</em><span><b>Artificially Intelligent</b><small>Human × Machine Learning: an independent research site on consciousness &amp; AI</small></span></div>
+        <div class="entry"><em>An app —</em><span><b>Dessert Spotter</b><small>Search a dessert, find the nearest place that has it</small></span></div>
+        <div class="entry"><em>An oracle —</em><span><b>TarotParot</b><small>Tarot readings. “A little birdie told me.”</small></span></div>
+        <div class="entry"><em>A business —</em><span><b>Pierce County Cleaning Services</b><small>Cleaning services for Tacoma &amp; Pierce County, WA</small></span></div>
+        <div class="entry"><em>Elsewhere —</em><span><b><a href="https://www.linkedin.com/in/jojomojojo222/">LinkedIn</a></b><small>The best way to reach her</small></span></div>
+      </div>
+      <svg class="sprig" viewBox="0 0 200 220" aria-hidden="true">
+        <use href="#rose" x="10" y="20" width="180" height="180" transform="rotate(-8 100 110)"/>
+      </svg>
+    </div>
+  </section>
+
+  <svg class="lace" preserveAspectRatio="none" aria-hidden="true"><rect width="100%" height="34" fill="url(#lacePat)"/></svg>
+
+  <!-- SEA -->
+  <section class="sea" id="now">
+    <svg class="water" preserveAspectRatio="none" viewBox="0 0 1000 420" aria-hidden="true">
+      <defs><linearGradient id="seaG" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#c9cfb2"/><stop offset=".5" stop-color="#b4c0a2"/><stop offset="1" stop-color="#9fb197"/></linearGradient></defs>
+      <rect width="1000" height="420" fill="url(#seaG)"/>
+      <g id="waves" stroke="#f3f1e2" stroke-width="1.6" fill="none" stroke-linecap="round" opacity=".75"></g>
+      <rect width="1000" height="420" filter="url(#canvas)" fill="#000"/>
+    </svg>
+    <svg class="rose-float" style="left:30%;top:22%;--r:-24deg" width="70" height="70"><use href="#rose"/></svg>
+    <svg class="rose-float" style="right:8%;top:14%;--r:30deg;animation-delay:-3s" width="60" height="60"><use href="#rose"/></svg>
+    <svg class="rose-float" style="left:4%;bottom:12%;--r:-50deg;animation-delay:-5s" width="64" height="64"><use href="#rose"/></svg>
+    <svg class="rose-float" style="right:22%;bottom:6%;--r:12deg;animation-delay:-1.5s" width="48" height="48"><use href="#rose"/></svg>
+    <svg class="rose-float" style="left:50%;top:6%;--r:70deg;animation-delay:-6s" width="44" height="44"><use href="#rose"/></svg>
+    <div class="duo">
+      <div>
+        <h3>Now</h3>
+        <div class="big">Autumn 2026</div>
+        <div class="small">Teaching a parrot to read tarot<br>and building rooms for curious minds</div>
+      </div>
+      <div>
+        <h3>Where</h3>
+        <div class="big">The amaris ct studio</div>
+        <div class="small">On the web, and in<br>Pierce County, Washington</div>
+      </div>
+    </div>
+  </section>
+
+  <svg class="lace" preserveAspectRatio="none" aria-hidden="true"><rect width="100%" height="34" fill="url(#lacePat)"/></svg>
+
+  <!-- END OF THE LETTER -->
+  <section class="closing" id="closing">
+    <p>And so this is where the letter ends, for now. Every room in this garden is still growing. Some are blooming, some are only seeds, and a few are being argued over by a parrot with strong opinions about tarot.</p>
+    <p>Thank you for reading this far. Wander back whenever you like, and if something here sparks an idea, a question or a collaboration, the envelope below is always open.</p>
+    <p class="valediction">With warmth &amp; wonder,</p>
+    <div class="sig">Jasleen</div>
+    <p class="ps">P.S. If you find the dessert you’ve been craving, you know which app to thank.</p>
+  </section>
+
+  <!-- FINALE: shell rising from the sea -->
+  <section class="finale" id="write">
+    <svg class="shore" viewBox="0 0 1000 560" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
+      <defs>
+        <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b9c4b4"/><stop offset=".55" stop-color="#cfd3bd"/><stop offset=".56" stop-color="#7f9d98"/><stop offset="1" stop-color="#5e807d"/></linearGradient>
+        <radialGradient id="shellG" cx=".5" cy=".95" r=".95"><stop offset="0" stop-color="#e9c99a"/><stop offset=".6" stop-color="#f3e2c0"/><stop offset="1" stop-color="#c79a62"/></radialGradient>
+        <linearGradient id="cloak" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d49a8c"/><stop offset=".5" stop-color="#b8665c"/><stop offset="1" stop-color="#7f3a35"/></linearGradient>
+        <linearGradient id="hair" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#d79a45"/><stop offset="1" stop-color="#9a5b22"/></linearGradient>
+      </defs>
+      <rect width="1000" height="560" fill="url(#sky2)"/>
+      <g filter="url(#cloud)" opacity=".6"><ellipse cx="300" cy="80" rx="200" ry="24" fill="#eef0e6"/><ellipse cx="700" cy="140" rx="180" ry="18" fill="#eef0e6"/></g>
+      <!-- far shore -->
+      <g filter="url(#paintSoft)"><path d="M0 300 C120 280 220 290 300 306 L0 312Z" fill="#7b8b66"/><path d="M760 306 C840 286 920 280 1000 290 L1000 312 L760 312Z" fill="#6c7e5c"/></g>
+      <!-- sea strokes -->
+      <g id="waves2" stroke="#e8efe6" stroke-width="1.8" fill="none" stroke-linecap="round" opacity=".7"></g>
+      <!-- orange grove (right) -->
+      <g filter="url(#leafy)">
+        <ellipse cx="920" cy="170" rx="130" ry="150" fill="#1f3320"/>
+        <ellipse cx="820" cy="110" rx="90" ry="80" fill="#26402a"/>
+        <ellipse cx="990" cy="300" rx="80" ry="140" fill="#1a2a1a"/>
+      </g>
+      <g fill="#f2f0e6" opacity=".85" id="blossoms"></g>
+      <!-- roses carried on the wind -->
+      <use href="#rose" x="60" y="150" width="90" height="90" transform="rotate(-30 105 195)"/>
+      <use href="#rose" x="190" y="90" width="60" height="60" transform="rotate(25 220 120)"/>
+      <use href="#rose" x="120" y="300" width="70" height="70" transform="rotate(-60 155 335)"/>
+      <use href="#rose" x="300" y="190" width="46" height="46" transform="rotate(40 323 213)"/>
+      <use href="#rose" x="660" y="70" width="54" height="54" transform="rotate(-15 687 97)"/>
+      <!-- shell -->
+      <g transform="translate(500 548)">
+        <g filter="url(#paint)">
+          <path d="M-230 0 C-230 -150 -120 -250 0 -250 C120 -250 230 -150 230 0Z" fill="url(#shellG)"/>
+        </g>
+        <g id="ribs" stroke="#b78a52" stroke-width="2.2" opacity=".75" fill="none"></g>
+        <path d="M-60 0 L-80 30 L80 30 L60 0Z" fill="#c69a63"/>
+        <path d="M-230 0 C-230 -150 -120 -250 0 -250 C120 -250 230 -150 230 0" fill="none" stroke="#a4783f" stroke-width="3" stroke-dasharray="14 8" opacity=".55"/>
+      </g>
+      <rect width="1000" height="560" filter="url(#canvas)" fill="#000"/>
+    </svg>
+
+    <a class="envelope" href="https://www.linkedin.com/in/jojomojojo222/" aria-label="Write to Jasleen on LinkedIn">
+      <div class="card"><div class="k">KINDLY WRITE</div><div class="r">Send a note<br>by way of LinkedIn</div></div>
+      <svg viewBox="0 0 280 266" preserveAspectRatio="none" aria-hidden="true">
+        <defs>
+          <linearGradient id="wine1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#5e1a28"/><stop offset="1" stop-color="#2e0912"/></linearGradient>
+          <linearGradient id="wine2" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6e2131"/><stop offset="1" stop-color="#3a0d18"/></linearGradient>
+        </defs>
+        <g filter="url(#velvet)">
+          <rect x="0" y="40" width="280" height="226" rx="4" fill="url(#wine1)"/>
+          <path d="M0 266 L140 140 L280 266Z" fill="url(#wine2)"/>
+          <path d="M0 40 L140 160 L0 266Z" fill="#4a1420"/>
+          <path d="M280 40 L140 160 L280 266Z" fill="#3f101b"/>
+        </g>
+        <text x="140" y="232" text-anchor="middle" font-family="Italiana" font-size="30" fill="#c7a26a" opacity=".85">J</text>
+      </svg>
+    </a>
+  </section>
+</main>
+
+<footer>amaris ct · Jasleen · MMXXVI</footer>
+
+<script>
+(function(){
+  const NS='http://www.w3.org/2000/svg';
+  const el=(t,a)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);return e};
+  let s=7;const rnd=()=>{s=(s*16807)%2147483647;return (s-1)/2147483646};
+
+  // balusters
+  const b=document.getElementById('balusters');
+  for(let x=10;x<1000;x+=34){
+    b.appendChild(el('path',{d:`M${x} 518 h14 c-6 10 4 18 2 32 c-2 12 6 20 -2 36 h-14 c-8 -16 0 -24 -2 -36 c-2 -14 8 -22 2 -32Z`}));
+  }
+  // sea wave ticks
+  const wv=(g,w,h,n,y0)=>{for(let i=0;i<n;i++){const x=rnd()*w,y=y0+rnd()*(h-y0),sz=5+rnd()*7;
+    g.appendChild(el('path',{d:`M${x-sz} ${y} q${sz/2} ${sz*.6} ${sz} 0 q${sz/2} ${sz*.6} ${sz} 0`}))}};
+  wv(document.getElementById('waves'),1000,420,170,0);
+  wv(document.getElementById('waves2'),1000,560,90,312);
+  // orange blossoms
+  const bl=document.getElementById('blossoms');
+  for(let i=0;i<60;i++){bl.appendChild(el('circle',{cx:790+rnd()*220,cy:40+rnd()*300,r:1.2+rnd()*2.2}))}
+  // shell ribs
+  const r=document.getElementById('ribs');
+  for(let i=0;i<=16;i++){const a=Math.PI*(i/16);const x=-Math.cos(a)*222,y=-Math.sin(a)*240;
+    r.appendChild(el('path',{d:`M0 0 Q${x*.4} ${y*.55} ${x} ${y}`}))}
+  const hs=null;if(hs)
+  for(let i=0;i<26;i++){const y=120+i*9+rnd()*8,x=30+rnd()*40;
+    hs.appendChild(el('path',{d:`M${x} ${y} c40 ${-30+rnd()*20} 80 ${20+rnd()*20} 130 ${-10+rnd()*10} s70 ${-20} 100 ${-30+rnd()*20}`,
+      stroke:['#c98a3c','#e0ac5c','#a8662a','#f0c47a'][i%4],'stroke-width':1.5+rnd()*2.5,opacity:.4+rnd()*.5}))}
+
+  // backdrop: flowing golden hair, painted
+  const bd=document.getElementById('backdrop');
+  bd.appendChild(el('rect',{width:1600,height:1000,fill:'#dcc8a0'}));
+  const g=el('g',{fill:'none','stroke-linecap':'round'});bd.appendChild(g);
+  const cols=['#c88a3a','#e3b064','#a9682a','#f2d08e','#b87a34','#d99b48','#8a5220','#efdcb0'];
+  for(let i=0;i<260;i++){
+    let x=-100+rnd()*1800,y=-100+rnd()*1200;let d=`M${x} ${y}`;
+    for(let k=0;k<5;k++){const dx=120+rnd()*120,dy=80+rnd()*60*(rnd()<.5?-1:1);
+      d+=` q${dx/2} ${dy} ${dx} ${dy*.2}`;}
+    g.appendChild(el('path',{d,stroke:cols[i%cols.length],'stroke-width':4+rnd()*22,opacity:.25+rnd()*.45}));
+  }
+  bd.appendChild(el('rect',{width:1600,height:1000,fill:'#000',filter:'url(#canvas)'}));
+
+  // ===== the letter: break seal → pull → unfold into the site =====
+  const intro=document.getElementById('intro'),seal=document.getElementById('seal'),
+        letter=document.getElementById('letter'),hint=document.getElementById('hint');
+  let opened=false,done=false,startY=null,dy=0,moved=false;
+  const openEnv=()=>{if(opened)return;opened=true;intro.classList.add('open');
+    setTimeout(()=>{hint.innerHTML='<b>now pull it out</b>Drag the letter upward';letter.focus({preventScroll:true})},900)};
+  const unfold=()=>{if(done)return;done=true;
+    const r=letter.getBoundingClientRect(),g=document.createElement('div');g.className='grow';
+    Object.assign(g.style,{left:r.left+'px',top:r.top+'px',width:r.width+'px',height:r.height+'px'});
+    document.body.appendChild(g);letter.style.visibility='hidden';
+    intro.classList.add('pulled');hint.style.opacity=0;
+    requestAnimationFrame(()=>requestAnimationFrame(()=>{
+      Object.assign(g.style,{left:'0px',top:'0px',width:'100vw',height:'100vh'});g.classList.add('full');}));
+    setTimeout(()=>{window.scrollTo(0,0);document.body.classList.remove('sealed');intro.classList.add('gone')},850);
+    setTimeout(()=>{g.remove();intro.remove()},2000);
+  };
+  seal.addEventListener('click',openEnv);
+  letter.addEventListener('pointerdown',e=>{if(!opened)return;startY=e.clientY;dy=0;moved=false;letter.classList.add('drag');letter.setPointerCapture(e.pointerId)});
+  letter.addEventListener('pointermove',e=>{if(startY===null)return;dy=Math.min(20,e.clientY-startY);if(Math.abs(dy)>4)moved=true;
+    letter.style.transform=`translateY(calc(-62% + ${dy}px))`});
+  const release=()=>{if(startY===null)return;letter.classList.remove('drag');startY=null;
+    if(dy<-50||!moved)unfold();else letter.style.transform=''};
+  letter.addEventListener('pointerup',release);letter.addEventListener('pointercancel',release);
+  letter.addEventListener('keydown',e=>{if(e.key==='Enter'||e.key===' '){e.preventDefault();unfold()}});
+  document.getElementById('skip').addEventListener('click',()=>{opened=true;intro.classList.add('open');setTimeout(unfold,300)});
+})();
+</script>
+</body>
+</html>
