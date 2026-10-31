@@ -409,6 +409,22 @@ html.calm .page,html.calm .tabwrap,html.calm footer{transition:none!important}
 .sl-well{position:absolute;overflow:hidden}
 .splash{position:absolute;pointer-events:none}
 
+
+/* ---------------- THE LIVING SKY ---------------- */
+#livingSky{position:fixed;inset:0;z-index:0;pointer-events:none}
+#livingSky .ls-tint{position:absolute;inset:0;mix-blend-mode:multiply}
+#livingSky.ready .ls-tint{transition:background 4s,opacity 4s}
+html[data-light=night] .veil{background:radial-gradient(ellipse at center,rgba(20,26,60,0) 35%,rgba(6,10,30,.5) 100%)}
+html[data-light=dusk] .veil{background:radial-gradient(ellipse at center,rgba(60,40,90,0) 35%,rgba(40,24,60,.4) 100%)}
+#livingSky svg,#livingSky canvas{position:absolute;inset:0;width:100%;height:100%}
+#livingSky .st{animation:twk var(--t,4s) ease-in-out infinite alternate}
+@keyframes twk{from{opacity:var(--o,.8)}to{opacity:.15}}
+#livingSky.ready .ls-stars,#livingSky.ready .ls-const{transition:opacity 4s}
+#backdrop .bd-drift{animation:bdDrift 140s ease-in-out infinite alternate}
+@keyframes bdDrift{from{transform:translate(0,0)}to{transform:translate(-60px,34px)}}
+html[data-light=night] footer,html[data-light=dusk] footer{color:#eadfc2}
+#skyNote{display:block;margin-top:10px;font-family:'Cormorant Garamond',serif;font-style:italic;text-transform:none;letter-spacing:.04em;font-size:15px;opacity:.9}
+
 /* ---------------- THE LETTER ---------------- */
 body.sealed{overflow:hidden}
 body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:translateY(30px) scale(.97)}
@@ -582,6 +598,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
 
 <svg id="backdrop" preserveAspectRatio="xMidYMid slice" viewBox="0 0 1600 1000" aria-hidden="true"></svg>
 <div class="veil"></div>
+<div id="livingSky" aria-hidden="true"><div class="ls-tint"></div><svg class="ls-svg"></svg><canvas class="ls-meteors"></canvas></div>
 
 <!-- ================= THE LETTER ================= -->
 <div id="intro" role="dialog" aria-label="A sealed letter">
@@ -976,7 +993,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     <span><b>close the letter</b>fold &amp; seal</span>
   </button>
 </div>
-<footer>amaris ct · Jasleen Ahluwalia · MMXXVI</footer>
+<footer>amaris ct · Jasleen Ahluwalia · MMXXVI<span id="skyNote"></span></footer>
 
 <button id="calmBtn" aria-pressed="false" aria-label="Calm mode off. Turn calm mode on to stop the animations" title="Calm mode"><svg viewBox="0 0 24 24" aria-hidden="true"><path d="M12 3 C7 8 7 16 12 21 C17 16 17 8 12 3Z" fill="none" stroke="currentColor" stroke-width="1.6"/><path d="M12 7 V18" stroke="currentColor" stroke-width="1.2"/></svg></button>
 <button id="soundBtn" aria-pressed="false" aria-label="Sound off. Turn sound on" title="Sound">
@@ -1942,7 +1959,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     const n=$('holidayNote');n.textContent=notes.join(' · ');n.classList.toggle('show',!!notes.length);
     const done=new Set();active.forEach(h=>h.deco.forEach(dc=>{const [name,arg]=dc.split(':');const key=name+(name==='lights'?'':'');if(done.has(name)&&name!=='candles')return;done.add(name);M[name]&&M[name](arg)}));
     fxKinds=active.map(h=>h.fx).filter(Boolean);fallKind=(active.find(h=>h.fall)||{}).fall||null;holiOn=active.some(h=>h.k==='holi');
-    restyle();holWx(window.__wx||{});pageTheme()};
+    restyle();holWx(window.__wx||{});pageTheme();window.__hol=active.map(h=>h.k);document.dispatchEvent(new CustomEvent('hol',{detail:window.__hol}))};
   const holWx=st=>{const night=st.night||st.key==='night';glows.forEach(g=>g.setAttribute('opacity',night?.85:.35));
     batsG.style.opacity=fxKinds.includes('bats')&&night?1:0;fwOn=fxKinds.includes('fireworks')&&night;fwG.style.opacity=fwOn?1:0;nightFx.style.opacity=night||st.key==='golden'?1:0};
   render((window.__geo||{}).country_code);
@@ -2105,6 +2122,148 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
   let first=false;new IntersectionObserver(es=>{if(!first&&es.some(e=>e.isIntersecting)){first=true;setTimeout(()=>{if(!window.CALM&&!reduce)(Math.random()<.5?pod:seal)()},R(2500,4500));next()}},{threshold:.3}).observe(sea);
   new IntersectionObserver(es=>es.forEach(e=>document.documentElement.classList.toggle('at-sea',e.intersectionRatio>.25)),{threshold:[0,.25,.5]}).observe(sea);
   window.__sealife={pod,seal,orca};
+})();
+</script>
+
+<script>
+/* ===== The living sky: the page's background follows the day, the year, the moon and the holidays ===== */
+(function(){
+  const NS='http://www.w3.org/2000/svg',$=id=>document.getElementById(id),qs=new URLSearchParams(location.search);
+  const el=(t,a,p)=>{const e=document.createElementNS(NS,t);for(const k in a)e.setAttribute(k,a[k]);if(p)p.appendChild(e);return e};
+  const reduce=matchMedia('(prefers-reduced-motion: reduce)').matches;
+  const pinned=qs.get('date'),pinH=qs.get('hour');
+  const now=()=>{const t=pinned?new Date(pinned+'T12:00'):new Date();if(pinH!==null){t.setHours(+pinH,(+pinH%1)*60|0,0,0)}return t};
+  let seed=1;const rnd=()=>{seed=(seed*16807)%2147483647;return (seed-1)/2147483646};
+  const R=(a,b)=>a+rnd()*(b-a);
+  const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16)),toHex=c=>'#'+c.map(v=>Math.round(Math.max(0,Math.min(255,v))).toString(16).padStart(2,'0')).join('');
+  const mix=(a,b,t)=>{const A=hex(a),B=hex(b);return toHex(A.map((v,i)=>v+(B[i]-v)*t))};
+  const doy=d=>Math.floor((d-new Date(d.getFullYear(),0,0))/864e5);
+
+  // ---- the moon, as it really is tonight ----
+  const SYN=29.530588853,REF=Date.UTC(2000,0,6,18,14);
+  const moonOf=d=>{const age=(((d-REF)/864e5)%SYN+SYN)%SYN,lit=(1-Math.cos(2*Math.PI*age/SYN))/2;
+    const names=[[1,'a new moon'],[6.38,'a waxing crescent'],[8.38,'the first quarter moon'],[13.77,'a waxing gibbous moon'],[15.77,'a full moon'],[21.15,'a waning gibbous moon'],[23.15,'the last quarter moon'],[28.53,'a waning crescent'],[99,'a new moon']];
+    return {age,lit,waxing:age<SYN/2,name:names.find(n=>age<n[0])[1],full:age>=13.8&&age<15.8,isNew:age<1||age>SYN-1}};
+  const FULLNAMES=['the Wolf Moon','the Snow Moon','the Worm Moon','the Pink Moon','the Flower Moon','the Strawberry Moon','the Buck Moon','the Sturgeon Moon','the Harvest Moon','the Hunter’s Moon','the Beaver Moon','the Cold Moon'];
+  const moonPath=(cx,cy,r,m)=>{const k=Math.cos(2*Math.PI*m.age/SYN),rx=Math.abs(k)*r,cres=k>0;
+    const o=m.waxing?1:0,t=m.waxing?(cres?0:1):(cres?1:0);
+    return `M${cx} ${cy-r} A${r} ${r} 0 0 ${o} ${cx} ${cy+r} A${rx.toFixed(2)} ${r} 0 0 ${t} ${cx} ${cy-r}Z`};
+
+  // ---- the zodiac season, drawn faintly in the stars ----
+  const ZOD=[['Capricorn',[1,19]],['Aquarius',[2,18]],['Pisces',[3,20]],['Aries',[4,19]],['Taurus',[5,20]],['Gemini',[6,20]],['Cancer',[7,22]],['Leo',[8,22]],['Virgo',[9,22]],['Libra',[10,22]],['Scorpio',[11,21]],['Sagittarius',[12,21]],['Capricorn',[12,31]]];
+  const zodiacOf=d=>{const m=d.getMonth()+1,dd=d.getDate();return ZOD.find(([,[em,ed]])=>m<em||(m===em&&dd<=ed))[0]};
+  const STARS={
+    Aries:[[[8,62],[40,46],[64,40],[76,47]],[[0,1],[1,2],[2,3]]],
+    Taurus:[[[50,56],[40,46],[28,38],[46,64],[36,72],[62,50],[88,28],[84,74]],[[0,1],[1,2],[0,3],[3,4],[0,5],[5,6],[4,7]]],
+    Gemini:[[[22,8],[26,40],[28,78],[52,6],[56,40],[62,80],[14,60],[70,62]],[[0,1],[1,2],[3,4],[4,5],[1,4],[1,6],[4,7]]],
+    Cancer:[[[50,48],[50,16],[28,78],[74,80],[50,64]],[[0,1],[0,4],[4,2],[4,3]]],
+    Leo:[[[72,44],[68,26],[58,16],[46,22],[48,36],[60,46],[32,54],[10,48],[28,68]],[[0,1],[1,2],[2,3],[3,4],[4,5],[5,0],[5,6],[6,7],[7,8],[8,0]]],
+    Virgo:[[[14,26],[32,38],[50,36],[62,50],[78,72],[48,60],[38,84],[88,40]],[[0,1],[1,2],[2,3],[3,4],[2,5],[5,6],[3,7]]],
+    Libra:[[[50,12],[28,44],[72,44],[24,78],[74,82]],[[0,1],[0,2],[1,2],[1,3],[2,4]]],
+    Scorpio:[[[12,10],[8,24],[18,32],[26,40],[36,46],[46,54],[54,64],[60,76],[70,86],[82,84],[90,72],[92,60]],[[0,2],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,11]]],
+    Sagittarius:[[[28,62],[44,58],[48,40],[34,36],[58,28],[66,42],[62,62],[82,52],[88,38]],[[0,1],[1,2],[2,3],[3,0],[2,4],[4,5],[5,1],[5,6],[6,1],[5,7],[7,8]]],
+    Capricorn:[[[12,28],[28,34],[54,58],[82,40],[92,26],[62,72],[30,62]],[[0,1],[1,6],[6,5],[5,2],[2,3],[3,4],[1,2]]],
+    Aquarius:[[[12,18],[28,28],[44,22],[54,38],[48,58],[62,72],[76,58],[88,76]],[[0,1],[1,2],[2,3],[3,4],[4,5],[5,6],[6,7]]],
+    Pisces:[[[6,14],[14,8],[18,28],[30,44],[44,58],[58,68],[70,60],[82,54],[92,46],[86,38],[96,34]],[[0,1],[0,2],[2,3],[3,4],[4,5],[5,6],[6,7],[7,8],[8,9],[9,10],[10,8]]]};
+
+  // ---- meteor showers at their peaks ----
+  const SHOWERS=[['the Quadrantids',1,3],['the Lyrids',4,22],['the Eta Aquariids',5,6],['the Delta Aquariids',7,30],['the Perseids',8,12],['the Draconids',10,8],['the Orionids',10,21],['the Leonids',11,17],['the Geminids',12,14],['the Ursids',12,22]];
+  const showerOf=d=>{const y=d.getFullYear();return (SHOWERS.find(([,m,dd])=>Math.abs(d-new Date(y,m-1,dd,12))<1.6*864e5)||[])[0]||null};
+
+  // ---- the year's slow colour: frost-gold in winter, rose-gold in spring, honey in summer, copper in autumn ----
+  const PAL={winter:{bg:'#d9d3c6',c:['#b9a77e','#e2d6b4','#8f8a7e','#f1ead8','#a7a8a6','#cfc3a0','#6f6e6c','#f6f1e4']},
+    spring:{bg:'#e6cfc2',c:['#d49a86','#efc3b0','#b9786a','#f6dccd','#c98d74','#e8b4a0','#94584c','#f7e8dc']},
+    summer:{bg:'#dcc8a0',c:['#c88a3a','#e3b064','#a9682a','#f2d08e','#b87a34','#d99b48','#8a5220','#efdcb0']},
+    autumn:{bg:'#d8bc96',c:['#b86a30','#d8944c','#8f4a1e','#ecc38a','#a65a28','#c97c3a','#6e3414','#ead2ac']}};
+  const SEASONS=[['winter',15],['spring',105],['summer',196],['autumn',288],['winter',380]];
+  const yearPalette=d=>{let n=doy(d);if(n<15)n+=365;const i=SEASONS.findIndex((s,k)=>n>=s[1]&&n<SEASONS[k+1][1]),a=SEASONS[i],b=SEASONS[i+1],t=(n-a[1])/(b[1]-a[1]);
+    const A=PAL[a[0]],B=PAL[b[0]];return {bg:mix(A.bg,B.bg,t),c:A.c.map((x,k)=>mix(x,B.c[k],t))}};
+
+  // ---- the light of the day ----
+  const sunTimes=d=>{const c=Math.cos(2*Math.PI*(doy(d)+10)/365);return {rise:6.6+1.2*c,set:18.6-1.9*c}};
+  const LIGHT={night:{c:'#1a2452',o:.74,st:1},dawn:{c:'#f2a0a4',o:.3,st:.25},day:{c:'#ffffff',o:0,st:0},golden:{c:'#f2a24c',o:.24,st:0},dusk:{c:'#5f4c94',o:.52,st:.6}};
+  const lightAt=d=>{const h=d.getHours()+d.getMinutes()/60,{rise,set}=sunTimes(d);
+    const K=[[rise-1.3,'night'],[rise-.3,'dawn'],[rise+1.1,'day'],[set-1.5,'day'],[set-.4,'golden'],[set+.4,'dusk'],[set+1.3,'night']];
+    if(h<=K[0][0]||h>=K[K.length-1][0])return {...LIGHT.night,key:'night'};
+    for(let i=0;i<K.length-1;i++)if(h>=K[i][0]&&h<K[i+1][0]){const a=LIGHT[K[i][1]],b=LIGHT[K[i+1][1]],t=(h-K[i][0])/(K[i+1][0]-K[i][0]);
+      return {c:mix(a.c,b.c,t),o:a.o+(b.o-a.o)*t,st:a.st+(b.st-a.st)*t,key:t<.5?K[i][1]:K[i+1][1]}}
+    return {...LIGHT.day,key:'day'}};
+
+  // ---- holiday wax for the seal in the browser tab ----
+  const WAX={halloween:['#2a1d2e','#3d2a44','#f08a2a'],muertos:['#c8621a','#e2812a','#5a1b4a'],christmas:['#1f4f36','#2e6b4f','#e9c46a'],december:['#1f4f36','#2e6b4f','#e9c46a'],
+    diwali:['#b97c12','#d89a26','#6a1420'],gurpurab:['#b97c12','#d89a26','#6a1420'],vaisakhi:['#b97c12','#d89a26','#6a1420'],valentine:['#b8365e','#d25a80','#fde4ea'],
+    stpatrick:['#1f6f2e','#2d8a3e','#f2e6b8'],hanukkah:['#2f4f9a','#4a74c9','#eef2fa'],lny:['#a80f1c','#c8102e','#f2c14e'],lantern:['#a80f1c','#c8102e','#f2c14e'],
+    eidf:['#1f5f4a','#2e7d62','#e9c46a'],eida:['#1f5f4a','#2e7d62','#e9c46a'],ramadan:['#1f5f4a','#2e7d62','#e9c46a'],newyear:['#9c7a2a','#c9a24e','#2a1d10'],
+    holi:['#7a2fd0','#d6176a','#fff4fb'],easter:['#8d6cbc','#b79be0','#fffaf0'],july4:['#1f2a5a','#3c3b6e','#f4f4f4'],thanks:['#7f421a','#a0522d','#f2d08e'],cathanks:['#7f421a','#a0522d','#f2d08e'],
+    kwanzaa:['#1d1a16','#8a1c1c','#3f8a3a'],mothers:['#c2607a','#de8aa0','#fff3f5'],earth:['#2f6b3a','#4a8c4f','#eaf4dc']};
+
+  const sky=$('livingSky'),svg=sky.querySelector('.ls-svg'),tint=sky.querySelector('.ls-tint'),cv=sky.querySelector('.ls-meteors'),cx=cv.getContext('2d');
+  const B=$('backdrop'),bdRect=B.querySelector('rect'),hair=B.querySelector('g'),bdPaths=[...B.querySelectorAll('g path')];
+  // the hair strokes drift slowly, and turn a little each day
+  const turn=el('g',{},B);B.insertBefore(turn,hair);turn.appendChild(hair);hair.classList.add('bd-drift');
+  let state={},lastDay='';
+  const build=()=>{const d=now(),W=innerWidth,H=innerHeight,key=d.toDateString();seed=Math.floor(d/864e5)%2147483646+1;
+    const m=moonOf(d),z=zodiacOf(d),sh=showerOf(d),pal=yearPalette(d);
+    turn.setAttribute('transform',`rotate(${R(-14,14).toFixed(1)} 800 500) scale(1.28) translate(${R(-60,60).toFixed(0)} ${R(-40,40).toFixed(0)})`);
+    B.style.filter=`blur(1px) saturate(.95) hue-rotate(${R(-7,7).toFixed(1)}deg)`;
+    bdPaths.forEach((p,i)=>{if(!p.dataset.s||!/^#[0-9a-f]{6}$/i.test(p.dataset.s))return;const thin=+p.getAttribute('stroke-width')<3;p.dataset.s=thin?p.dataset.s:pal.c[i%8]});
+    const holidayOn=document.getElementById('holidayLayer')?.classList.contains('on');
+    if(!holidayOn){bdPaths.forEach(p=>p.setAttribute('stroke',p.dataset.s));bdRect.setAttribute('fill',pal.bg)}
+    // stars, constellation and moon
+    svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.innerHTML='';
+    const stars=el('g',{class:'ls-stars'},svg);const n=Math.round(W*H/5200);
+    for(let i=0;i<n;i++){const c=el('circle',{cx:R(0,W).toFixed(1),cy:R(0,H).toFixed(1),r:R(.5,1.8).toFixed(2),fill:rnd()<.15?'#ffe9c4':'#f4f2ff'},stars);
+      if(rnd()<.35&&!reduce){c.classList.add('st');c.style.setProperty('--t',R(2,6).toFixed(1)+'s');c.style.setProperty('--o',R(.5,1).toFixed(2));c.style.animationDelay=(-R(0,6)).toFixed(1)+'s'}else c.setAttribute('opacity',R(.3,.9).toFixed(2))}
+    const page=Math.min(1000,W*.94),margin=(W-page)/2,wide=margin>110;
+    const cs=wide?Math.min(margin-40,220):Math.min(W*.42,190),cx0=wide?(margin-cs)/2:14,cy0=wide?H*.52:70;
+    const C=STARS[z],cg=el('g',{class:'ls-const',transform:`translate(${cx0} ${cy0}) scale(${cs/100})`},svg);
+    C[1].forEach(([a,b])=>el('line',{x1:C[0][a][0],y1:C[0][a][1],x2:C[0][b][0],y2:C[0][b][1],stroke:'#f4ecd2','stroke-width':(.5*100/cs*1.4).toFixed(2),'stroke-opacity':.45,'stroke-dasharray':`${(3*100/cs).toFixed(1)} ${(3*100/cs).toFixed(1)}`},cg));
+    C[0].forEach(([x,y],i)=>{el('circle',{cx:x,cy:y,r:(i%3?1.8:2.6)*100/cs*.9,fill:'#fff7e2',opacity:.95},cg);el('circle',{cx:x,cy:y,r:7*100/cs,fill:'#fff3d0',opacity:.12},cg)});
+    el('text',{x:50,y:104,'text-anchor':'middle','font-family':'Cormorant Garamond, serif','font-style':'italic','font-size':(13*100/cs).toFixed(1),fill:'#f4ecd2',opacity:.8},cg).textContent=z;
+    const r=wide?Math.min(38,margin*.26):26,mx=wide?W-margin/2:W-r-22,my=wide?Math.max(160,H*.2):r+70;
+    const mg=el('g',{class:'ls-moon'},svg);
+    el('circle',{cx:mx,cy:my,r:r*(m.full?3.4:2.4),fill:'#fff6dc',opacity:(.08+m.lit*.16).toFixed(2),filter:'url(#blur8)'},mg);
+    el('circle',{cx:mx,cy:my,r,fill:'#3d4560',opacity:.55},mg);
+    const cid='mclip'+Date.now();const defs=el('defs',{},mg);const cp=el('clipPath',{id:cid},defs);el('path',{d:moonPath(mx,my,r,m)},cp);
+    if(!m.isNew){el('path',{d:moonPath(mx,my,r,m),fill:'#fbf3dc'},mg);const cr=el('g',{'clip-path':`url(#${cid})`,fill:'#d9ccb0',opacity:.55},mg);
+      [[-.3,-.25,.22],[.25,.1,.16],[-.1,.35,.12],[.35,-.35,.1],[-.42,.15,.08],[.05,-.05,.07]].forEach(([a,b,c])=>el('circle',{cx:mx+a*r,cy:my+b*r,r:c*r},cr))}
+    el('circle',{cx:mx,cy:my,r,fill:'none',stroke:'#fff6dc','stroke-opacity':.25,'stroke-width':.8},mg);
+    // the note under the letter
+    const notes=[];const mo=d.getMonth();
+    notes.push(m.full?`tonight, ${FULLNAMES[mo]}`:`tonight, ${m.name}`);
+    notes.push(`${z} season`);if(sh)notes.push(`${sh} are falling`);
+    $('skyNote').textContent=notes.join(' · ');
+    state={m,z,sh,pal,mx,my,r,W,H,key};window.__sky={moon:m.name,lit:+m.lit.toFixed(3),age:+m.age.toFixed(2),waxing:m.waxing,full:m.full,zodiac:z,shower:sh,palette:pal,wax:waxNow()};
+    cv.width=W*devicePixelRatio;cv.height=H*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0);
+    light();favicon()};
+  // the hour's light, eased every few minutes
+  let L={};
+  const light=()=>{const d=now();L=lightAt(d);const moonUp=L.st>.2;
+    tint.style.background=L.c;tint.style.opacity=L.o.toFixed(3);
+    const st=svg.querySelector('.ls-stars'),cg=svg.querySelector('.ls-const'),mg=svg.querySelector('.ls-moon');
+    if(st)st.style.opacity=(L.st*(state.m&&state.m.full?.55:1)).toFixed(2);if(cg)cg.style.opacity=(L.st*.9).toFixed(2);if(mg)mg.style.opacity=(moonUp?1:.28).toFixed(2);
+    document.documentElement.dataset.light=L.key;window.__sky&&(window.__sky.light=L.key);favicon()};
+  // seal in the browser tab: holiday wax, and the moon at night
+  const waxNow=()=>{const k=(window.__hol||[]).find(x=>WAX[x]);return WAX[k]||['#a3242a','#b8312f','#f4cdb6']};
+  let lastFav='';
+  const favicon=()=>{const jka=document.getElementById('jka');if(!jka||!state.m)return;const [o,i,t]=waxNow(),night=L.st>.5;
+    const badge=night&&!state.m.isNew?`<circle cx="80" cy="20" r="17" fill="#1d2440"/><path d="${moonPath(80,20,13,state.m)}" fill="#fbf3dc"/>`:'';
+    const s=`<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 100 100"><path d="M50 4 C67 2 82 11 90 26 C98 41 96 60 86 74 C76 89 59 97 42 95 C25 93 10 82 5 65 C0 48 6 29 19 17 C28 8 38 5 50 4Z" fill="${o}"/><circle cx="50" cy="50" r="33" fill="${i}"/><circle cx="50" cy="50" r="28" fill="none" stroke="${t}" stroke-opacity=".45" stroke-dasharray="2 3"/><svg x="21" y="35" width="58" height="29" viewBox="${jka.getAttribute('viewBox')}" fill="${t}">${jka.innerHTML}</svg>${badge}</svg>`;
+    if(s===lastFav)return;lastFav=s;let link=document.querySelector('link[rel="icon"][type="image/svg+xml"]');if(!link){link=document.createElement('link');link.rel='icon';link.type='image/svg+xml';document.head.appendChild(link)}
+    link.href='data:image/svg+xml,'+encodeURIComponent(s);document.querySelectorAll('link[rel="icon"][type="image/png"]').forEach(l=>l.remove())};
+  // shooting stars: often on shower nights, now and then on any clear night
+  let M=[],running=false;
+  const meteor=()=>{const {W,H}=state;const x=Math.random()*W*.8+W*.1,y=Math.random()*H*.45,a=Math.PI*(.15+Math.random()*.2)*(Math.random()<.5?1:-1)+Math.PI/2*0;
+    M.push({x,y,vx:Math.cos(a)*(Math.random()<.5?-1:1)*9,vy:Math.abs(Math.sin(a))*7+2,l:1});if(!running){running=true;requestAnimationFrame(fly)}};
+  const fly=()=>{cx.clearRect(0,0,state.W,state.H);M=M.filter(p=>(p.l-=.022)>0);M.forEach(p=>{p.x+=p.vx;p.y+=p.vy;const g=cx.createLinearGradient(p.x,p.y,p.x-p.vx*9,p.y-p.vy*9);
+      g.addColorStop(0,`rgba(255,250,230,${p.l})`);g.addColorStop(1,'rgba(255,250,230,0)');cx.strokeStyle=g;cx.lineWidth=1.6;cx.beginPath();cx.moveTo(p.x,p.y);cx.lineTo(p.x-p.vx*9,p.y-p.vy*9);cx.stroke()});
+    if(M.length)requestAnimationFrame(fly);else{running=false;cx.clearRect(0,0,state.W,state.H)}};
+  (function sky(){setTimeout(()=>{if(!reduce&&!window.CALM&&document.visibilityState==='visible'&&L.st>.5&&(state.sh||Math.random()<.18))meteor();sky()},state.sh?2500+Math.random()*4500:9000+Math.random()*9000)})();
+  build();requestAnimationFrame(()=>requestAnimationFrame(()=>sky.classList.add('ready')));
+  document.addEventListener('hol',()=>{build()});
+  let rt;addEventListener('resize',()=>{clearTimeout(rt);rt=setTimeout(build,300)});
+  setInterval(()=>{const d=now();if(d.toDateString()!==state.key)build();else light()},5*60*1000);
+  document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){const d=now();if(d.toDateString()!==state.key)build();else light()}});
 })();
 </script>
 </body>

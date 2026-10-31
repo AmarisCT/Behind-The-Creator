@@ -1,0 +1,14 @@
+
+      <path d="M60 64 C58 84 48 100 30 114" stroke="#4d6b3c" stroke-width="2.2" fill="none" stroke-linecap="round"/>
+      <path d="M44 96 l-3 -2 M52 84 l3 -2" stroke="#4d6b3c" stroke-width="1.2"/>
+      <path d="M47 92 C30 86 18 92 10 104 C26 106 40 102 47 92Z" fill="#3f5e33"/><path d="M47 92 C30 92 18 96 10 104" stroke="#7d9b62" stroke-width=".7" fill="none"/>
+      <path d="M55 78 C66 70 82 72 92 82 C78 88 64 86 55 78Z" fill="#4a6b3a"/><path d="M55 78 C68 78 80 80 92 82" stroke="#7d9b62" stroke-width=".7" fill="none"/>
+      <g filter="url(#leafy)">
+        <path d="M60 66 C38 66 28 48 36 32 C42 21 53 19 60 25 C67 17 81 20 85 32 C91 49 81 66 60 66Z" fill="#eab2ae"/>
+        <path d="M60 62 C45 60 38 47 45 36 C51 29 58 31 60 35 C64 29 73 29 77 38 C81 49 73 60 60 62Z" fill="#dd8a8d"/>
+        <path d="M60 56 C51 54 48 45 53 40 C57 36 62 39 62 42 C66 39 71 43 69 48 C67 53 64 55 60 56Z" fill="#c05f68"/>
+        <path d="M57 46 C58 42 63 42 64 46" stroke="#933a46" stroke-width="1.2" fill="none"/>
+        <path d="M36 34 C32 45 39 59 52 63" stroke="#f9dbd6" stroke-width="1.8" fill="none" opacity=".8"/>
+        <path d="M84 34 C88 46 80 58 70 62" stroke="#c9727a" stroke-width="1.2" fill="none" opacity=".7"/>
+      </g>
+    
