@@ -15,8 +15,8 @@ const moonPath=(cx,cy,r,age)=>{const waxing=age<SYN/2,k=Math.cos(2*Math.PI*age/S
   return `M${cx} ${cy-r} A${r} ${r} 0 0 ${o} ${cx} ${cy+r} A${rx.toFixed(2)} ${r} 0 0 ${tt} ${cx} ${cy-r}Z`};
 (async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1200,height:800}});
   await p.route('**/*',r=>r.request().url().startsWith('file:')?r.continue():r.abort());
-  await p.goto('file://'+path.join(ROOT,'index.html')+`?date=${date}&hour=21`);await p.waitForFunction(()=>window.__sky&&window.__sky.wax,null,{timeout:20000});await p.waitForTimeout(600);
-  const sky=await p.evaluate(()=>window.__sky);
+  await p.goto('file://'+path.join(ROOT,'index.html')+`?date=${date}&hour=17`);await p.waitForFunction(()=>window.__sky&&window.__sky.wax,null,{timeout:20000});await p.waitForTimeout(600);
+  const sky=await p.evaluate(()=>({...window.__sky,bg:[...document.querySelectorAll('#bdGrad stop')].map(x=>x.getAttribute('stop-color'))}));
   let s=Math.floor(new Date(date+'T12:00')/864e5)%2147483646+1;const rnd=()=>{s=(s*16807)%2147483647;return (s-1)/2147483646};
   const cols=sky.palette.c;let hair='';
   for(let i=0;i<260;i++){let x=-100+rnd()*1400,y=-100+rnd()*830,d=`M${x} ${y}`;for(let k=0;k<5;k++){const dx=100+rnd()*110,dy=70+rnd()*50*(rnd()<.5?-1:1);d+=` q${dx/2} ${dy} ${dx} ${dy*.2}`}
@@ -26,7 +26,7 @@ const moonPath=(cx,cy,r,age)=>{const waxing=age<SYN/2,k=Math.cos(2*Math.PI*age/S
   const html=`<html><body style="margin:0"><svg xmlns="http://www.w3.org/2000/svg" width="1200" height="630" viewBox="0 0 1200 630">
 <defs><filter id="blur"><feGaussianBlur stdDeviation="1.2"/></filter><filter id="glow" x="-50%" y="-50%" width="200%" height="200%"><feGaussianBlur stdDeviation="14"/></filter><filter id="ds" x="-20%" y="-20%" width="140%" height="160%"><feDropShadow dx="0" dy="24" stdDeviation="22" flood-color="#2a0a05" flood-opacity=".5"/></filter>
 <radialGradient id="vig" cx=".5" cy=".5" r=".75"><stop offset=".45" stop-color="#2a1405" stop-opacity="0"/><stop offset="1" stop-color="#2a1405" stop-opacity=".55"/></radialGradient>
-<linearGradient id="bg" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="${sky.bg[0]}"/><stop offset=".55" stop-color="${sky.bg[1]}"/><stop offset="1" stop-color="${sky.bg[2]}"/></linearGradient>
+<linearGradient id="bg" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="${sky.bg[0]}"/><stop offset=".55" stop-color="${sky.bg[1]}"/><stop offset="1" stop-color="${sky.bg[2]}"/></linearGradient>
 <radialGradient id="glowbg" cx=".5" cy=".42" r=".6"><stop offset="0" stop-color="${sky.bg[0]}" stop-opacity=".0"/><stop offset="0" stop-color="#ffffff" stop-opacity=".22"/><stop offset="1" stop-color="#ffffff" stop-opacity="0"/></radialGradient>
 <linearGradient id="env" x1="0" y1="0" x2="1" y2="1"><stop offset="0" stop-color="#6a1f2f"/><stop offset=".7" stop-color="#3a0d18"/></linearGradient>
 <linearGradient id="flap" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#7a2536"/><stop offset="1" stop-color="#4a1420"/></linearGradient>

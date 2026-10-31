@@ -25,7 +25,7 @@
 html{scroll-behavior:smooth}
 body{font-family:'Cormorant Garamond',Georgia,serif;color:var(--ink);background:#d4bd92;min-height:100vh;overflow-x:hidden;font-size:18px}
 #backdrop{position:fixed;inset:0;z-index:0;width:100%;height:100%;filter:blur(1px) saturate(.95)}
-.veil{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at center,rgba(240,228,205,0) 35%,rgba(110,75,38,.32) 100%)}
+.veil{position:fixed;inset:0;z-index:0;background:radial-gradient(ellipse at center,rgba(240,228,205,0) 45%,rgba(20,30,60,.22) 100%)}
 .page{position:relative;z-index:1;width:min(1000px,94vw);margin:56px auto 0;background:var(--cream);
   box-shadow:0 34px 90px rgba(60,35,10,.5),0 0 0 1px rgba(255,255,255,.35) inset}
 section{position:relative}
@@ -220,6 +220,7 @@ footer{position:relative;z-index:1;text-align:center;padding:0 0 40px;font-famil
 #holidayLayer{position:fixed;inset:0;z-index:0;pointer-events:none;opacity:0;transition:opacity 1.5s}
 #holidayLayer.on{opacity:1}
 #holidayLayer .h-tint,#holidayLayer canvas{position:absolute;inset:0;width:100%;height:100%}
+#holidayLayer .h-tint{opacity:.3}
 #holidayLayer .h-top{position:absolute;left:0;right:0;top:0;height:110px}
 #holidayLayer .h-top svg{display:block}
 .h-orn{position:absolute;top:0;width:60px;display:flex;flex-direction:column;align-items:center;transform-origin:50% 0;animation:ornsway 5s ease-in-out infinite alternate}
@@ -2212,19 +2213,15 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
   hair.style.display='none';
   const bdDefs=el('defs',{},B);B.insertBefore(bdDefs,B.firstChild);
   const lg=el('linearGradient',{id:'bdGrad',x1:0,y1:0,x2:1,y2:1},bdDefs),s0=el('stop',{offset:0},lg),s1=el('stop',{offset:.55},lg),s2=el('stop',{offset:1},lg);
-  const rg=el('radialGradient',{id:'bdGlow',cx:.5,cy:.42,r:.6},bdDefs),g0=el('stop',{offset:0,'stop-opacity':.38},rg),g1=el('stop',{offset:1,'stop-opacity':0},rg);
+  const rg=el('radialGradient',{id:'bdGlow',cx:.5,cy:.42,r:.45},bdDefs),g0=el('stop',{offset:0,'stop-opacity':.38},rg),g1=el('stop',{offset:1,'stop-opacity':0},rg);
   bdRect.setAttribute('fill','url(#bdGrad)');const glow=el('rect',{width:1600,height:1000,fill:'url(#bdGlow)'});bdRect.after(glow);
   [s0,s1,s2].forEach(x=>x.style.transition='stop-color 3s');
   let state={},lastDay='';
   const build=()=>{const d=now(),W=innerWidth,H=innerHeight,key=d.toDateString();seed=Math.floor(d/864e5)%2147483646+1;
     const m=moonOf(d),z=zodiacOf(d),sh=showerOf(d),pal=yearPalette(d);
     // the page's colour: the holiday's when there is one, otherwise the season's, turned a little differently each day
-    const th=window.__theme,a=R(0,1);
-    const c0=th?th.bg[0]:pal.bg,c2=th?(th.bg[1]||mix(th.bg[0],'#000000',.3)):mix(pal.bg,pal.c[6],.42),c1=mix(c0,c2,.45);
-    lg.setAttribute('x1',a.toFixed(2));lg.setAttribute('x2',(1-a).toFixed(2));
-    s0.setAttribute('stop-color',c0);s1.setAttribute('stop-color',c1);s2.setAttribute('stop-color',c2);
-    const glowC=mix(c0,'#ffffff',.55);g0.setAttribute('stop-color',glowC);g1.setAttribute('stop-color',glowC);
-    B.style.filter='none';document.body.style.background=c1;
+    const th=window.__theme;lg.setAttribute('x1',0);lg.setAttribute('y1',0);lg.setAttribute('x2',0);lg.setAttribute('y2',1);B.style.filter='none';
+    const c0=pal.bg,c1=pal.bg,c2=pal.bg;
     // stars, constellation and moon
     svg.setAttribute('viewBox',`0 0 ${W} ${H}`);svg.innerHTML='';
     const stars=el('g',{class:'ls-stars'},svg);const n=Math.round(W*H/5200);
@@ -2239,9 +2236,16 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     // the sun and the moon travel across the sky; light() moves them
     const r=wide?Math.min(40,margin*.28):28;
     const clouds=el('g',{class:'ls-clouds'},svg);
-    const nC=({clear:2,golden:3,night:3,partly:5,cloudy:9,fog:8,rain:9,snow:8,storm:10})[(window.__wx||{}).key]||4;
-    for(let i=0;i<nC;i++){const cy=R(.06,.5)*H,w=R(160,360),cg2=el('g',{class:'ls-cloud',style:`--d:${R(160,320).toFixed(0)}s;animation-delay:${(-R(0,320)).toFixed(0)}s`},clouds);
-      for(let k=0;k<4;k++)el('ellipse',{cx:(k-1.5)*w*.22+R(-10,10),cy:cy+R(-8,8)-(k===1||k===2?w*.06:0),rx:w*R(.18,.26),ry:w*R(.09,.13),filter:'url(#blur8)'},cg2)}
+    const cdefs=el('defs',{},clouds);const cgr=el('linearGradient',{id:'cloudG',x1:0,y1:0,x2:0,y2:1},cdefs);el('stop',{offset:0,class:'ct'},cgr);el('stop',{offset:.55,class:'cm'},cgr);el('stop',{offset:1,class:'cb'},cgr);
+    const cf=el('filter',{id:'cloudSoft',x:'-20%',y:'-40%',width:'140%',height:'180%'},cdefs);el('feGaussianBlur',{stdDeviation:2.2},cf);
+    const cf2=el('filter',{id:'cirrus',x:'-20%',y:'-200%',width:'140%',height:'500%'},cdefs);el('feGaussianBlur',{stdDeviation:'14 4'},cf2);
+    const wk=(window.__wx||{}).key,nC=({clear:3,golden:4,night:3,partly:6,cloudy:10,fog:9,rain:10,snow:9,storm:11})[wk]||5;
+    for(let i=0;i<3;i++){const c=el('g',{class:'ls-cloud',style:`--d:${R(380,520).toFixed(0)}s;animation-delay:${(-R(0,500)).toFixed(0)}s`},clouds);
+      el('ellipse',{cx:0,cy:R(.05,.22)*H,rx:R(200,340),ry:R(5,9),fill:'url(#cloudG)',opacity:.55,filter:'url(#cirrus)'},c)}
+    for(let i=0;i<nC;i++){const by=R(.18,.62)*H,w=R(150,320)*(innerWidth<700?.6:1),c=el('g',{class:'ls-cloud',style:`--d:${R(200,360).toFixed(0)}s;animation-delay:${(-R(0,360)).toFixed(0)}s`},clouds);
+      const g=el('g',{filter:'url(#cloudSoft)'},c),n=Math.round(R(8,13));
+      for(let k=0;k<n;k++){const t=k/(n-1),x=(t-.5)*w,hump=Math.sin(Math.PI*t),r=w*R(.09,.16)*(.55+hump*.75);el('circle',{cx:x.toFixed(1),cy:(by-hump*w*R(.08,.16)+r*.35).toFixed(1),r:r.toFixed(1),fill:'url(#cloudG)'},g)}
+      el('rect',{x:-w*.55,y:by,width:w*1.1,height:w*.07,rx:w*.035,fill:'url(#cloudG)'},g)}
     const sun=el('g',{class:'ls-sun'},svg);
     el('circle',{r:r*4.2,class:'sun-halo',filter:'url(#blur8)'},sun);el('circle',{r:r*2,class:'sun-glow',filter:'url(#blur8)'},sun);el('circle',{r:r*.92,class:'sun-disc'},sun);
     const mg=el('g',{class:'ls-moon'},svg);
@@ -2265,21 +2269,41 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     light();favicon()};
   // the hour's light, eased every few minutes
   let L={};
+  // the colour of the sky through a day: [top, middle, horizon] and the clouds' [lit, middle, shadow]
+  const SKY={night:{sky:['#070d24','#121d42','#27325a'],cloud:['#4a557a','#2c3558','#161d38']},
+    predawn:{sky:['#131c42','#3b3c6e','#a0697e'],cloud:['#8a7aa0','#5a4f7a','#2e2a50']},
+    sunrise:{sky:['#3f5f9c','#d0909a','#ffc48c'],cloud:['#ffd9c4','#e5a2a4','#8a6f92']},
+    morning:{sky:['#4a82c4','#8dbbe4','#e2ecef'],cloud:['#ffffff','#eef2f6','#b9c6d6']},
+    noon:{sky:['#3a78c8','#79b0e6','#cfe5f5'],cloud:['#ffffff','#f2f5f8','#bcc9d8']},
+    afternoon:{sky:['#447dc4','#86b6e0','#e8e4d2'],cloud:['#fffdf6','#eeeee8','#bfc5cf']},
+    golden:{sky:['#4f6fae','#d6a888','#ffd391'],cloud:['#fff0d2','#f1c4a0','#a88a96']},
+    sunset:{sky:['#2c3268','#b45f7c','#ff9a52'],cloud:['#ffc48a','#e07f78','#5e4470']},
+    dusk:{sky:['#121a42','#3c2f66','#9c5a82'],cloud:['#9c7aa8','#5c4878','#2a2550']}};
+  const skyAt=(d,h,rise,set)=>{const noon=(rise+set)/2,K=[[rise-1.7,'night'],[rise-.7,'predawn'],[rise+.15,'sunrise'],[rise+1.4,'morning'],[noon,'noon'],[set-2.2,'afternoon'],[set-.9,'golden'],[set-.05,'sunset'],[set+.7,'dusk'],[set+1.6,'night']];
+    const pick=(a,b,t)=>({sky:a.sky.map((c,i)=>mix(c,b.sky[i],t)),cloud:a.cloud.map((c,i)=>mix(c,b.cloud[i],t))});
+    if(h<K[0][0]||h>=K[K.length-1][0])return SKY.night;
+    for(let i=0;i<K.length-1;i++)if(h>=K[i][0]&&h<K[i+1][0])return pick(SKY[K[i][1]],SKY[K[i+1][1]],(h-K[i][0])/(K[i+1][0]-K[i][0]));return SKY.noon};
   const arc=(p)=>{const {W,H}=state;return [W*(.06+.88*p),H*(.86-.72*Math.sin(Math.PI*p))]};
   const light=()=>{const d=now();L=lightAt(d);const h=d.getHours()+d.getMinutes()/60,{rise,set}=sunTimes(d);
-    const dark=L.st*.62;tint.style.background=L.c;tint.style.opacity=(L.o*(1-.55*L.st)).toFixed(3);
-    if(state.base){const nv=L.key==='dusk'?'#2c2350':'#121a3c';[s0,s1,s2].forEach((x,i)=>x.setAttribute('stop-color',mix(state.base[i],nv,dark*(.85+i*.08))));document.body.style.background=mix(state.base[1],nv,dark)}
+    tint.style.opacity=0;const P=skyAt(d,h,rise,set),th=window.__theme;
+    let [top,mid,hor]=P.sky;const wk=(window.__wx||{}).key,grey=({cloudy:.5,fog:.62,rain:.6,snow:.5,storm:.72})[wk]||0;
+    if(grey){const gT=L.st>.5?['#1a1f2c','#2a3040','#3c4250']:['#7d8792','#a3abb3','#c8ccca'];top=mix(top,gT[0],grey);mid=mix(mid,gT[1],grey);hor=mix(hor,gT[2],grey)}
+    if(th&&th.bg){hor=mix(hor,th.bg[0],.22);mid=mix(mid,th.bg[0],.08)}
+    s0.setAttribute('stop-color',top);s1.setAttribute('stop-color',mid);s2.setAttribute('stop-color',hor);document.body.style.background=mid;
+    const cs=svg.querySelector('#cloudG');if(cs){const [a,b,c]=P.cloud;cs.querySelector('.ct').setAttribute('stop-color',grey?mix(a,'#c9cdd0',grey*.6):a);cs.querySelector('.cm').setAttribute('stop-color',grey?mix(b,'#9aa2aa',grey*.6):b);cs.querySelector('.cb').setAttribute('stop-color',grey?mix(c,'#6c7580',grey*.6):c)}
+    state.base=null;
+    if(false){const nv=0;[s0,s1,s2].forEach((x,i)=>x.setAttribute('stop-color',mix(state.base[i],nv,dark*(.85+i*.08))));document.body.style.background=mix(state.base[1],nv,dark)}
     const st=svg.querySelector('.ls-stars'),cg=svg.querySelector('.ls-const'),mg=svg.querySelector('.ls-moon'),sun=svg.querySelector('.ls-sun'),cl=svg.querySelector('.ls-clouds');
     if(st)st.style.opacity=(L.st*(state.m&&state.m.full?.55:1)).toFixed(2);if(cg)cg.style.opacity=(L.st*.9).toFixed(2);
     // the sun: up between sunrise and sunset, warmer near the horizon
     if(sun){const p=(h-rise)/(set-rise);if(p>-.04&&p<1.04){const q=Math.min(1,Math.max(0,p)),[x,y]=arc(q),low=Math.min(1,Math.min(q,1-q)/.16);
         sun.setAttribute('transform',`translate(${x.toFixed(1)} ${y.toFixed(1)})`);sun.style.opacity=(p<0||p>1?.4:1).toFixed(2);
         sun.querySelector('.sun-disc').setAttribute('fill',mix('#ff9a4a','#fff6dc',low));sun.querySelector('.sun-glow').setAttribute('fill',mix('#ff8a3a','#fff0c4',low));sun.querySelector('.sun-glow').setAttribute('opacity',(.55-.15*low).toFixed(2));
-        sun.querySelector('.sun-halo').setAttribute('fill',mix('#ff7a4a','#fff3cf',low));sun.querySelector('.sun-halo').setAttribute('opacity',(.32-.1*low).toFixed(2))}else sun.style.opacity=0}
+        sun.querySelector('.sun-halo').setAttribute('fill',mix('#ff7a4a','#fff3cf',low));rg.setAttribute('cx',(x/state.W).toFixed(3));rg.setAttribute('cy',(y/state.H).toFixed(3));g0.setAttribute('stop-color',mix('#ffb070','#fffbe8',low));g0.setAttribute('stop-opacity',(.55-.2*low).toFixed(2));sun.querySelector('.sun-halo').setAttribute('opacity',(.32-.1*low).toFixed(2))}else{sun.style.opacity=0;g0.setAttribute('stop-opacity',0)}}
     // the moon: rises and sets with its phase (new moons ride with the sun, full moons rise at sunset)
     if(mg&&state.m){const transit=(12+state.m.age/SYN*24.8)%24;let ha=h-transit;if(ha>12)ha-=24;if(ha<-12)ha+=24;
       if(Math.abs(ha)<6.3&&!state.m.isNew){const [x,y]=arc((ha+6.3)/12.6);mg.setAttribute('transform',`translate(${x.toFixed(1)} ${y.toFixed(1)})`);mg.style.opacity=(L.st>.2?1:.42).toFixed(2)}else mg.style.opacity=0}
-    if(cl){const night=L.st>.5;cl.setAttribute('fill',night?'#3c4566':L.key==='dusk'?'#d9a7c0':L.key==='dawn'||L.key==='golden'?'#ffd9c0':'#fffaf0');cl.style.opacity=(night?.35:.55).toFixed(2)}
+    if(cl){cl.style.opacity=(L.st>.5?.6:.92).toFixed(2)}
     document.documentElement.dataset.light=L.key;window.__sky&&(window.__sky.light=L.key);favicon()};
   // seal in the browser tab: holiday wax, and the moon at night
   const waxNow=()=>{const k=(window.__hol||[]).find(x=>WAX[x]);return WAX[k]||['#a3242a','#b8312f','#f4cdb6']};
