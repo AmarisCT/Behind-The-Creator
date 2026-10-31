@@ -104,6 +104,24 @@ h2.script{font-family:'Pinyon Script',cursive;font-weight:400;color:var(--sage);
 @keyframes swell2{0%,100%{transform:translate(0,0)}50%{transform:translate(16px,-3px)}}
 @keyframes swell3{0%,100%{transform:translate(0,2px)}50%{transform:translate(-10px,-4px)}}
 #waves{transition:stroke 2.5s}
+.fade,.tint{transition:opacity 2.5s,fill 2.5s}
+#canopyL,#canopyR,#cypressRow,#willow,#grove,#urnFlowers{transform-box:fill-box;transform-origin:50% 100%;animation:treesway var(--swayT,6s) ease-in-out infinite alternate}
+#canopyR{animation-delay:-1.3s}#cypressRow{animation-delay:-2.1s;animation-duration:calc(var(--swayT,6s) * .8)}#willow{animation-delay:-.7s;animation-duration:calc(var(--swayT,6s) * .7)}#grove{animation-delay:-1.9s}#urnFlowers{animation-duration:calc(var(--swayT,6s) * .6)}
+@keyframes treesway{from{transform:rotate(calc(var(--sway,.6deg) * -1)) skewX(calc(var(--sway,.6deg) * -.5))}to{transform:rotate(var(--sway,.6deg)) skewX(calc(var(--sway,.6deg) * .5))}}
+#heroClouds,#finClouds{animation:clouddrift 80s ease-in-out infinite alternate}
+@keyframes clouddrift{from{transform:translateX(-50px)}to{transform:translateX(50px)}}
+#birds,#birds2{animation:birdfly 46s linear infinite}#birds2{animation-duration:58s;animation-delay:-20s}
+@keyframes birdfly{from{transform:translate(-520px,30px)}to{transform:translate(760px,-40px)}}
+.tw{animation:twinkle var(--tw,2.6s) ease-in-out infinite}
+@keyframes twinkle{0%,100%{opacity:.15}50%{opacity:1}}
+.rip{transform-box:fill-box;transform-origin:center;animation:ripple 2.2s ease-out infinite}
+@keyframes ripple{from{transform:scale(.15);opacity:.9}to{transform:scale(1.7);opacity:0}}
+.mist{animation:mistdrift var(--mt,40s) ease-in-out infinite alternate}
+@keyframes mistdrift{from{transform:translateX(-90px)}to{transform:translateX(90px)}}
+.ff{animation:firefly var(--ft,6s) ease-in-out infinite}
+@keyframes firefly{0%,100%{transform:translate(0,0);opacity:.1}30%{opacity:1}50%{transform:translate(var(--fx,12px),var(--fy,-14px));opacity:.9}80%{opacity:.2}}
+.fl{transform-box:fill-box;transform-origin:center;animation:leaffall var(--t,12s) linear infinite}
+@keyframes leaffall{0%{transform:translate(0,0) rotate(0);opacity:0}8%{opacity:1}50%{transform:translate(calc(var(--dx,-80px) * .5 + 22px),calc(var(--dy,500px) * .5)) rotate(280deg)}88%{opacity:1}100%{transform:translate(var(--dx,-80px),var(--dy,500px)) rotate(600deg);opacity:0}}
 .drop{animation:fall var(--fall,1.1s) linear infinite}
 @keyframes fall{from{transform:translate(0,-40px)}to{transform:translate(-14px,500px)}}
 .flake{animation:snow var(--fall,6s) linear infinite}
@@ -394,9 +412,9 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   <section class="hero" id="top">
     <svg class="scene" viewBox="0 0 1000 640" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
-        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#71889e"/><stop offset=".4" stop-color="#a9b8c1"/><stop offset=".68" stop-color="#dcd5bd"/><stop offset="1" stop-color="#ecdfba"/></linearGradient>
+        <linearGradient id="sky" x1="0" y1="0" x2="0" y2="1"><stop id="hs0" offset="0" stop-color="#71889e"/><stop id="hs1" offset=".4" stop-color="#a9b8c1"/><stop id="hs2" offset=".68" stop-color="#dcd5bd"/><stop id="hs3" offset="1" stop-color="#ecdfba"/></linearGradient>
         <linearGradient id="mtn1" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#8a9caa"/><stop offset="1" stop-color="#bcc4c2"/></linearGradient>
-        <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#d3d4c2"/><stop offset=".45" stop-color="#93a397"/><stop offset="1" stop-color="#4c6155"/></linearGradient>
+        <linearGradient id="lake" x1="0" y1="0" x2="0" y2="1"><stop id="hl0" offset="0" stop-color="#d3d4c2"/><stop id="hl1" offset=".45" stop-color="#93a397"/><stop id="hl2" offset="1" stop-color="#4c6155"/></linearGradient>
         <linearGradient id="haze" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#ece0bf" stop-opacity="0"/><stop offset="1" stop-color="#ece0bf" stop-opacity=".6"/></linearGradient>
         <linearGradient id="stone" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#cdbd96"/><stop offset="1" stop-color="#857353"/></linearGradient>
         <radialGradient id="sun" cx=".6" cy=".5" r=".45"><stop offset="0" stop-color="#fff6d6" stop-opacity=".75"/><stop offset=".4" stop-color="#fff0c8" stop-opacity=".25"/><stop offset="1" stop-color="#fff0c8" stop-opacity="0"/></radialGradient>
@@ -405,12 +423,13 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
         <clipPath id="lakeClip"><rect x="0" y="384" width="1000" height="130"/></clipPath>
       </defs>
       <rect width="1000" height="640" fill="url(#sky)"/>
-      <g filter="url(#cloud)" opacity=".85">
+      <g id="stars" class="fade" style="opacity:0"></g><g id="moon" class="fade" style="opacity:0"><circle cx="190" cy="92" r="26" fill="#fff6dc" opacity=".25" filter="url(#blur8)"/><circle cx="190" cy="92" r="14" fill="#f8f0d8"/><circle cx="195" cy="88" r="12" fill="url(#sky)"/></g>
+      <g id="heroClouds" class="fade" filter="url(#cloud)" style="opacity:.85">
         <ellipse cx="200" cy="80" rx="190" ry="30" fill="#eef0ea"/><ellipse cx="540" cy="52" rx="240" ry="24" fill="#e9ece6"/>
         <ellipse cx="870" cy="112" rx="170" ry="28" fill="#f3efe3"/><ellipse cx="420" cy="160" rx="170" ry="16" fill="#f5ecd2"/><ellipse cx="760" cy="196" rx="120" ry="12" fill="#f8efd6"/>
       </g>
-      <rect width="1000" height="640" fill="url(#sun)"/>
-      <g filter="url(#blur8)" opacity=".8">
+      <rect id="sunGlow" class="fade" width="1000" height="640" fill="url(#sun)"/>
+      <g id="rays" class="fade" filter="url(#blur8)" style="opacity:.8">
         <path d="M600 300 L470 0 H520Z" fill="url(#ray)"/><path d="M600 300 L590 0 H640Z" fill="url(#ray)"/><path d="M600 300 L700 0 H760Z" fill="url(#ray)"/><path d="M600 300 L830 0 H880Z" fill="url(#ray)"/>
       </g>
       <g id="birds" fill="none" stroke="#4a4f4e" stroke-width="1.1" stroke-linecap="round" opacity=".55"></g>
@@ -434,7 +453,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
           <rect x="0" y="12" width="40" height="22" fill="#e6d8b8"/><path d="M-3 13 L20 2 L43 13Z" fill="#b5683f"/>
           <rect x="44" y="18" width="26" height="16" fill="#dccdab"/><path d="M42 19 L57 10 L72 19Z" fill="#a85e3a"/>
           <rect x="28" y="-4" width="10" height="20" fill="#e9dcbc"/><path d="M26 -3 L33 -10 L40 -3Z" fill="#b5683f"/>
-          <g fill="#7c6c55"><rect x="6" y="18" width="3" height="5"/><rect x="15" y="18" width="3" height="5"/><rect x="24" y="18" width="3" height="5"/><rect x="50" y="23" width="3" height="4"/><rect x="59" y="23" width="3" height="4"/><rect x="31" y="2" width="3" height="4"/></g>
+          <g id="villaWin" class="fade" fill="#7c6c55" style="transition:fill 2.5s"><rect x="6" y="18" width="3" height="5"/><rect x="15" y="18" width="3" height="5"/><rect x="24" y="18" width="3" height="5"/><rect x="50" y="23" width="3" height="4"/><rect x="59" y="23" width="3" height="4"/><rect x="31" y="2" width="3" height="4"/></g>
         </g>
         <g id="cypressRow" fill="#24321b"></g>
         <!-- canopies (generated) -->
@@ -470,7 +489,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
         <g transform="translate(520 408)"><path d="M0 6 Q20 12 40 6 L36 10 Q20 14 4 10Z" fill="#5b4632"/><path d="M20 6 V-14" stroke="#5b4632" stroke-width="1.2"/><path d="M20 -14 L32 2 H20Z" fill="#efe6d0"/></g>
       </g>
       <!-- balustrade, urn, ivy -->
-      <rect y="520" width="1000" height="16" fill="#cbbc97"/><rect y="532" width="1000" height="6" fill="#8f7f5b"/>
+      <rect id="balTop" y="520" width="1000" height="16" fill="#cbbc97"/><rect y="532" width="1000" height="6" fill="#8f7f5b"/>
       <g fill="#bcad86" id="balusters"></g>
       <rect y="604" width="1000" height="36" fill="#8b7b57"/><rect y="604" width="1000" height="4" fill="#b6a57f"/>
       <g transform="translate(880 452)">
@@ -479,6 +498,8 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
       </g>
       <g id="urnFlowers"></g>
       <g id="ivy"></g>
+      <rect id="heroTint" class="tint" width="1000" height="640" style="fill:#0b1330;opacity:0"/>
+      <g id="heroFall"></g><g id="heroPrecip"></g>
       <rect width="1000" height="640" fill="url(#shade)"/>
       <rect width="1000" height="640" filter="url(#canvas)" fill="#000"/>
     </svg>
@@ -654,11 +675,12 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   <section class="finale" id="write">
     <svg class="shore" viewBox="0 0 1000 600" preserveAspectRatio="xMidYMid slice" aria-hidden="true">
       <defs>
-        <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop offset="0" stop-color="#b6c2b2"/><stop offset=".55" stop-color="#d2d5bf"/><stop offset=".56" stop-color="#83a09a"/><stop offset="1" stop-color="#5b7e7a"/></linearGradient>
+        <linearGradient id="sky2" x1="0" y1="0" x2="0" y2="1"><stop id="fs0" offset="0" stop-color="#b6c2b2"/><stop id="fs1" offset=".55" stop-color="#d2d5bf"/><stop id="fs2" offset=".56" stop-color="#83a09a"/><stop id="fs3" offset="1" stop-color="#5b7e7a"/></linearGradient>
         <radialGradient id="shellG" cx=".5" cy="1" r="1"><stop offset="0" stop-color="#e3b98f"/><stop offset=".35" stop-color="#f6e6c8"/><stop offset=".62" stop-color="#f3dccd"/><stop offset=".85" stop-color="#ead4b0"/><stop offset="1" stop-color="#c39463"/></radialGradient>
       </defs>
       <rect width="1000" height="600" fill="url(#sky2)"/>
-      <g filter="url(#cloud)" opacity=".6"><ellipse cx="300" cy="80" rx="200" ry="22" fill="#eef0e6"/><ellipse cx="700" cy="150" rx="180" ry="16" fill="#eef0e6"/></g>
+      <g id="stars2" class="fade" style="opacity:0"></g><g id="moon2" class="fade" style="opacity:0"><circle cx="560" cy="90" r="24" fill="#fff6dc" opacity=".25" filter="url(#blur8)"/><circle cx="560" cy="90" r="13" fill="#f8f0d8"/><circle cx="565" cy="86" r="11" fill="url(#sky2)"/></g>
+      <g id="finClouds" class="fade" filter="url(#cloud)" style="opacity:.6"><ellipse cx="300" cy="80" rx="200" ry="22" fill="#eef0e6"/><ellipse cx="700" cy="150" rx="180" ry="16" fill="#eef0e6"/></g>
       <g filter="url(#paintSoft)"><path d="M0 322 C120 300 220 312 310 330 L0 336Z" fill="#7b8b66"/><path d="M740 330 C830 306 920 300 1000 310 L1000 336 L740 336Z" fill="#6c7e5c"/></g>
       <g id="birds2" fill="none" stroke="#4a4f4e" stroke-width="1" stroke-linecap="round" opacity=".5"></g>
       <g id="waves2" stroke="#e8efe6" fill="none" stroke-linecap="round"></g>
@@ -671,6 +693,8 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
         <path d="M-64 0 L-84 34 L84 34 L64 0Z" fill="#c69a63"/><path d="M-64 0 L-84 34 M64 0 L84 34" stroke="#9c7440" stroke-width="1"/>
       </g>
       <g id="foam" fill="none" stroke="#f5f7f0" stroke-linecap="round" opacity=".85"></g>
+      <rect id="finTint" class="tint" width="1000" height="600" style="fill:#0b1330;opacity:0"/>
+      <g id="finFall"></g><g id="finPrecip"></g>
       <rect width="1000" height="600" filter="url(#canvas)" fill="#000"/>
     </svg>
     <div class="sqenv" id="sqenv" role="button" tabindex="0" aria-label="Open the envelope to write to Jasleen">
@@ -860,52 +884,162 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   $('skip').addEventListener('click',()=>{if(done)return;opened=true;intro.classList.add('open');setTimeout(unfold,300)});
   $('closeLetter').addEventListener('click',closeLetter);
 
-  // ---------- living sea: colour follows the visitor's local weather ----------
+  // ---------- living weather: sky, water, trees, rain/snow and seasonal leaves follow the visitor ----------
   (function(){
     const P={
-      clear:{c:['#c3e2dc','#86c1bd','#4f979b'],w:'#f6fcf8',n:'#21403f',sp:'9s',label:'clear skies'},
-      partly:{c:['#cfe0d6','#9fc0b6','#6c9a96'],w:'#f6fbf6',n:'#2b4542',sp:'9s',label:'a few clouds'},
-      golden:{c:['#f2d6b8','#d4bba6','#86a3a1'],w:'#fff4e4',n:'#4a3a2c',sp:'10s',label:'golden hour'},
-      cloudy:{c:['#d3d6ca','#aeb9ad','#8c9c93'],w:'#f3f3ea',n:'#36433c',sp:'8s',label:'overcast'},
-      fog:{c:['#e6e5dc','#d2d4ca','#bbc1b7'],w:'#fbfbf5',n:'#4a4f48',sp:'12s',label:'fog'},
-      rain:{c:['#aeb8ba','#82939a','#5e707a'],w:'#e8eef0',n:'#1f2d33',sp:'5s',label:'rain',pr:'rain'},
-      snow:{c:['#eff4f7','#d6e2ea','#b6c8d4'],w:'#ffffff',n:'#3b4a56',sp:'11s',label:'snow',pr:'snow'},
-      storm:{c:['#80898f','#58646d','#3b4650'],w:'#d9dee1',n:'#eef1f2',sp:'3.6s',label:'a storm',pr:'rain'},
-      night:{c:['#40506c','#2c3c57','#1b2841'],w:'#c9d6ea',n:'#e9eef6',sp:'10s',label:'a clear night'}
+      clear:{c:['#c3e2dc','#86c1bd','#4f979b'],sky:['#5f8fbf','#9cc0dc','#e3ecdf','#f1e6c4'],cl:'#f4f3ec',co:.55,w:'#f6fcf8',n:'#21403f',sp:'9s',sun:1,label:'clear skies'},
+      partly:{c:['#cfe0d6','#9fc0b6','#6c9a96'],sky:['#7395b4','#aec5d2','#e2e5d6','#eee2c0'],cl:'#f1f1ea',co:.9,w:'#f6fbf6',n:'#2b4542',sp:'9s',sun:.7,label:'a few clouds'},
+      golden:{c:['#f2d6b8','#d4bba6','#86a3a1'],sky:['#6b7fa6','#c9a3a0','#f0c79a','#f6dcae'],cl:'#f8ddc4',co:.8,w:'#fff4e4',n:'#4a3a2c',sp:'10s',sun:1,label:'golden hour',tint:['#f2a65a',.07]},
+      cloudy:{c:['#d3d6ca','#aeb9ad','#8c9c93'],sky:['#8f99a0','#b2b8b8','#cfd0c6','#dcd8c6'],cl:'#d9dbd5',co:1,over:.85,w:'#f3f3ea',n:'#36433c',sp:'8s',sun:0,label:'overcast'},
+      fog:{c:['#e6e5dc','#d2d4ca','#bbc1b7'],sky:['#c9ccc6','#d9dad3','#e4e3da','#ebe8dc'],cl:'#eceae2',co:1,over:.6,w:'#fbfbf5',n:'#4a4f48',sp:'12s',sun:0,label:'fog',tint:['#ecebe2',.32]},
+      rain:{c:['#aeb8ba','#82939a','#5e707a'],sky:['#5f6b74','#7f8b92','#a4abab','#b9bcb4'],cl:'#9ea6aa',co:1,over:1,w:'#e8eef0',n:'#1f2d33',sp:'5s',sun:0,label:'rain',pr:'rain',tint:['#2c3a44',.16]},
+      snow:{c:['#eff4f7','#d6e2ea','#b6c8d4'],sky:['#a9b6c2','#c8d2da','#e2e7ea','#eef0ee'],cl:'#e6eaee',co:1,over:.8,w:'#ffffff',n:'#3b4a56',sp:'11s',sun:0,label:'snow',pr:'snow',tint:['#eef3f7',.14]},
+      storm:{c:['#80898f','#58646d','#3b4650'],sky:['#3e464f','#58626b','#7d858a','#959a98'],cl:'#6c747a',co:1,over:1,w:'#d9dee1',n:'#eef1f2',sp:'3.6s',sun:0,label:'a storm',pr:'rain',tint:['#1d252b',.3]},
+      night:{c:['#40506c','#2c3c57','#1b2841'],sky:['#0f1730','#1f2c4c','#3a4a6a','#56627c'],cl:'#4a5674',co:.45,w:'#c9d6ea',n:'#e9eef6',sp:'10s',sun:0,label:'a clear night',stars:1,tint:['#0b1330',.42]}
     };
     const sec=document.getElementById('now'),note=$('seaNote');
     const hex=h=>[1,3,5].map(i=>parseInt(h.slice(i,i+2),16));
     const mix=(a,b,t)=>'#'+hex(a).map((v,i)=>Math.round(v+(hex(b)[i]-v)*t).toString(16).padStart(2,'0')).join('');
-    const ids=['sea0','sea1','sea2'];
-    const apply=(p,night,text)=>{
+    const tween=(ids,cols)=>{const from=ids.map(id=>$(id).getAttribute('stop-color'));let t0=null;
+      const step=ts=>{t0=t0||ts;const k=Math.min(1,(ts-t0)/2500);ids.forEach((id,i)=>$(id).setAttribute('stop-color',mix(from[i],cols[i],k)));if(k<1)requestAnimationFrame(step)};requestAnimationFrame(step)};
+    const op=(id,v)=>{$(id).style.opacity=v};
+    // stars + overcast layers (built once)
+    [['stars',1000,300],['stars2',1000,320]].forEach(([id,w,h])=>{for(let i=0;i<120;i++)el('circle',{cx:rnd()*w,cy:rnd()*h,r:(.4+rnd()*1.1).toFixed(2),fill:'#fff8e4',opacity:(.4+rnd()*.6).toFixed(2)},$(id))});
+    const over=(gid,W)=>{const g=el('g',{class:'fade',style:'opacity:0'},$(gid));for(let i=0;i<9;i++)el('ellipse',{cx:i*W/8,cy:40+rnd()*120,rx:160+rnd()*80,ry:40+rnd()*30,fill:'#c8ccc6'},g);return g};
+    const heroOver=over('heroClouds',1000),finOver=over('finClouds',1000);
+    const precip=(g,W,H,type,storm,col)=>{g.innerHTML='';
+      if(type==='rain')for(let i=0;i<(storm?130:85);i++){const x=rnd()*(W+60),y=rnd()*H;const d=el('path',{d:`M${x} ${y} l-5 14`,stroke:col,'stroke-width':.9,opacity:.55,class:'drop'},g);d.style.animationDelay=(-rnd()*1.2).toFixed(2)+'s';d.style.setProperty('--fall',(storm?.6:.95)+rnd()*.5+'s')}
+      if(type==='snow')for(let i=0;i<80;i++){const x=rnd()*W,y=rnd()*H;const d=el('circle',{cx:x,cy:y,r:1.2+rnd()*2,fill:'#fff',opacity:.85,class:'flake'},g);d.style.animationDelay=(-rnd()*6).toFixed(2)+'s';d.style.setProperty('--fall',5+rnd()*4+'s')}};
+    // seasonal falling things + treetop colours
+    const LEAF=(x,y,k)=>`M${x} ${y} c${3*k} ${-4*k} ${8*k} ${-4*k} ${11*k} 0 c${-3*k} ${4*k} ${-8*k} ${4*k} ${-11*k} 0Z`;
+    const SEASON={
+      spring:{n:24,cols:['#f6d3d6','#efb6bd','#fbe9ea','#ffffff'],k:.55,dab:['#f3c6cc','#fbe4e6'],dabP:.12,label:'spring blossoms'},
+      summer:{n:9,cols:['#6f8f45','#87a35a','#5b7a37'],k:.8,label:'summer leaves'},
+      autumn:{n:30,cols:['#d9822b','#c4521f','#e3a83b','#a8381c','#e9c25a'],k:.9,tint:['#c8692a','#d99a3a','#a8471f','#e1b04b','#8f5a26'],tintP:.5,label:'autumn leaves'},
+      winter:{n:6,cols:['#8a6a48','#a07f5a'],k:.8,frost:.35,label:'winter'}
+    };
+    const canopies=['canopyL','canopyR','grove'];let seasonDone=null;
+    const dress=(se)=>{if(seasonDone===se)return;seasonDone=se;const S=SEASON[se];
+      canopies.forEach(id=>$(id).querySelectorAll('ellipse').forEach(e=>{if(!e.dataset.f)e.dataset.f=e.getAttribute('fill');const f=e.dataset.f;if(!/^#[0-9a-f]{6}$/i.test(f))return;
+        let c=f;if(S.tint&&rnd()<S.tintP)c=pick(S.tint);if(S.frost)c=mix(f,'#9a9a8c',S.frost);e.setAttribute('fill',c)}));
+      canopies.forEach(id=>$(id).querySelectorAll('.bloom').forEach(e=>e.remove()));
+      if(S.dab)canopies.forEach(id=>{const g=$(id);[...g.querySelectorAll('ellipse')].forEach(e=>{if(rnd()<S.dabP){el('circle',{cx:e.getAttribute('cx'),cy:e.getAttribute('cy'),r:1.6+rnd()*1.6,fill:pick(S.dab),class:'bloom'},g)}})})};
+    const fall=(g,boxes,H,se,wind)=>{g.innerHTML='';const S=SEASON[se];
+      for(let i=0;i<S.n;i++){const [x0,y0,w,h]=pick(boxes),x=x0+rnd()*w,y=y0+rnd()*h;
+        const d=el('path',{d:LEAF(x,y,S.k*(.8+rnd()*.6)),fill:pick(S.cols),class:'fl',opacity:.95},g);
+        d.style.setProperty('--dx',(-(30+wind*7)*(.6+rnd()*.8)+(rnd()*60-30)).toFixed(0)+'px');
+        d.style.setProperty('--dy',(H-y+30).toFixed(0)+'px');d.style.setProperty('--t',(Math.max(5,14-wind/3)*(.7+rnd()*.6)).toFixed(1)+'s');
+        d.style.animationDelay=(-rnd()*14).toFixed(1)+'s'}};
+    const seasonOf=(lat)=>{const m=new Date().getMonth(),south=lat<0;const s=[11,0,1].includes(m)?'winter':[2,3,4].includes(m)?'spring':[5,6,7].includes(m)?'summer':'autumn';
+      return south?{winter:'summer',summer:'winter',spring:'autumn',autumn:'spring'}[s]:s};
+
+
+    // ---------- scene details (sun, moon paths, sparkles, ripples, mist, fireflies, lightning, snow caps) ----------
+    const SC=[
+      {svg:$('birds').ownerSVGElement,W:1000,H:640,wt:392,wb:516,skyBefore:$('birds'),waterAfter:$('shimmer'),mistBefore:$('balTop'),can:['canopyL','canopyR'],sunX:600,moonX:190,moonY:92,birds:'birds',flashAfter:$('heroPrecip'),ffBoxes:[[0,140,330,260],[820,120,180,260]],snowline:520},
+      {svg:$('birds2').ownerSVGElement,W:1000,H:600,wt:340,wb:590,skyBefore:$('birds2'),waterAfter:$('waves2'),mistBefore:$('grove'),can:['grove'],sunX:380,moonX:560,moonY:90,birds:'birds2',flashAfter:$('finPrecip'),ffBoxes:[[780,60,220,320]],snowline:null}
+    ];
+    SC.forEach(sc=>{
+      const ins=(node,ref,after)=>{ref.parentNode.insertBefore(node,after?ref.nextSibling:ref);return node};
+      const G=(ref,after)=>ins(el('g',{class:'fade',style:'opacity:0'}),ref,after);
+      // sun
+      sc.sun=G(sc.skyBefore,false);
+      sc.sunGlow=el('circle',{cx:sc.sunX,cy:120,r:70,fill:'#fff3cf',filter:'url(#blur8)',opacity:.7},sc.sun);
+      sc.sunDisc=el('circle',{cx:sc.sunX,cy:120,r:17,fill:'#fff7df'},sc.sun);
+      // lightning bolt
+      sc.bolt=G(sc.skyBefore,false);
+      el('path',{d:`M${sc.W*.7} 0 l-18 70 l14 -4 l-26 86 l12 -3 l-30 90`,stroke:'#fffbe8','stroke-width':2.4,fill:'none',filter:'url(#blur2)'},sc.bolt);
+      el('path',{d:`M${sc.W*.7} 0 l-18 70 l14 -4 l-26 86 l12 -3 l-30 90`,stroke:'#ffffff','stroke-width':1.1,fill:'none'},sc.bolt);
+      // water: sun path, moon path, sparkles, ripples
+      sc.sunPath=G(sc.waterAfter,true);sc.moonPath=G(sc.waterAfter,true);sc.spark=G(sc.waterAfter,true);sc.rip=G(sc.waterAfter,true);
+      for(let i=0;i<18;i++){const y=sc.wt+4+i*(sc.wb-sc.wt-10)/18,w=8+rnd()*22*(1+i/10);
+        const a=el('path',{d:`M${sc.sunX-w/2+rnd()*14-7} ${y} h${w}`,stroke:'#fff1c4','stroke-width':1.6,'stroke-linecap':'round',class:'tw'},sc.sunPath);a.style.setProperty('--tw',(1.4+rnd()*2)+'s');a.style.animationDelay=-rnd()*3+'s';
+        const b=el('path',{d:`M${sc.moonX-w/2+rnd()*12-6} ${y} h${w*.8}`,stroke:'#e8eefc','stroke-width':1.3,'stroke-linecap':'round',class:'tw'},sc.moonPath);b.style.setProperty('--tw',(1.6+rnd()*2.4)+'s');b.style.animationDelay=-rnd()*3+'s'}
+      for(let i=0;i<46;i++){const x=rnd()*sc.W,y=sc.wt+rnd()*(sc.wb-sc.wt);const c=el('path',{d:`M${x-2} ${y} h4 M${x} ${y-2} v4`,stroke:'#fffdf2','stroke-width':.9,class:'tw'},sc.spark);c.style.setProperty('--tw',(1.2+rnd()*2.6)+'s');c.style.animationDelay=-rnd()*3+'s'}
+      for(let i=0;i<34;i++){const x=rnd()*sc.W,y=sc.wt+6+rnd()*(sc.wb-sc.wt-10);const r=el('ellipse',{cx:x,cy:y,rx:9,ry:2.6,fill:'none',stroke:'#eef2f2','stroke-width':.8,class:'rip'},sc.rip);r.style.animationDelay=-rnd()*2.2+'s';r.style.animationDuration=(1.6+rnd()*1.4)+'s'}
+      // mist
+      sc.mist=G(sc.mistBefore,false);
+      for(let i=0;i<7;i++){const m=el('ellipse',{cx:rnd()*sc.W,cy:sc.wt-30+rnd()*70,rx:200+rnd()*160,ry:16+rnd()*16,fill:'#f4f3ec',filter:'url(#blur8)',opacity:.75,class:'mist'},sc.mist);m.style.setProperty('--mt',(28+rnd()*30)+'s');m.style.animationDelay=-rnd()*30+'s'}
+      // fireflies
+      sc.ff=G(sc.flashAfter,false);
+      for(let i=0;i<22;i++){const [x0,y0,w,h]=pick(sc.ffBoxes),x=x0+rnd()*w,y=y0+rnd()*h;const f=el('circle',{cx:x,cy:y,r:1.6,fill:'#fff3a0',class:'ff',filter:'url(#blur2)'},sc.ff);el('circle',{cx:x,cy:y,r:.8,fill:'#fffbe0',class:'ff'},sc.ff);
+        f.style.setProperty('--fx',(rnd()*30-15)+'px');f.style.setProperty('--fy',(rnd()*30-15)+'px');f.style.setProperty('--ft',(4+rnd()*5)+'s');f.style.animationDelay=-rnd()*6+'s'}
+      sc.ff.querySelectorAll('circle:nth-child(2n)').forEach((c,i)=>{const big=c.previousSibling;c.style.cssText=big.style.cssText});
+      // lightning flash
+      sc.flash=ins(el('rect',{width:sc.W,height:sc.H,fill:'#f4f6ff',style:'opacity:0;transition:opacity .08s'}),sc.flashAfter,true);
+      // snow line on balustrade
+      if(sc.snowline!==null){sc.snow=G(sc.mistBefore,true);let d=`M0 ${sc.snowline}`;for(let x=0;x<=sc.W;x+=20)d+=` Q${x+10} ${sc.snowline-6-rnd()*4} ${x+20} ${sc.snowline}`;el('path',{d:d+` V${sc.snowline+4} H0Z`,fill:'#fbfdff'},sc.snow)}
+    });
+    let storming=false;
+    (function strike(){setTimeout(()=>{if(storming){SC.forEach(sc=>{sc.flash.style.opacity=.75;sc.bolt.style.transition='none';sc.bolt.style.opacity=1;
+      setTimeout(()=>{sc.flash.style.opacity=0},90);setTimeout(()=>{sc.flash.style.opacity=.45},180);setTimeout(()=>{sc.flash.style.opacity=0;sc.bolt.style.opacity=0},300)})}strike()},3500+rnd()*6000)})();
+    const snowcaps=(on)=>{SC.forEach(sc=>sc.can.forEach(id=>{const g=$(id);g.querySelectorAll('.snowcap').forEach(e=>e.remove());
+      if(on)[...g.querySelectorAll('ellipse')].forEach(e=>{if(rnd()<.22){const cx=+e.getAttribute('cx'),cy=+e.getAttribute('cy'),rx=+e.getAttribute('rx');el('ellipse',{cx,cy:cy-3,rx:rx*.8,ry:2.6,fill:'#fbfdff',class:'snowcap',opacity:.95},g)}})}))};
+    const fx=(key,night)=>{const p=P[key];const day=!night;
+      storming=key==='storm';
+      SC.forEach((sc,i)=>{
+        const golden=key==='golden',sunUp=day&&(key==='clear'||key==='partly'||golden);
+        const sy=golden?sc.wt-26:i?110:118;sc.sunDisc.setAttribute('cy',sy);sc.sunGlow.setAttribute('cy',sy);
+        sc.sunDisc.setAttribute('fill',golden?'#ffcf86':'#fff7df');sc.sunGlow.setAttribute('fill',golden?'#ffb766':'#fff3cf');sc.sunGlow.setAttribute('r',golden?110:70);
+        sc.sun.style.opacity=sunUp?(key==='partly'?.65:1):0;
+        sc.sunPath.style.opacity=day&&golden?1:sunUp?.45:0;
+        sc.moonPath.style.opacity=night&&(key==='night'||key==='partly')?.9:0;
+        sc.spark.style.opacity=day&&(key==='clear'||key==='partly')?1:0;
+        sc.rip.style.opacity=key==='rain'||key==='storm'?1:0;
+        sc.mist.style.opacity=key==='fog'?1:key==='rain'||key==='snow'?.45:key==='storm'?.3:night?.12:0;
+        sc.ff.style.opacity=night&&key!=='rain'&&key!=='snow'&&key!=='storm'&&seasonDone!=='winter'?1:0;
+        $(sc.birds).style.opacity=day&&(key==='clear'||key==='partly'||golden)?.55:0;
+        if(sc.snow)sc.snow.style.opacity=key==='snow'?1:0;
+        sc.bolt.style.opacity=0;
+      });
+      $('villaWin').style.fill=night||key==='storm'?'#ffd77a':'#7c6c55';$('villaWin').style.filter=night?'drop-shadow(0 0 3px #ffcf6a)':'none';
+      snowcaps(key==='snow');
+    };
+    const apply=(st)=>{const p=P[st.key],night=st.night;
+      // sea
       let c=p.c.slice(),w=p.w,n=p.n,cart='rgba(247,242,228,.55)';
       if(night&&p!==P.night){c=c.map(x=>mix(x,'#16223a',.55));w=mix(w,'#b9c6dc',.4);n='#e9eef6'}
       if(night||p===P.storm)cart='rgba(247,242,228,.86)';
-      const from=ids.map(id=>$(id).getAttribute('stop-color'));let t0=null;
-      const step=ts=>{t0=t0||ts;const k=Math.min(1,(ts-t0)/2500);ids.forEach((id,i)=>$(id).setAttribute('stop-color',mix(from[i],c[i],k)));if(k<1)requestAnimationFrame(step)};
-      requestAnimationFrame(step);
+      tween(['sea0','sea1','sea2'],c);
       $('waves').setAttribute('stroke',w);sec.style.setProperty('--wspeed',p.sp);sec.style.setProperty('--note',n);sec.style.setProperty('--cart',cart);
-      const pg=$('precip');pg.innerHTML='';
-      if(p.pr==='rain'){for(let i=0;i<70;i++){const x=rnd()*1040,y=rnd()*460;const d=el('path',{d:`M${x} ${y} l-5 14`,stroke:w,'stroke-width':.9,opacity:.55,class:'drop'},pg);d.style.animationDelay=(-rnd()*1.2).toFixed(2)+'s';d.style.setProperty('--fall',(p===P.storm?.7:1)+rnd()*.5+'s')}}
-      if(p.pr==='snow'){for(let i=0;i<60;i++){const x=rnd()*1000,y=rnd()*460;const d=el('circle',{cx:x,cy:y,r:1.2+rnd()*1.8,fill:'#fff',opacity:.85,class:'flake'},pg);d.style.animationDelay=(-rnd()*6).toFixed(2)+'s';d.style.setProperty('--fall',5+rnd()*4+'s')}}
-      if(text)note.textContent=text;
+      precip($('precip'),1040,460,p.pr,p===P.storm,w);
+      // skies
+      let sky=p.sky.slice();if(night&&p!==P.night)sky=sky.map((x,i)=>mix(x,P.night.sky[i],.72));
+      tween(['hs0','hs1','hs2','hs3'],sky);tween(['fs0','fs1'],[sky[1],sky[3]]);
+      tween(['hl0','hl1','hl2'],[mix(sky[3],c[0],.5),c[1],c[2]]);tween(['fs2','fs3'],[c[1],c[2]]);
+      const cl=night&&p!==P.night?mix(p.cl,'#3a4766',.6):p.cl;
+      ['heroClouds','finClouds'].forEach(id=>{$(id).querySelectorAll('ellipse').forEach(e=>e.setAttribute('fill',cl));$(id).style.opacity=p.co});
+      [heroOver,finOver].forEach(g=>g.style.opacity=p.over||0);
+      op('sunGlow',night?0:p.sun);op('rays',night?0:p.sun*.8);
+      const starsOn=night&&(p===P.night||p===P.partly)?1:night?.15:0;['stars','stars2','moon','moon2'].forEach(id=>op(id,starsOn));
+      const t=night&&p!==P.night?['#0b1330',.38]:(p.tint||['#000',0]);
+      ['heroTint','finTint'].forEach(id=>{$(id).style.fill=t[0];$(id).style.opacity=t[1]});
+      precip($('heroPrecip'),1040,640,p.pr,p===P.storm,w);precip($('finPrecip'),1040,600,p.pr,p===P.storm,w);
+      // wind → trees
+      const wind=st.wind;document.body.style.setProperty('--sway',Math.min(3.4,.35+wind/16).toFixed(2)+'deg');document.body.style.setProperty('--swayT',Math.max(1.6,7-wind/7).toFixed(2)+'s');
+      // season → treetops + falling leaves/petals (snow days use the snow instead)
+      dress(st.season);
+      const se=st.season;
+      if(p.pr==='snow'){$('heroFall').innerHTML='';$('finFall').innerHTML=''}else{
+        fall($('heroFall'),[[0,110,320,260],[820,90,180,280]],640,se,wind);fall($('finFall'),[[790,30,210,320]],600,se,wind)}
+      fx(st.key,night);
+      if(st.text)note.textContent=st.text;
     };
     // first guess from the visitor's own clock
     const h=new Date().getHours(),isNight=h<6||h>=20;
-    apply(isNight?P.night:(h<8||h>=18)?P.golden:P.clear,false,isNight?'the sea, under your night sky':'the sea, as your day looks right now');
-    const pick=(code,cloud)=>code>=95?P.storm:(code>=71&&code<=77)||code===85||code===86?P.snow:(code>=51&&code<=67)||(code>=80&&code<=82)?P.rain:(code===45||code===48)?P.fog:code===3||cloud>85?P.cloudy:code===2||cloud>40?P.partly:P.clear;
+    apply({key:isNight?'night':(h<8||h>=18)?'golden':'clear',night:false,wind:8,season:seasonOf(1),text:isNight?'the sea, under your night sky':'the sea, as your day looks right now'});
+    const pickKey=(code,cloud)=>code>=95?'storm':(code>=71&&code<=77)||code===85||code===86?'snow':(code>=51&&code<=67)||(code>=80&&code<=82)?'rain':(code===45||code===48)?'fog':code===3||cloud>85?'cloudy':code===2||cloud>40?'partly':'clear';
     const words={0:'clear skies',1:'mostly clear',2:'a few clouds',3:'overcast',45:'fog',48:'frosty fog',51:'light drizzle',53:'drizzle',55:'heavy drizzle',56:'freezing drizzle',57:'freezing drizzle',61:'light rain',63:'rain',65:'heavy rain',66:'freezing rain',67:'freezing rain',71:'light snow',73:'snow',75:'heavy snow',77:'snow grains',80:'passing showers',81:'showers',82:'heavy showers',85:'snow showers',86:'heavy snow showers',95:'a thunderstorm',96:'a thunderstorm with hail',99:'a thunderstorm with hail'};
-    const tmo=(u,ms=6000)=>{const c=new AbortController();setTimeout(()=>c.abort(),ms);return fetch(u,{signal:c.signal}).then(r=>{if(!r.ok)throw 0;return r.json()})};
+    const tmo=(u,ms=6000)=>{const ac=new AbortController();setTimeout(()=>ac.abort(),ms);return fetch(u,{signal:ac.signal}).then(r=>{if(!r.ok)throw 0;return r.json()})};
     tmo('https://get.geojs.io/v1/ip/geo.json').then(g=>{
       const lat=+g.latitude,lon=+g.longitude,city=g.city||g.region||'',us=(g.country_code||'')==='US';
-      return tmo(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code,is_day,cloud_cover,temperature_2m&daily=sunrise,sunset&timezone=auto&forecast_days=1${us?'&temperature_unit=fahrenheit':''}`).then(w=>{
-        const cur=w.current,code=cur.weather_code,night=!cur.is_day;let p=pick(code,cur.cloud_cover);
+      return tmo(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code,is_day,cloud_cover,temperature_2m,wind_speed_10m&daily=sunrise,sunset&timezone=auto&forecast_days=1&wind_speed_unit=kmh${us?'&temperature_unit=fahrenheit':''}`).then(w=>{
+        const cur=w.current,code=cur.weather_code,night=!cur.is_day;let key=pickKey(code,cur.cloud_cover);
         const now=new Date(cur.time).getTime(),sr=new Date(w.daily.sunrise[0]).getTime(),ss=new Date(w.daily.sunset[0]).getTime();
-        const nearSun=Math.min(Math.abs(now-sr),Math.abs(now-ss))<50*60*1000;
-        if(!night&&nearSun&&(p===P.clear||p===P.partly))p=P.golden;
-        if(night&&(p===P.clear||p===P.partly))p=P.night;
-        const temp=Math.round(cur.temperature_2m)+(us?'°F':'°C');
-        apply(p,night,`the sea, as it is${city?' in '+city:''} right now · ${words[code]||p.label}${night&&p!==P.night?' tonight':''} · ${temp}`);
+        if(!night&&Math.min(Math.abs(now-sr),Math.abs(now-ss))<50*60*1000&&(key==='clear'||key==='partly'))key='golden';
+        if(night&&(key==='clear'||key==='partly'))key='night';
+        const temp=Math.round(cur.temperature_2m)+(us?'°F':'°C');const season=seasonOf(lat);
+        apply({key,night,wind:+cur.wind_speed_10m||0,season,text:`the sea, as it is${city?' in '+city:''} right now · ${words[code]||P[key].label}${night&&key!=='night'?' tonight':''} · ${temp} · ${SEASON[season].label}`});
       });
     }).catch(()=>{});
   })();
