@@ -1167,13 +1167,15 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
       if(st.text)note.textContent=st.text;
     };
     // first guess from the visitor's own clock
-    const h=new Date().getHours(),isNight=h<6||h>=20;
-    apply({key:isNight?'night':(h<8||h>=18)?'golden':'clear',night:false,wind:8,season:seasonOf(1),text:isNight?'the sea, under your night sky':'the sea, as your day looks right now'});
+    const clockGuess=()=>{const h=new Date().getHours(),isNight=h<6||h>=20;
+      apply({key:isNight?'night':(h<8||h>=18)?'golden':'clear',night:false,wind:8,season:seasonOf((window.__geo&&+window.__geo.latitude)||1),text:isNight?'the sea, under your night sky':'the sea, as your day looks right now'})};
+    clockGuess();let live=false;
     const pickKey=(code,cloud)=>code>=95?'storm':(code>=71&&code<=77)||code===85||code===86?'snow':(code>=51&&code<=67)||(code>=80&&code<=82)?'rain':(code===45||code===48)?'fog':code===3||cloud>85?'cloudy':code===2||cloud>40?'partly':'clear';
     const words={0:'clear skies',1:'mostly clear',2:'a few clouds',3:'overcast',45:'fog',48:'frosty fog',51:'light drizzle',53:'drizzle',55:'heavy drizzle',56:'freezing drizzle',57:'freezing drizzle',61:'light rain',63:'rain',65:'heavy rain',66:'freezing rain',67:'freezing rain',71:'light snow',73:'snow',75:'heavy snow',77:'snow grains',80:'passing showers',81:'showers',82:'heavy showers',85:'snow showers',86:'heavy snow showers',95:'a thunderstorm',96:'a thunderstorm with hail',99:'a thunderstorm with hail'};
     const tmo=(u,ms=6000)=>{const ac=new AbortController();setTimeout(()=>ac.abort(),ms);return fetch(u,{signal:ac.signal}).then(r=>{if(!r.ok)throw 0;return r.json()})};
-    tmo('https://get.geojs.io/v1/ip/geo.json').then(g=>{
-      const lat=+g.latitude,lon=+g.longitude,city=g.city||g.region||'',us=(g.country_code||'')==='US';window.__geo=g;document.dispatchEvent(new CustomEvent('geo',{detail:g}));
+    let geoP=null,lastWx=0;const getGeo=()=>geoP||(geoP=tmo('https://get.geojs.io/v1/ip/geo.json').then(g=>{window.__geo=g;document.dispatchEvent(new CustomEvent('geo',{detail:g}));return g}).catch(e=>{geoP=null;throw e}));
+    const fetchWx=()=>{lastWx=Date.now();getGeo().then(g=>{
+      const lat=+g.latitude,lon=+g.longitude,city=g.city||g.region||'',us=(g.country_code||'')==='US';
       return tmo(`https://api.open-meteo.com/v1/forecast?latitude=${lat}&longitude=${lon}&current=weather_code,is_day,cloud_cover,temperature_2m,wind_speed_10m&daily=sunrise,sunset&timezone=auto&forecast_days=1&wind_speed_unit=kmh${us?'&temperature_unit=fahrenheit':''}`).then(w=>{
         const cur=w.current,code=cur.weather_code,night=!cur.is_day;let key=pickKey(code,cur.cloud_cover);
         const now=new Date(cur.time).getTime(),sr=new Date(w.daily.sunrise[0]).getTime(),ss=new Date(w.daily.sunset[0]).getTime();
@@ -1181,8 +1183,12 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
         if(night&&(key==='clear'||key==='partly'))key='night';
         const temp=Math.round(cur.temperature_2m)+(us?'°F':'°C');const season=seasonOf(lat);
         apply({key,night,wind:+cur.wind_speed_10m||0,season,text:`the sea, as it is${city?' in '+city:''} right now · ${words[code]||P[key].label}${night&&key!=='night'?' tonight':''} · ${temp} · ${SEASON[season].label}`});
-      });
-    }).catch(()=>{});
+        live=true;});
+    }).catch(()=>{if(!live)clockGuess()})};
+    fetchWx();
+    setInterval(()=>{if(document.visibilityState==='visible')fetchWx()},10*60*1000);
+    setInterval(()=>{if(!live)clockGuess()},30*60*1000);
+    document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'&&Date.now()-lastWx>5*60*1000)fetchWx()});
   })();
 
 
@@ -1292,14 +1298,15 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   const now=new Date(),H=now.getHours();
 
   // ---------- 2. greeting, returning visitors, postmark ----------
-  const greet=H>=5&&H<12?'Buongiorno':H>=12&&H<17?'Buon pomeriggio':H>=17&&H<22?'Buonasera':'Buonanotte';
   const visits=+(store.get('btc-visits')||0);store.set('btc-visits',visits+1);
   const back=visits>0;
-  const hint=$('hint');hint.innerHTML=`<b>${greet}, ${back?'another letter for you':'a letter has arrived'}</b>Break the seal`;
-  if(back)$('envTo').textContent='for you, again';
-  const sal=document.querySelector('.salutation');sal.textContent=`${greet}, dear friend,`;
+  const hint=$('hint'),sal=document.querySelector('.salutation'),intro0=$('intro');
   const MON=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
-  $('pmDate').textContent=`${now.getDate()} ${MON[now.getMonth()]}`;$('pmYear').textContent=now.getFullYear();
+  const setGreeting=()=>{const t=new Date(),h=t.getHours();const greet=h>=5&&h<12?'Buongiorno':h>=12&&h<17?'Buon pomeriggio':h>=17&&h<22?'Buonasera':'Buonanotte';
+    if(!intro0.classList.contains('open')&&!/sealed with love/.test(hint.textContent))hint.innerHTML=`<b>${greet}, ${back?'another letter for you':'a letter has arrived'}</b>Break the seal`;
+    sal.textContent=`${greet}, dear friend,`;$('pmDate').textContent=`${t.getDate()} ${MON[t.getMonth()]}`;$('pmYear').textContent=t.getFullYear()};
+  setGreeting();
+  if(back)$('envTo').textContent='for you, again';
   const setCity=c=>{if(c)$('pmCity').textContent=c.toUpperCase().slice(0,18)};
   if(window.__geo)setCity(window.__geo.city);document.addEventListener('geo',e=>setCity(e.detail.city||e.detail.region));
 
@@ -1326,10 +1333,9 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
 
   // ---------- 4. catch a falling leaf ----------
   const MAJOR=[['The Fool','a leap of faith, a fresh beginning'],['The Magician','you already hold every tool you need'],['The High Priestess','trust the quiet voice'],['The Empress','let something grow slowly'],['The Emperor','build the structure, then rest in it'],['The Hierophant','learn from those who came before'],['The Lovers','choose with your whole heart'],['The Chariot','steady will, forward motion'],['Strength','gentleness is its own kind of power'],['The Hermit','a little solitude will light the way'],['Wheel of Fortune','the season is turning in your favour'],['Justice','honest scales, clear decisions'],['The Hanged Man','a new angle changes everything'],['Death','an ending that makes room'],['Temperance','balance, patience, the long blend'],['The Devil','notice what holds you, then loosen it'],['The Tower','what falls was ready to fall'],['The Star','hope, renewal, quiet faith'],['The Moon','not everything needs to be clear yet'],['The Sun','warmth, joy, a day that says yes'],['Judgement','answer the call you keep hearing'],['The World','a circle completed, a door opening']];
-  const dayIdx=Math.floor(new Date(now.getFullYear(),now.getMonth(),now.getDate()).getTime()/864e5);
-  const card=MAJOR[(dayIdx*7+3)%MAJOR.length];
+  const cardOfDay=()=>{const t=new Date();return MAJOR[(Math.floor(new Date(t.getFullYear(),t.getMonth(),t.getDate()).getTime()/864e5)*7+3)%MAJOR.length]};
   const SUR=[
-    ()=>({h:'tarot card of the day',t:`TarotParot drew <em>${card[0]}</em> for today: ${card[1]}.`,a:['ask the parrot yourself','https://amarisct.github.io/TarotParot/']}),
+    ()=>{const card=cardOfDay();return {h:'tarot card of the day',t:`TarotParot drew <em>${card[0]}</em> for today: ${card[1]}.`,a:['ask the parrot yourself','https://amarisct.github.io/TarotParot/']}},
     ()=>({h:'from the catalogue',t:'Dessert Spotter: name the dessert you’re craving and I’ll point you to the nearest place that has it.',a:['find a dessert','https://amarisct.github.io/dessertspotter/']}),
     ()=>({h:'from the catalogue',t:'Artificially Intelligent is where I study human consciousness and machine intelligence, side by side.',a:['step inside','https://amarisct.github.io/Artificially-Intelligent/']}),
     ()=>({h:'from the catalogue',t:'The Weekly Planner: a gentler way to hold the week.',a:['plan a week','https://amarisct.github.io/Weekly-Planner/']}),
@@ -1372,8 +1378,8 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
 
   // ---------- 6. holiday moments: a calendar of holidays from around the world ----------
   const qs=new URLSearchParams(location.search);
-  const today=qs.get('date')?new Date(qs.get('date')+'T12:00'):now;      // preview any day with ?date=2026-12-25
-  const Y=today.getFullYear(),day=new Date(Y,today.getMonth(),today.getDate());
+  const pinned=!!qs.get('date');let today=pinned?new Date(qs.get('date')+'T12:00'):new Date();      // preview any day with ?date=2026-12-25
+  let Y=today.getFullYear(),day=new Date(Y,today.getMonth(),today.getDate());
   const at=(m,d,y=Y)=>new Date(y,m-1,d),add=(dt,n)=>new Date(dt.getFullYear(),dt.getMonth(),dt.getDate()+n);
   const near=(dt,b=0,a=0)=>!!dt&&day>=add(dt,-b)&&day<=add(dt,a);
   const tbl=o=>{const v=o[Y];if(!v)return null;const [m,d]=v.split('-').map(Number);return at(m,d)};
@@ -1701,6 +1707,11 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   render((window.__geo||{}).country_code);
   document.addEventListener('geo',e=>render(e.detail.country_code));
   document.addEventListener('wx',e=>{holWx(e.detail);restyle()});
+  // the calendar keeps itself current: new day → holidays, decorations, flowers, season; new hour → greeting
+  let lastDay=day.toDateString(),lastHour=new Date().getHours();
+  const tickClock=()=>{const t=new Date();if(t.getHours()!==lastHour){lastHour=t.getHours();setGreeting()}
+    if(!pinned&&t.toDateString()!==lastDay){lastDay=t.toDateString();today=t;Y=t.getFullYear();day=new Date(Y,t.getMonth(),t.getDate());setGreeting();render((window.__geo||{}).country_code)}};
+  setInterval(tickClock,60*1000);document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible')tickClock()});
 
   // ---------- 7. quill cursor + gold shimmer ----------
   if(matchMedia('(pointer:fine)').matches){document.documentElement.classList.add('quill');
