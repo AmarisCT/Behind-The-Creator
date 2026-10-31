@@ -482,12 +482,7 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
         <g id="canopyL"></g>
         <!-- willow -->
         <g id="willow" stroke="#728441" stroke-width="2" fill="none" opacity=".8"></g>
-        <!-- statue -->
-        <g transform="translate(112 372)">
-          <rect x="0" y="22" width="82" height="56" fill="url(#stone)"/><rect x="-7" y="17" width="96" height="8" fill="#d2c39d"/><rect x="-4" y="74" width="90" height="6" fill="#a5966f"/>
-          <path d="M14 17 C18 3 34 -3 50 3 C62 7 70 11 74 17Z" fill="#ddd0ad"/><circle cx="22" cy="0" r="6.5" fill="#ddd0ad"/>
-          <path d="M8 40 h66 M8 60 h66" stroke="#9a8b66" stroke-width=".6"/>
-        </g>
+        <g id="roseBush"></g>
         <!-- figures by the water -->
         <g transform="translate(700 398)">
           <path d="M0 18 l5 -18 l5 18Z" fill="#8a2f2a"/><circle cx="5" cy="-2" r="2.6" fill="#ddb68e"/>
@@ -801,6 +796,8 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
     pts.forEach(([x,y],i)=>{if(i%1===0){el('ellipse',{cx:x+rnd()*8-4,cy:y+rnd()*6-3,rx:4+rnd()*3,ry:3+rnd()*2,fill:pick(['#3d5a2a','#4f6e38','#2f4520','#6a8a48']),transform:`rotate(${rnd()*180} ${x} ${y})`},ivy)}})};
   let pts=[];for(let i=0;i<60;i++){const x=i*7,y=524+Math.sin(i*.35)*6+(i>30?(i-30)*1.6:0);pts.push([x,y])}vine(pts);
   pts=[];for(let i=0;i<40;i++){pts.push([620+i*6,524+Math.sin(i*.4)*5+(i<10?(10-i)*2:0)])}vine(pts);
+  const rbsh=$('roseBush');rbsh.setAttribute('filter','url(#leafy)');canopy(rbsh,150,418,70,22,160,['#2f4220','#3d5229','#566b37','#7f9150'],[.4,.7]);
+  [[110,404,26],[140,396,30],[176,402,24],[200,412,20],[124,418,22],[160,414,26]].forEach(([x,y,w])=>el('use',{href:'#rose',x:x-w/2,y:y-w/2,width:w,height:w},$('roseBush')));
   const uf=$('urnFlowers');[[906,456,30],[930,446,34],[952,458,28],[918,438,22],[944,434,24]].forEach(([x,y,w])=>el('use',{href:'#rose',x:x-w/2,y:y-w/2,width:w,height:w},uf));
 
   // ---------- story sprig + garland ----------
