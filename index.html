@@ -120,6 +120,14 @@ h2.script{font-family:'Pinyon Script',cursive;font-weight:400;color:var(--sage);
 @keyframes mistdrift{from{transform:translateX(-90px)}to{transform:translateX(90px)}}
 .ff{animation:firefly var(--ft,6s) ease-in-out infinite}
 @keyframes firefly{0%,100%{transform:translate(0,0);opacity:.1}30%{opacity:1}50%{transform:translate(var(--fx,12px),var(--fy,-14px));opacity:.9}80%{opacity:.2}}
+.beamsweep{transform-box:view-box;transform-origin:123px 274px;animation:beamsweep 7s ease-in-out infinite alternate}
+@keyframes beamsweep{from{transform:rotate(-14deg)}to{transform:rotate(14deg)}}
+.boatrock{transform-box:fill-box;transform-origin:50% 100%;animation:rock var(--swayT,6s) ease-in-out infinite alternate}
+@keyframes rock{from{transform:rotate(calc(var(--sway,.6deg) * -1.6))}to{transform:rotate(calc(var(--sway,.6deg) * 1.6))}}
+#boat{animation:sail 70s ease-in-out infinite alternate}
+@keyframes sail{from{transform:translateX(-50px)}to{transform:translateX(40px)}}
+.gull{animation:glide 9s ease-in-out infinite}
+@keyframes glide{0%,100%{transform:translate(0,0)}50%{transform:translate(26px,-12px)}}
 .fl{transform-box:fill-box;transform-origin:center;animation:leaffall var(--t,12s) linear infinite}
 @keyframes leaffall{0%{transform:translate(0,0) rotate(0);opacity:0}8%{opacity:1}50%{transform:translate(calc(var(--dx,-80px) * .5 + 22px),calc(var(--dy,500px) * .5)) rotate(280deg)}88%{opacity:1}100%{transform:translate(var(--dx,-80px),var(--dy,500px)) rotate(600deg);opacity:0}}
 .drop{animation:fall var(--fall,1.1s) linear infinite}
@@ -822,8 +830,31 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
   canopy(gr,920,170,130,160,520,darkPal,[-.3,.6]);canopy(gr,820,110,90,80,240,midPal,[-.2,.7]);canopy(gr,990,320,70,150,260,darkPal,[-.3,.5]);
   for(let i=0;i<70;i++){const x=800+rnd()*200,y=40+rnd()*320;el('circle',{cx:x,cy:y,r:1.2+rnd()*2,fill:'#f6f2e6',opacity:.9},gr)}
   for(let i=0;i<16;i++){const x=820+rnd()*180,y=80+rnd()*260;el('circle',{cx:x,cy:y,r:4+rnd()*2,fill:pick(['#e08a2e','#d47622','#eb9b3c'])},gr)}
-  const wr=$('windRoses');[[70,170,70,-30],[190,100,48,20],[130,310,58,-60],[300,200,40,40],[660,80,44,-10],[400,120,30,60]].forEach(([x,y,w,r])=>el('use',{href:'#rose',x:x-w/2,y:y-w/2,width:w,height:w,transform:`rotate(${r} ${x} ${y})`},wr));
-  for(let i=0;i<24;i++){const x=40+rnd()*420,y=60+rnd()*300;el('ellipse',{cx:x,cy:y,rx:2.6,ry:1.5,fill:pick(['#eab2ae','#dd8a8d']),transform:`rotate(${rnd()*180} ${x} ${y})`},wr)}
+  // shore life: lighthouse, sailboat, gulls
+  const fsvg=$('waves2').ownerSVGElement;
+  const lh=el('g',{id:'lighthouse'});fsvg.insertBefore(lh,$('waves2'));
+  el('path',{d:'M60 336 C80 318 150 312 190 336Z',fill:'#6f7d5c'},lh);
+  el('path',{d:'M112 330 L117 278 H129 L134 330Z',fill:'#efe9da'},lh);
+  el('path',{d:'M114.6 312 H131.4 L132.4 322 H113.6Z M116.2 292 H129.8 L130.6 301 H115.4Z',fill:'#b0404a'},lh);
+  el('rect',{x:114,y:270,width:18,height:8,fill:'#3d4a4a'},lh);el('rect',{x:117,y:271.5,width:12,height:5,fill:'#ffe9a6',id:'lamp'},lh);
+  el('path',{d:'M113 270 L123 261 L133 270Z',fill:'#7a2a30'},lh);el('path',{d:'M110 278 H136',stroke:'#3d4a4a','stroke-width':1.4},lh);
+  const beam=el('g',{id:'beam',class:'fade',style:'opacity:0'},lh);
+  const bm=el('g',{class:'beamsweep'},beam);
+  el('path',{d:'M123 274 L-120 240 L-120 300Z',fill:'#fff3c4',opacity:.35,filter:'url(#blur2)'},bm);
+  el('path',{d:'M123 274 L380 238 L380 306Z',fill:'#fff3c4',opacity:.35,filter:'url(#blur2)'},bm);
+  el('circle',{cx:123,cy:274,r:16,fill:'#fff1b8',opacity:.6,filter:'url(#blur8)'},beam);
+  const boatWrap=el('g',{transform:'translate(-380 2)'});fsvg.insertBefore(boatWrap,$('grove'));const boat=el('g',{id:'boat'},boatWrap);
+  const bb=el('g',{class:'boatrock'},boat);
+  el('path',{d:'M630 352 Q660 360 690 352 L684 360 Q660 365 636 360Z',fill:'#5b4632'},bb);
+  el('path',{d:'M660 352 V300',stroke:'#4a3a2a','stroke-width':1.4},bb);
+  el('path',{d:'M661 302 Q684 324 686 349 H661Z',fill:'#f4efe2'},bb);el('path',{d:'M659 308 Q644 328 640 349 H659Z',fill:'#e9e0cc'},bb);
+  el('path',{d:'M660 300 l10 3 l-10 3Z',fill:'#b0404a'},bb);
+  el('path',{d:'M636 366 Q660 372 684 366 M640 371 Q660 376 680 371',stroke:'#f2efe4','stroke-width':.9,fill:'none',opacity:.6},boat);
+  el('path',{d:'M660 362 V392',stroke:'#e9e0cc','stroke-width':6,opacity:.12,filter:'url(#blur2)'},boat);
+  const wr=$('windRoses');wr.setAttribute('id','gulls');wr.classList.add('fade');
+  [[120,150,1.6,0],[210,118,1.2,-3],[300,170,1.4,-6],[470,96,.9,-9]].forEach(([x,y,k,dl])=>{const gg=el('g',{class:'gull'},wr);gg.style.animationDelay=dl+'s';
+    el('path',{d:`M${x-10*k} ${y} q${5*k} ${-6*k} ${10*k} 0 q${5*k} ${-6*k} ${10*k} 0`,stroke:'#4b5254','stroke-width':1.3,fill:'none','stroke-linecap':'round'},gg);
+    el('path',{d:`M${x-9*k} ${y-.5} q${4.5*k} ${-4*k} ${9*k} 0`,stroke:'#f6f4ee','stroke-width':.8,fill:'none',opacity:.7},gg)});
   // shell: scalloped edge + ribs
   const N=26,Rx=250,Ry=272;let sp2='M-250 0 ';const edge=[];
   for(let i=0;i<=N;i++){const a=Math.PI*(1-i/N),x=Math.cos(a)*Rx,y=-Math.sin(a)*Ry;edge.push([x,y])}
@@ -992,6 +1023,8 @@ body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:tr
         if(sc.snow)sc.snow.style.opacity=key==='snow'?1:0;
         sc.bolt.style.opacity=0;
       });
+      $('gulls').style.opacity=day&&(key==='clear'||key==='partly'||key==='golden'||key==='cloudy')?1:0;
+      $('beam').style.opacity=night||key==='fog'||key==='storm'||key==='rain'?1:0;$('lamp').setAttribute('fill',night||key==='fog'||key==='storm'||key==='rain'?'#fff4c2':'#d9c58a');
       $('villaWin').style.fill=night||key==='storm'?'#ffd77a':'#7c6c55';$('villaWin').style.filter=night?'drop-shadow(0 0 3px #ffcf6a)':'none';
       snowcaps(key==='snow');
     };
