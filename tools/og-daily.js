@@ -16,10 +16,8 @@ const moonPath=(cx,cy,r,age)=>{const waxing=age<SYN/2,k=Math.cos(2*Math.PI*age/S
 (async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1200,height:800}});
   await p.route('**/*',r=>r.request().url().startsWith('file:')?r.continue():r.abort());
   await p.goto('file://'+path.join(ROOT,'index.html')+`?date=${date}&hour=17`);await p.waitForFunction(()=>window.__sky&&window.__sky.wax,null,{timeout:20000});await p.waitForTimeout(600);
-  const sky=await p.evaluate(()=>{const b=document.getElementById('backdrop').cloneNode(true);
-    [...b.querySelectorAll('[filter="url(#canvas)"]')].forEach(x=>x.remove());[...b.children].forEach(x=>{if(x.tagName==='g'&&x.id!=='wallpaper')x.remove()});
-    b.setAttribute('width','1200');b.setAttribute('height','630');b.removeAttribute('style');b.removeAttribute('id');
-    return {...window.__sky,wall:b.outerHTML}});
+  const sky=await p.evaluate(()=>({...window.__sky,key:window.__wall.key}));
+  sky.wall=`<image href="data:image/webp;base64,${fs.readFileSync(path.join(ROOT,'wall',sky.key+'-d.webp')).toString('base64')}" width="1200" height="630" preserveAspectRatio="xMidYMid slice"/>`;
   let s=Math.floor(new Date(date+'T12:00')/864e5)%2147483646+1;const rnd=()=>{s=(s*16807)%2147483647;return (s-1)/2147483646};
   const cols=sky.palette.c;let hair='';
   for(let i=0;i<260;i++){let x=-100+rnd()*1400,y=-100+rnd()*830,d=`M${x} ${y}`;for(let k=0;k<5;k++){const dx=100+rnd()*110,dy=70+rnd()*50*(rnd()<.5?-1:1);d+=` q${dx/2} ${dy} ${dx} ${dy*.2}`}
