@@ -16,7 +16,7 @@ const moonPath=(cx,cy,r,age)=>{const waxing=age<SYN/2,k=Math.cos(2*Math.PI*age/S
 (async()=>{const b=await chromium.launch();const p=await b.newPage({viewport:{width:1200,height:800}});
   await p.route('**/*',r=>r.request().url().startsWith('file:')?r.continue():r.abort());
   await p.goto('file://'+path.join(ROOT,'index.html')+`?date=${date}&hour=17`);await p.waitForFunction(()=>window.__sky&&window.__sky.wax,null,{timeout:20000});await p.waitForTimeout(600);
-  const sky=await p.evaluate(()=>({...window.__sky,key:window.__wall.key}));
+  const sky=await p.evaluate(()=>({...window.__sky,key:window.__wall.key,stamp:document.querySelector('.postage > g').outerHTML.replace(/ id="[^"]*"/g,'')}));
   sky.wall=`<image href="data:image/webp;base64,${fs.readFileSync(path.join(ROOT,'wall',sky.key+'-d.webp')).toString('base64')}" width="1200" height="630" preserveAspectRatio="xMidYMid slice"/>`;
   let s=Math.floor(new Date(date+'T12:00')/864e5)%2147483646+1;const rnd=()=>{s=(s*16807)%2147483647;return (s-1)/2147483646};
   const cols=sky.palette.c;let hair='';
@@ -38,7 +38,7 @@ ${sky.wall}<rect width="1200" height="630" fill="#f3ead8" opacity=".12"/><rect w
  <path d="M0 346 L250 180 M540 346 L290 180" stroke="#2a0710" stroke-opacity=".3" stroke-width="1.5"/><path d="M0 0 H540 L270 228Z" fill="url(#flap)"/>
  <path d="M12 7 H528 L270 216Z" fill="none" stroke="#dcc088" stroke-opacity=".55"/><rect x="9" y="9" width="522" height="328" rx="2" fill="none" stroke="#dcc088" stroke-opacity=".35"/>
  <g transform="translate(176 160) scale(.94)">${waxSeal(seal(true,'o'),sky.wax)}</g>
- <g transform="translate(22 252) rotate(-5)"><rect width="58" height="74" fill="#f4ecd8" stroke="#f4ecd8" stroke-width="6" stroke-dasharray="3 3"/><rect x="5" y="5" width="48" height="64" fill="#e9dcc0" stroke="#b58c4c" stroke-width=".6"/><use href="#rose" x="9" y="12" width="40" height="40"/></g>
+ <g transform="translate(8 206) scale(1.35)">${sky.stamp}</g>
  <g fill="none" stroke="#ecd7aa" stroke-opacity=".7" stroke-width="1.1"><circle cx="128" cy="290" r="30"/><circle cx="128" cy="290" r="21"/><path d="M84 270 q10 -5 20 0 t20 0 M84 284 q10 -5 20 0 t20 0 M84 298 q10 -5 20 0 t20 0 M84 312 q10 -5 20 0 t20 0"/></g>
  <use href="#rose" x="456" y="250" width="78" height="78" transform="rotate(-24 495 289)"/></g>
 <g transform="translate(600 540)" text-anchor="middle" font-family="Liberation Serif, DejaVu Serif, serif">
