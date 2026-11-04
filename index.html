@@ -2030,7 +2030,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
 /* ===== The pressed-flower guest book + the gardener's hidden panel ===== */
 (function(){
   // Paste your Google Apps Script web app URL here (see guestbook/README.md).
-  const GUESTBOOK_URL='';
+  const GUESTBOOK_URL='https://script.google.com/macros/s/AKfycbxq5U5Ex50b8XPgtIlI0wdTra7jo6kV-7Wgn4C0MAP3HrW5jU01NAG-XUEN5ehsuDlWag/exec';
   const $=id=>document.getElementById(id),qs=new URLSearchParams(location.search);
   const URL_=qs.get('gb')||GUESTBOOK_URL,sec=$('guestbook');
   if(!URL_){sec.classList.add('off');return}
