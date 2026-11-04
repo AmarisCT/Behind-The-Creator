@@ -1496,10 +1496,9 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
   const hint=$('hint'),sal=document.querySelector('.salutation'),intro0=$('intro');
   const MON=['JAN','FEB','MAR','APR','MAY','JUN','JUL','AUG','SEP','OCT','NOV','DEC'];
   const setGreeting=()=>{const t=new Date(),h=t.getHours();const greet=h>=5&&h<12?'Buongiorno':h>=12&&h<17?'Buon pomeriggio':h>=17&&h<22?'Buonasera':'Buonanotte';
-    if(!intro0.classList.contains('open')&&!/sealed with love/.test(hint.textContent))hint.innerHTML=`<b>${greet}, ${back?'another letter for you':'a letter has arrived'}</b>Break the seal`;
+    if(!intro0.classList.contains('open')&&!/sealed with love/.test(hint.textContent))hint.innerHTML=`<b>${greet}, a letter has arrived</b>Break the seal`;
     sal.textContent=`${greet}, dear friend,`;$('pmDate').textContent=`${t.getDate()} ${MON[t.getMonth()]}`;$('pmYear').textContent=t.getFullYear()};
   setGreeting();
-  if(back)$('envTo').textContent='for you, again';
   const setCity=c=>{if(c)$('pmCity').textContent=c.toUpperCase().slice(0,18)};
   if(window.__geo)setCity(window.__geo.city);document.addEventListener('geo',e=>setCity(e.detail.city||e.detail.region));
 
@@ -1829,7 +1828,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     cx.restore()};
   const tick=()=>{if(ptype==='none'||document.visibilityState!=='visible'){rafOn=false;return}cx.clearRect(0,0,innerWidth,innerHeight);
     parts.forEach((p,i)=>{p.x+=p.vx+Math.sin(p.ph+p.y/60)*.3;p.y+=p.vy;p.r+=p.vr;if(p.y>innerHeight+30||p.y<-40||p.x<-50||p.x>innerWidth+50)parts[i]=spawn(ptype);drawP(p,ptype)});requestAnimationFrame(tick)};
-  const sizeCv=()=>{cv.width=innerWidth*devicePixelRatio;cv.height=innerHeight*devicePixelRatio;cx.setTransform(devicePixelRatio,0,0,devicePixelRatio,0,0)};
+  const DPR=window.LITE?1:Math.min(2,devicePixelRatio);const sizeCv=()=>{cv.width=innerWidth*DPR;cv.height=innerHeight*DPR;cx.setTransform(DPR,0,0,DPR,0,0)};
   let theme=null;
   const dress=()=>{const t=theme;window.__theme=t;const tint=layer.querySelector('.h-tint'),top=layer.querySelector('.h-top'),hang=layer.querySelector('.h-hang'),cor=layer.querySelector('.h-corners');
     if(!t){webs(false);layer.classList.remove('on');bdPaths.forEach(p=>p.setAttribute('stroke',p.dataset.s));document.body.style.background='';ptype='none';cx.clearRect(0,0,innerWidth,innerHeight);top.innerHTML=hang.innerHTML=cor.innerHTML='';return}
@@ -1839,7 +1838,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     if(t.hang.length&&m>54){const per=Math.max(1,Math.floor(m/70));[0,1].forEach(side=>{for(let i=0;i<per;i++){const x=side?W-m+18+i*((m-60)/Math.max(1,per-1)||0):18+i*((m-60)/Math.max(1,per-1)||0),len=R(40,Math.min(300,innerHeight*.45));
       const d=document.createElement('div');d.className='h-orn';d.style.left=x+'px';d.style.animationDelay=-R(0,4)+'s';d.innerHTML=`<i style="height:${len}px"></i>`+svgw(60,96,ORN[t.hang[(i+side)%t.hang.length]]());hang.appendChild(d)}})}
     cor.innerHTML='';if(t.corner&&t.corner!=='none'&&CORNER[t.corner]){[0,1].forEach(side=>{const d=document.createElement('div');d.className='h-corner '+(side?'r':'l');d.innerHTML=svgw(150,70,CORNER[t.corner](0)+CORNER[t.corner](45)+CORNER[t.corner](90));cor.appendChild(d)})}
-    webs(!!t.webs);ptype=t.fall||'none';sizeCv();parts=Array.from({length:ptype==='powder'?16:ptype==='snow'?90:55},()=>spawn(ptype,true));if(!rafOn&&ptype!=='none'&&!reduce){rafOn=true;requestAnimationFrame(tick)}};
+    webs(!!t.webs);ptype=t.fall||'none';sizeCv();parts=Array.from({length:Math.round((ptype==='powder'?16:ptype==='snow'?90:55)*(window.LITE?.45:1))},()=>spawn(ptype,true));if(!rafOn&&ptype!=='none'&&!reduce){rafOn=true;requestAnimationFrame(tick)}};
 
   const WEB=(opt={})=>{
     // an orb web: frame anchored to walls (corner) or strung between branches (free), uneven spokes, one continuous sagging capture spiral
@@ -2357,7 +2356,20 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
 (function(){
   const io=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('zz',!e.isIntersecting)),{rootMargin:'120px'});
   document.querySelectorAll('.hero,.sea,.finale').forEach(x=>io.observe(x));
-  if(window.LITE)document.querySelectorAll('.hero svg.scene [filter],.finale svg.shore [filter]').forEach(e=>{if(/#(leafy|paint|paintSoft)\)/.test(e.getAttribute('filter')))e.removeAttribute('filter')});
+  // Phones: Safari draws SVG filters on the processor and redraws them every frame of an animation.
+  // Swap soft blurs for soft-edged gradients, drop textures and brush effects, keep the look.
+  if(window.LITE){const NS='http://www.w3.org/2000/svg',defs=document.querySelector('svg defs'),grads=new Map();
+    const soft=(fill)=>{if(!fill||fill.startsWith('url'))return fill;let id=grads.get(fill);if(!id){id='sg'+grads.size;grads.set(fill,id);const g=document.createElementNS(NS,'radialGradient');g.id=id;
+        [[0,1],[.45,.75],[1,0]].forEach(([o,a])=>{const st=document.createElementNS(NS,'stop');st.setAttribute('offset',o);st.setAttribute('stop-color',fill);st.setAttribute('stop-opacity',a);g.appendChild(st)});defs.appendChild(g)}return `url(#${id})`};
+    const blurShape=e=>{if(e.tagName==='circle'){e.setAttribute('r',(+e.getAttribute('r')||0)*1.5)}else if(e.tagName==='ellipse'){e.setAttribute('rx',(+e.getAttribute('rx')||0)*1.35);e.setAttribute('ry',(+e.getAttribute('ry')||0)*1.5)}else return;e.setAttribute('fill',soft(e.getAttribute('fill')||'#ffffff'))};
+    const fix=e=>{const f=e.getAttribute&&e.getAttribute('filter');if(!f)return;
+      if(/#canvas\)/.test(f)){e.remove();return}
+      if(/#(blur8|cloud)\)/.test(f)){if(e.tagName==='g')e.querySelectorAll('circle,ellipse').forEach(blurShape);else blurShape(e)}
+      e.removeAttribute('filter')};
+    const roots=['.hero svg.scene','.sea svg.water','.finale svg.shore','#holidayLayer','.page'].map(q=>document.querySelector(q)).filter(Boolean);
+    roots.forEach(r=>r.querySelectorAll('[filter]').forEach(fix));
+    const mo=new MutationObserver(ms=>ms.forEach(m=>{if(m.type==='attributes')fix(m.target);else m.addedNodes.forEach(n=>{if(n.nodeType!==1)return;fix(n);n.querySelectorAll&&n.querySelectorAll('[filter]').forEach(fix)})}));
+    roots.forEach(r=>mo.observe(r,{subtree:true,childList:true,attributes:true,attributeFilter:['filter']}));}
 })();
 </script>
 </body>
