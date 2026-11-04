@@ -397,6 +397,7 @@ html.calm .page,html.calm .tabwrap,html.calm footer{transition:none!important}
 .gd-row .st{color:#a3242a}.gd-row .st.ok{color:#5b7669}
 .gd-acts{display:flex;gap:8px;margin-top:6px}.gd-acts button{font-family:'Cinzel',serif;font-size:10px;letter-spacing:.18em;padding:7px 12px;border:1px solid var(--wine);background:none;color:var(--wine);cursor:pointer}
 .gd-acts .yes{background:var(--wine);color:#f3dcae}
+.gd-stats{display:grid;grid-template-columns:repeat(3,1fr);gap:8px;margin:6px 0 8px}.gd-stat{border:1px solid rgba(181,140,76,.35);padding:10px 4px;font-style:italic;color:var(--muted);font-size:14px;text-align:center}.gd-stat b{display:block;font-family:'Italiana',serif;font-style:normal;font-weight:400;font-size:30px;color:var(--wine);line-height:1.1}
 .gd-h{font-family:'Cinzel',serif;font-size:11px;letter-spacing:.24em;color:var(--sepia);margin:18px 0 4px;text-align:left}
 #sealSm{cursor:default;-webkit-touch-callout:none;user-select:none}
 @media (max-width:700px){#gbSend{display:flex;margin:26px auto 0}.gb-msg{text-align:center}.gb-book{grid-template-columns:1fr}.gb-book::after{display:none}.gb-page{min-height:0}.gb-right{border-top:1px dashed rgba(181,140,76,.4)}.gb-pressed{min-height:0;gap:18px 12px}.gb-empty{padding:40px 0}}
@@ -2076,7 +2077,9 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     <div class="gd-acts">${e.status==='approved'?'<button data-a="hide">Take out</button>':'<button class="yes" data-a="approve">Approve</button>'}<button data-a="delete">Delete</button></div></div></div>`;
   const refresh=()=>{$('gdMsg').textContent='Opening the book…';post({action:'list',key}).then(j=>{if(!j.ok){key='';sessionStorage.removeItem('btc-gardener');$('gdLogin').hidden=false;list.hidden=true;$('gdMsg').textContent='That isn’t the gardener’s secret.';return}
     sessionStorage.setItem('btc-gardener',key);$('gdLogin').hidden=true;list.hidden=false;const w=j.entries.filter(e=>e.status!=='approved'),a=j.entries.filter(e=>e.status==='approved');
-    list.innerHTML=`<div class="gd-h">WAITING · ${w.length}</div>${w.map(row).join('')||'<p>Nothing waiting. The garden is tidy.</p>'}<div class="gd-h">IN THE BOOK · ${a.length}</div>${a.map(row).join('')}`}).catch(()=>$('gdMsg').textContent='The book could not be reached.')};
+    const ab=k=>fetch(`https://abacus.jasoncameron.dev/get/behind-the-creator-jka/${k}`).then(r=>r.ok?r.json():{value:0}).then(j=>j.value||0).catch(()=>'—');
+    Promise.all(['visits','opened','read-to-end'].map(ab)).then(([v,o,r])=>{const el=document.getElementById('gdStats');if(el)el.innerHTML=`<div class="gd-stat"><b>${v}</b>visits</div><div class="gd-stat"><b>${o}</b>letters opened</div><div class="gd-stat"><b>${r}</b>read to the end</div>`});
+    list.innerHTML=`<div class="gd-h">YOUR VISITORS</div><div class="gd-stats" id="gdStats"><div class="gd-stat"><b>…</b>counting</div></div><div class="gd-h">WAITING · ${w.length}</div>${w.map(row).join('')||'<p>Nothing waiting. The garden is tidy.</p>'}<div class="gd-h">IN THE BOOK · ${a.length}</div>${a.map(row).join('')}`}).catch(()=>$('gdMsg').textContent='The book could not be reached.')};
   $('gdLogin').addEventListener('submit',e=>{e.preventDefault();key=$('gdKey').value;refresh()});
   list.addEventListener('click',e=>{const b=e.target.closest('button[data-a]');if(!b)return;const r=b.closest('.gd-row'),a=b.dataset.a;
     if(a==='delete'&&!confirm('Delete this flower for good?'))return;b.disabled=true;
