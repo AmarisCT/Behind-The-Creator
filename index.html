@@ -438,6 +438,11 @@ html[data-light=night] footer,html[data-light=dusk] footer{color:#eadfc2}
 #notecard .nc-lace{display:none}
 .sqenv::before{inset:-18px;border-width:18px;z-index:0}
 
+
+/* ---------------- PERFORMANCE: rest what you can't see ---------------- */
+.zz,.zz *{animation-play-state:paused!important}
+.story,.works,.closing,.guestbook{content-visibility:auto;contain-intrinsic-size:auto 900px}
+
 /* ---------------- THE LETTER ---------------- */
 body.sealed{overflow:hidden}
 body.sealed .page,body.sealed .tabwrap,body.sealed footer{opacity:0;transform:translateY(30px) scale(.97)}
@@ -1236,7 +1241,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     const precip=(g,W,H,type,storm,col)=>{g.innerHTML='';
       if(type==='rain')for(let i=0;i<(storm?130:85);i++){const x=rnd()*(W+60),y=rnd()*H;const d=el('path',{d:`M${x} ${y} l-5 14`,stroke:col,'stroke-width':.9,opacity:.55,class:'drop'},g);d.style.animationDelay=(-rnd()*1.2).toFixed(2)+'s';d.style.setProperty('--fall',(storm?.6:.95)+rnd()*.5+'s')}
       if(type==='snow')for(let i=0;i<80;i++){const x=rnd()*W,y=rnd()*H;const d=el('circle',{cx:x,cy:y,r:1.2+rnd()*2,fill:'#fff',opacity:.85,class:'flake'},g);d.style.animationDelay=(-rnd()*6).toFixed(2)+'s';d.style.setProperty('--fall',5+rnd()*4+'s')}};
-    // seasonal falling things + treetop colours
+    // seasonal falling things + treetop colors
     const LEAF=(x,y,k)=>`M${x} ${y} c${3*k} ${-4*k} ${8*k} ${-4*k} ${11*k} 0 c${-3*k} ${4*k} ${-8*k} ${4*k} ${-11*k} 0Z`;
     const SEASON={
       spring:{n:24,cols:['#f6d3d6','#efb6bd','#fbe9ea','#ffffff'],k:.55,dab:['#f3c6cc','#fbe4e6'],dabP:.12,label:'spring blossoms'},
@@ -1599,7 +1604,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     {k:'eidf',w:()=>near(tbl(D.eidf),0,2),n:'Eid Mubarak',deco:['fanous','lights:gold']},
     {k:'eida',w:()=>near(tbl(D.eida),0,2),n:'Eid al-Adha Mubarak',deco:['fanous']},
     {k:'ramadan',w:()=>{const s=tbl(D.ramadan),e=tbl(D.eidf);return s&&e&&day>=s&&day<add(e,0)},n:'Ramadan Mubarak',deco:['fanous']},
-    {k:'holi',w:()=>near(tbl(D.holi),1,1),n:'happy Holi · a festival of colours',deco:['holi'],fall:'holi'},
+    {k:'holi',w:()=>near(tbl(D.holi),1,1),n:'happy Holi · a festival of colors',deco:['holi'],fall:'holi'},
     {k:'passover',w:()=>near(tbl(D.passover),1,6),n:'Chag Pesach Sameach',deco:['candles:460,540']},
     {k:'rosh',w:()=>near(tbl(D.rosh),1,1),n:'Shanah Tovah · a sweet new year',deco:['candles:460,540']},
     {k:'easter',w:()=>near(easter(Y),2,1),n:'happy Easter from the garden',deco:['eggs'],fall:'pastel'},
@@ -1700,7 +1705,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
   };
   const restyle=()=>{if(!fallKind)return;const S=shapes[fallKind];document.querySelectorAll('#heroFall .fl, #finFall .fl').forEach(p=>{
     if(S.d){const bb=p.getBBox();const x=bb.x+bb.width/2,y=bb.y+bb.height/2,k=Math.max(.8,bb.width/11)*1.1;p.setAttribute('d',S.d(x,y,k))}p.setAttribute('fill',pick(S.cols))})};
-  // Holi colour bursts
+  // Holi color bursts
   const holiG=el('g',{},heroSvg);heroSvg.insertBefore(holiG,hg);let holiOn=false;
   (function puff(){setTimeout(()=>{if(holiOn&&document.visibilityState==='visible'){const x=R(100,900),y=R(80,300),c=pick(shapes.holi.cols),g=el('circle',{cx:x,cy:y,r:R(40,80),fill:c,opacity:.45,filter:'url(#blur8)',class:'fw'},holiG);setTimeout(()=>g.remove(),1800)}puff()},R(500,1300))})();
   const fwG=el('g',{class:'fade',style:'opacity:0'});heroSvg.insertBefore(fwG,hg);
@@ -1943,7 +1948,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     ramadan:'The evenings are long and quiet this month. I hope your fasts are gentle and your nights are full.',
     eidf:'Eid Mubarak. May your table be full and your heart even fuller.',
     eida:'Eid Mubarak. I hope this day is generous to you in every way.',
-    holi:'I wish I could send colour through the post. Consider this letter dusted in pink and saffron.',
+    holi:'I wish I could send color through the post. Consider this letter dusted in pink and saffron.',
     passover:'I hope your table is full and your evenings are long with stories.',
     rosh:'I am dipping apples in honey as I write this, and wishing you a sweet year.',
     easter:'The garden is waking up and the lilies are out. I hope this spring brings you something new.',
@@ -1957,7 +1962,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     earth:'Today I am thinking about the gardens we are leaving for whoever comes next.',
     spring:'I am writing this with the windows open and blossoms on the sill. I hope something new is beginning for you, too.',
     summer:'It is long-light season here. I hope you are reading this somewhere warm, with nowhere you have to be.',
-    autumn:'The leaves are turning as I write, and I am wrapped in a sweater with tea going cold beside me. It is my favourite time to begin things.',
+    autumn:'The leaves are turning as I write, and I am wrapped in a sweater with tea going cold beside me. It is my favorite time to begin things.',
     winter:'It is cold outside, so I wrote this one by the fire. I hope it found you somewhere cosy.'};
   const seasonLine=$('seasonLine');let lastLetter=null;
   const setLetter=(k)=>{const t=LETTERS[k];if(!t||t===lastLetter)return;lastLetter=t;const was=seasonLine.classList.contains('inked');seasonLine.textContent=t;words(seasonLine);if(was||reduce)seasonLine.classList.add('inked')};
@@ -2196,7 +2201,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
   const SHOWERS=[['the Quadrantids',1,3],['the Lyrids',4,22],['the Eta Aquariids',5,6],['the Delta Aquariids',7,30],['the Perseids',8,12],['the Draconids',10,8],['the Orionids',10,21],['the Leonids',11,17],['the Geminids',12,14],['the Ursids',12,22]];
   const showerOf=d=>{const y=d.getFullYear();return (SHOWERS.find(([,m,dd])=>Math.abs(d-new Date(y,m-1,dd,12))<1.6*864e5)||[])[0]||null};
 
-  // ---- the year's slow colour: frost-gold in winter, rose-gold in spring, honey in summer, copper in autumn ----
+  // ---- the year's slow color: frost-gold in winter, rose-gold in spring, honey in summer, copper in autumn ----
   const PAL={winter:{bg:'#d9d3c6',c:['#b9a77e','#e2d6b4','#8f8a7e','#f1ead8','#a7a8a6','#cfc3a0','#6f6e6c','#f6f1e4']},
     spring:{bg:'#e6cfc2',c:['#d49a86','#efc3b0','#b9786a','#f6dccd','#c98d74','#e8b4a0','#94584c','#f7e8dc']},
     summer:{bg:'#dcc8a0',c:['#c88a3a','#e3b064','#a9682a','#f2d08e','#b87a34','#d99b48','#8a5220','#efdcb0']},
@@ -2235,7 +2240,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
   let state={},lastDay='';
   const build=()=>{const d=now(),W=innerWidth,H=innerHeight,key=d.toDateString();seed=Math.floor(d/864e5)%2147483646+1;
     const m=moonOf(d),z=zodiacOf(d),sh=showerOf(d),pal=yearPalette(d);
-    // the page's colour: the holiday's when there is one, otherwise the season's, turned a little differently each day
+    // the page's color: the holiday's when there is one, otherwise the season's, turned a little differently each day
     window.__wall&&window.__wall.recolor(window.__hol,(()=>{const mo=d.getMonth();return [11,0,1].includes(mo)?'winter':[2,3,4].includes(mo)?'spring':[5,6,7].includes(mo)?'summer':'autumn'})());
     const th=window.__theme;lg.setAttribute('x1',0);lg.setAttribute('y1',0);lg.setAttribute('x2',0);lg.setAttribute('y2',1);B.style.filter='none';
     const c0=pal.bg,c1=pal.bg,c2=pal.bg;
@@ -2286,7 +2291,7 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
     light();favicon()};
   // the hour's light, eased every few minutes
   let L={};
-  // the colour of the sky through a day: [top, middle, horizon] and the clouds' [lit, middle, shadow]
+  // the color of the sky through a day: [top, middle, horizon] and the clouds' [lit, middle, shadow]
   const SKY={night:{sky:['#070d24','#121d42','#27325a'],cloud:['#4a557a','#2c3558','#161d38']},
     predawn:{sky:['#131c42','#3b3c6e','#a0697e'],cloud:['#8a7aa0','#5a4f7a','#2e2a50']},
     sunrise:{sky:['#3f5f9c','#d0909a','#ffc48c'],cloud:['#ffd9c4','#e5a2a4','#8a6f92']},
@@ -2344,6 +2349,15 @@ window.LITE=matchMedia('(max-width:700px)').matches||(navigator.hardwareConcurre
   setInterval(()=>{const d=now();if(d.toDateString()!==state.key)build();else light()},60*1000);
   document.addEventListener('wx',()=>build());
   document.addEventListener('visibilitychange',()=>{if(document.visibilityState==='visible'){const d=now();if(d.toDateString()!==state.key)build();else light()}});
+})();
+</script>
+
+<script>
+/* ===== Performance: scenes rest when they're off screen; phones skip the costliest brush filters ===== */
+(function(){
+  const io=new IntersectionObserver(es=>es.forEach(e=>e.target.classList.toggle('zz',!e.isIntersecting)),{rootMargin:'120px'});
+  document.querySelectorAll('.hero,.sea,.finale').forEach(x=>io.observe(x));
+  if(window.LITE)document.querySelectorAll('.hero svg.scene [filter],.finale svg.shore [filter]').forEach(e=>{if(/#(leafy|paint|paintSoft)\)/.test(e.getAttribute('filter')))e.removeAttribute('filter')});
 })();
 </script>
 </body>
